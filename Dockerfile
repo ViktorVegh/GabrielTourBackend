@@ -9,7 +9,7 @@ WORKDIR /app
 COPY target/gabriel_tour_app_backend-1.0-SNAPSHOT.jar /app/app.jar
 
 # Expose the port on which the Spring Boot app will run (default: 8080)
-EXPOSE 8080
+EXPOSE 9090
 
 # Set the command to run the JAR file
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

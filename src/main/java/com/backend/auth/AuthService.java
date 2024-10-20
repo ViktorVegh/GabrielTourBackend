@@ -10,7 +10,6 @@ import com.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 @Service
 public class AuthService {
 
@@ -29,7 +28,7 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-
+    // Registration
     public String register(String email, String password, String name, String profilePicture, String role) {
         // Check all repositories to see if the email is already registered
         if (userRepository.findByEmail(email) != null || driverRepository.findByEmail(email) != null || tourGuideRepository.findByEmail(email) != null) {
@@ -41,6 +40,7 @@ public class AuthService {
         String finalProfilePicture = (profilePicture != null) ? profilePicture : "";  // Default to empty string if profile picture is null
         Person newPerson;
 
+        // Save the appropriate user type and generate token
         switch (role.toLowerCase()) {
             case "driver":
                 newPerson = new Driver(email, hashedPassword, name, profilePicture);
@@ -56,10 +56,11 @@ public class AuthService {
                 break;
         }
 
-        return jwtUtil.generateToken(newPerson.getId());
+        // Generate a token with the role
+        return jwtUtil.generateToken(newPerson.getId(), role);  // Pass the role when generating the token
     }
 
-
+    // Login
     public String login(String email, String password) {
         // Try finding the user in each repository
         Person person = userRepository.findByEmail(email);
@@ -72,11 +73,20 @@ public class AuthService {
 
         // Check if the person was found and the password matches
         if (person != null && passwordEncoder.matches(password, person.getPassword())) {
-            return jwtUtil.generateToken(person.getId());
+            String role;
+            if (person instanceof Driver) {
+                role = "driver";
+            } else if (person instanceof TourGuide) {
+                role = "tourguide";
+            } else {
+                role = "user";
+            }
+            return jwtUtil.generateToken(person.getId(), role);  // Pass the role when generating the token
         }
         throw new RuntimeException("Invalid login credentials!");
     }
 
     public void logout() {
+
     }
 }
