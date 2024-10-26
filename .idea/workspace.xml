@@ -5,15 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b3c05bd-13fd-4d80-a087-1603d980e559" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/repository/TourGuideRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a/storage_v2/_src_/database/eochtyuo.7kaKmg.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a/storage_v2/_src_/database/eochtyuo.7kaKmg/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a/storage_v2/_src_/database/eochtyuo.7kaKmg/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a/storage_v2/_src_/database/eochtyuo.7kaKmg/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a/storage_v2/_src_/database/eochtyuo.7kaKmg/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a/storage_v2/_src_/database/eochtyuo.7kaKmg/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1ea77c9a-4f5b-41ef-bbca-cb16f5897b9a/storage_v2/_src_/database/eochtyuo.7kaKmg/schema/public.abK9xQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/auth/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/auth/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/auth/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/auth/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/controller/AuthController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,9 +38,9 @@
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2n98CLkSKravCV5w5bdxH3zTGBZ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -48,6 +52,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/viktorvegh/gabriel_tour_app/gabriel_tour_app_backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -89,7 +94,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1728373804332</updated>
-      <workItem from="1728373805519" duration="32638000" />
+      <workItem from="1728373805519" duration="33798000" />
+      <workItem from="1728895825362" duration="11868000" />
     </task>
     <servers />
   </component>
