@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     // Login endpoint
-    /*@PostMapping("/login")
+    @PostMapping("/login")
     public Map<String, String> login(@RequestBody LoginRequest loginRequest) {
         String token = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
 
@@ -45,14 +45,14 @@ public class AuthController {
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
         return response;
-    }*/
+    }/* //soap login
     @PostMapping("/login")
     public KlientPrihlasitResult login(@RequestBody LoginRequest loginRequest) {
         KlientPrihlasitResult result = loginService.login(loginRequest.getEmail(), loginRequest.getPassword());
         System.out.println(result);
         return result;
     }
-
+*/
     // Logout endpoint
     @PostMapping("/logout")
     public String logout() {

@@ -1,12 +1,17 @@
 package com.backend.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "app_user")
 public class User extends Person {
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<TeeTime> teeTimes;
 
     // Constructors
     public User() {
@@ -21,4 +26,13 @@ public class User extends Person {
         super(email, password, name, profilePicture);
     }
 
+    // One-to-Many relationship with TeeTime
+    @OneToMany(mappedBy = "user")
+    public List<TeeTime> getTeeTimes() {
+        return teeTimes;
+    }
+
+    public void setTeeTimes(List<TeeTime> teeTimes) {
+        this.teeTimes = teeTimes;
+    }
 }
