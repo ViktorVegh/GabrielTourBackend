@@ -3,6 +3,8 @@ package com.backend.controller;
 import com.backend.auth.AuthService;
 import com.backend.dtos.LoginRequest;
 import com.backend.dtos.RegisterRequest;
+import com.backend.profis_service.LoginService;
+import com.example.klientsoapclient.KlientPrihlasitResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,8 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-
+    @Autowired
+    private LoginService loginService;
     // Register endpoint
     @PostMapping("/register")
     public Map<String, String> register(@RequestBody RegisterRequest registerRequest) {
@@ -34,7 +37,7 @@ public class AuthController {
     }
 
     // Login endpoint
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public Map<String, String> login(@RequestBody LoginRequest loginRequest) {
         String token = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
 
@@ -42,6 +45,12 @@ public class AuthController {
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
         return response;
+    }*/
+    @PostMapping("/login")
+    public KlientPrihlasitResult login(@RequestBody LoginRequest loginRequest) {
+        KlientPrihlasitResult result = loginService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        System.out.println(result);
+        return result;
     }
 
     // Logout endpoint

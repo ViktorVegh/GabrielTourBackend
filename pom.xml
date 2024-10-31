@@ -94,9 +94,24 @@
         <dependency>
             <groupId>jakarta.xml.soap</groupId>
             <artifactId>jakarta.xml.soap-api</artifactId>
-            <version>4.0.1</version>
+            <version>3.0.1</version>
 <!--            <scope>system</scope>-->
 <!--            <systemPath>/Users/viktorvegh/Downloads/jakarta.xml.ws-api-4.0.1.jar</systemPath>-->
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.jws</groupId>
+            <artifactId>jakarta.jws-api</artifactId>
+            <version>3.0.0</version>
         </dependency>
 
     </dependencies>
@@ -109,6 +124,10 @@
         <repository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>sonatype-oss</id>
+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
         </repository>
     </repositories>
 
@@ -127,31 +146,6 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.cxf</groupId>-->
-<!--                <artifactId>cxf-codegen-plugin</artifactId>-->
-<!--                <version>4.0.5</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>generate-sources</id>-->
-<!--                        <phase>generate-sources</phase>-->
-<!--                        <configuration>-->
-<!--                            <wsdlOptions>-->
-<!--                                <wsdlOption>-->
-<!--                                    <wsdl>https://xml.gabrieltour.sk/API/v1/Admin.svc/basics?wsdl</wsdl>-->
-<!--                                    <extraargs>-->
-<!--                                        <extraarg>-p</extraarg>-->
-<!--                                        <extraarg>com.example.soapclient</extraarg>-->
-<!--                                    </extraargs>-->
-<!--                                </wsdlOption>-->
-<!--                            </wsdlOptions>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>wsdl2java</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
@@ -161,16 +155,17 @@
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
+                            <sourceRoot>C:/Users/babic/IdeaProjects/GabrielTourBackend/target/generated-sources/cxf</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>/Users/viktorvegh/Downloads/Klient.wsdl.xml</wsdl>
+                                    <wsdl>C:/Users/babic/Downloads/Klient.wsdl.xml</wsdl>
                                     <extraargs>
                                         <extraarg>-p</extraarg>
                                         <extraarg>com.example.klientsoapclient</extraarg>
                                     </extraargs>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>/Users/viktorvegh/Downloads/Objednavka.wsdl.xml</wsdl>
+                                    <wsdl>C:/Users/babic/Downloads/Objednavka.wsdl.xml</wsdl>
                                     <extraargs>
                                         <extraarg>-p</extraarg>
                                         <extraarg>com.example.objednavkasoapclient</extraarg>
