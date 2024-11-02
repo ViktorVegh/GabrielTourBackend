@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity // Replaces deprecated EnableGlobalMethodSecurity
 public class SecurityConfig {
 
     private final JwtHelper jwtHelper;
@@ -35,18 +37,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        //security filter chain
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtHelper);
 
         http
-                .csrf().disable() // Disable CSRF as we are using JWT
+                .csrf().disable() // Disable CSRF since we are using JWT
                 .cors().and() // Enable CORS
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/register", "/auth/login").permitAll() // Allow public access
+                .requestMatchers("/auth/register", "/auth/login").permitAll() // Allow public access to register and login endpoints
                 .anyRequest().authenticated() // All other requests require authentication
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Disable session management, use JWT
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Set session policy to stateless for JWT
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter before UsernamePasswordAuthenticationFilter
 

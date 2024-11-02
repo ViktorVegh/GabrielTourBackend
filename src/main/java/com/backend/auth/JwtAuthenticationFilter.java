@@ -11,7 +11,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -36,8 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("Extracted role from token: " + role); // Debug statement
 
             if (person != null && role != null) {
-                // Create a list of authorities based on the role
-                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+                // Set the authority based on the extracted role without the "ROLE_" prefix
+                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role.toLowerCase()));
                 System.out.println("Setting authorities: " + authorities); // Debug statement
 
                 UsernamePasswordAuthenticationToken authentication =
@@ -53,6 +52,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Continue the filter chain
         filterChain.doFilter(request, response);
-
     }
 }
