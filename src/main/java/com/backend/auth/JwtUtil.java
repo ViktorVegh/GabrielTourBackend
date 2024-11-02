@@ -47,4 +47,19 @@ public class JwtUtil {
             return null;
         }
     }
+    public static Claims getClaimsFromToken(String token) {
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
+            // Parse the token and return the claims
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException | IllegalArgumentException e) {
+            // Log or handle invalid token
+            return null;
+        }
+    }
 }

@@ -39,7 +39,7 @@ public class TeeTimeService {
         return user.map(teeTimeRepository::findByUser).orElseThrow(() -> new RuntimeException("User not found"));
     }
     public TeeTime createTeeTime(Long userId, GolfCourse golfCourse, LocalDateTime teeTime, Integer groupSize) {
-
+        System.out.println("i got to servicw");
         // Fetch User
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User with ID " + userId + " not found"));

@@ -24,8 +24,10 @@ public class TeeTimeController {
         return teeTimeService.getTeeTimesByUserId(userId);
     }
 
+    @PreAuthorize("hasRole('office')")
     @PostMapping("/create")
     public TeeTime createTeeTime(@RequestBody TeeTimeRequest teeTimeRequest) {
+        System.out.println("i got here");
         return teeTimeService.createTeeTime(
                 teeTimeRequest.getUserId(),
                 teeTimeRequest.getGolfCourse(),
