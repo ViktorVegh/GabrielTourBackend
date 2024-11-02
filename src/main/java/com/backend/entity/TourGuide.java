@@ -11,7 +11,7 @@ public class TourGuide extends Person {
         super();
     }
 
-    public TourGuide(String email, String password, String name, String profilePicture) {
-        super(email, password, name, profilePicture);
+    public TourGuide(String email, String password, String name, String profilePicture,String role) {
+        super(email, password, name, profilePicture,role);
     }
 }

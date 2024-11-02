@@ -12,8 +12,8 @@ public class Driver extends Person {
         super();
     }
 
-    public Driver(String email, String password, String name, String profilePicture) {
-        super(email, password, name, profilePicture);
+    public Driver(String email, String password, String name, String profilePicture, String role) {
+        super(email, password, name, profilePicture,role);
     }
 
 }

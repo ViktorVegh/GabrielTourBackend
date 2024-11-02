@@ -18,12 +18,12 @@ public class User extends Person {
         super();
     }
 
-    public User(String email, String password) {
-        super(email, password);
+    public User(String email, String password,String role) {
+        super(email, password, role);
     }
 
-    public User(String email, String password, String name, String profilePicture) {
-        super(email, password, name, profilePicture);
+    public User(String email, String password, String name, String profilePicture,String role) {
+        super(email, password, name, profilePicture,role);
     }
 
     // One-to-Many relationship with TeeTime
