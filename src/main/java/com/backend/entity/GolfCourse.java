@@ -10,7 +10,7 @@ public class GolfCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resort_id", nullable = true)
     private Resort resort;
@@ -27,6 +27,14 @@ public class GolfCourse {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Resort getResort() {
