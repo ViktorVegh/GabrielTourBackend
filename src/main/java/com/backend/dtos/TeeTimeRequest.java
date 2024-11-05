@@ -1,16 +1,14 @@
 package com.backend.dtos;
 
-import com.backend.entity.GolfCourse;
 import java.time.LocalDateTime;
 
 public class TeeTimeRequest {
     private Long userId;
-    private GolfCourse golfCourse;
+    private Long golfCourseId; // Use ID instead of GolfCourse entity
     private LocalDateTime teeTime;
     private Integer groupSize;
 
     // Getters and Setters
-
     public Long getUserId() {
         return userId;
     }
@@ -19,12 +17,12 @@ public class TeeTimeRequest {
         this.userId = userId;
     }
 
-    public GolfCourse getGolfCourse() {
-        return golfCourse;
+    public Long getGolfCourseId() {
+        return golfCourseId;
     }
 
-    public void setGolfCourse(GolfCourse golfCourse) {
-        this.golfCourse = golfCourse;
+    public void setGolfCourseId(Long golfCourseId) {
+        this.golfCourseId = golfCourseId;
     }
 
     public LocalDateTime getTeeTime() {

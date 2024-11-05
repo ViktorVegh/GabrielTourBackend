@@ -4,7 +4,6 @@ import com.backend.auth.AuthService;
 import com.backend.dtos.LoginRequest;
 import com.backend.dtos.RegisterRequest;
 import com.backend.profis_service.LoginService;
-import com.example.klientsoapclient.KlientPrihlasitResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
