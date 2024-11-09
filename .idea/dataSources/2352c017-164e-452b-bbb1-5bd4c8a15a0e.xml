@@ -3,20 +3,12 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.52">
     <root id="1">
       <DateStyle>mdy</DateStyle>
-      <Grants>1||-9223372036854775808|c|G
-1||16408|c|G
-1||16408|C|G
-1||16408|T|G
-4||-9223372036854775808|c|G
-4||10|c|G
-4||10|C|G
-4||10|T|G
-16384||10|c|G
+      <Grants>16384||10|c|G
 16384||10|C|G
 16384||10|T|G
 16413||-9223372036854775808|C|G
 16413||16386|C|G</Grants>
-      <IntrospectionStateNumber>934</IntrospectionStateNumber>
+      <IntrospectionStateNumber>40539</IntrospectionStateNumber>
       <ServerVersion>16.3</ServerVersion>
       <StartupTime>1728572904</StartupTime>
       <TimeZones>true ACDT
@@ -59,9 +51,9 @@ false Africa/Bissau
 false Africa/Blantyre
 false Africa/Brazzaville
 false Africa/Bujumbura
-true Africa/Cairo
+false Africa/Cairo
 false Africa/Casablanca
-true Africa/Ceuta
+false Africa/Ceuta
 false Africa/Conakry
 false Africa/Dakar
 false Africa/Dar_es_Salaam
@@ -162,7 +154,7 @@ false America/Fort_Nelson
 true America/Fort_Wayne
 false America/Fortaleza
 true America/Glace_Bay
-true America/Godthab
+false America/Godthab
 true America/Goose_Bay
 true America/Grand_Turk
 false America/Grenada
@@ -222,7 +214,7 @@ false America/Noronha
 true America/North_Dakota/Beulah
 true America/North_Dakota/Center
 true America/North_Dakota/New_Salem
-true America/Nuuk
+false America/Nuuk
 true America/Ojinaga
 false America/Panama
 true America/Pangnirtung
@@ -246,7 +238,7 @@ false America/Santarem
 true America/Santiago
 false America/Santo_Domingo
 false America/Sao_Paulo
-true America/Scoresbysund
+false America/Scoresbysund
 true America/Shiprock
 true America/Sitka
 false America/St_Barthelemy
@@ -278,9 +270,9 @@ false Antarctica/Palmer
 false Antarctica/Rothera
 true Antarctica/South_Pole
 false Antarctica/Syowa
-true Antarctica/Troll
+false Antarctica/Troll
 false Antarctica/Vostok
-true Arctic/Longyearbyen
+false Arctic/Longyearbyen
 false Asia/Aden
 false Asia/Almaty
 false Asia/Amman
@@ -295,7 +287,7 @@ false Asia/Bahrain
 false Asia/Baku
 false Asia/Bangkok
 false Asia/Barnaul
-true Asia/Beirut
+false Asia/Beirut
 false Asia/Bishkek
 false Asia/Brunei
 false Asia/Calcutta
@@ -310,10 +302,10 @@ false Asia/Dhaka
 false Asia/Dili
 false Asia/Dubai
 false Asia/Dushanbe
-true Asia/Famagusta
-true Asia/Gaza
+false Asia/Famagusta
+false Asia/Gaza
 false Asia/Harbin
-true Asia/Hebron
+false Asia/Hebron
 false Asia/Ho_Chi_Minh
 false Asia/Hong_Kong
 false Asia/Hovd
@@ -321,7 +313,7 @@ false Asia/Irkutsk
 false Asia/Istanbul
 false Asia/Jakarta
 false Asia/Jayapura
-true Asia/Jerusalem
+false Asia/Jerusalem
 false Asia/Kabul
 false Asia/Kamchatka
 false Asia/Karachi
@@ -340,7 +332,7 @@ false Asia/Magadan
 false Asia/Makassar
 false Asia/Manila
 false Asia/Muscat
-true Asia/Nicosia
+false Asia/Nicosia
 false Asia/Novokuznetsk
 false Asia/Novosibirsk
 false Asia/Omsk
@@ -364,7 +356,7 @@ false Asia/Taipei
 false Asia/Tashkent
 false Asia/Tbilisi
 false Asia/Tehran
-true Asia/Tel_Aviv
+false Asia/Tel_Aviv
 false Asia/Thimbu
 false Asia/Thimphu
 false Asia/Tokyo
@@ -380,14 +372,14 @@ false Asia/Yakutsk
 false Asia/Yangon
 false Asia/Yekaterinburg
 false Asia/Yerevan
-true Atlantic/Azores
+false Atlantic/Azores
 true Atlantic/Bermuda
-true Atlantic/Canary
+false Atlantic/Canary
 false Atlantic/Cape_Verde
-true Atlantic/Faeroe
-true Atlantic/Faroe
-true Atlantic/Jan_Mayen
-true Atlantic/Madeira
+false Atlantic/Faeroe
+false Atlantic/Faroe
+false Atlantic/Jan_Mayen
+false Atlantic/Madeira
 false Atlantic/Reykjavik
 false Atlantic/South_Georgia
 false Atlantic/St_Helena
@@ -470,8 +462,8 @@ true EGST
 false EGT
 false EST
 true EST5EDT
-true Egypt
-false Eire
+false Egypt
+true Eire
 false Etc/GMT
 false Etc/GMT+0
 false Etc/GMT+1
@@ -507,70 +499,70 @@ false Etc/UCT
 false Etc/UTC
 false Etc/Universal
 false Etc/Zulu
-true Europe/Amsterdam
-true Europe/Andorra
+false Europe/Amsterdam
+false Europe/Andorra
 false Europe/Astrakhan
-true Europe/Athens
-true Europe/Belfast
-true Europe/Belgrade
-true Europe/Berlin
-true Europe/Bratislava
-true Europe/Brussels
-true Europe/Bucharest
-true Europe/Budapest
-true Europe/Busingen
-true Europe/Chisinau
-true Europe/Copenhagen
-false Europe/Dublin
-true Europe/Gibraltar
-true Europe/Guernsey
-true Europe/Helsinki
-true Europe/Isle_of_Man
+false Europe/Athens
+false Europe/Belfast
+false Europe/Belgrade
+false Europe/Berlin
+false Europe/Bratislava
+false Europe/Brussels
+false Europe/Bucharest
+false Europe/Budapest
+false Europe/Busingen
+false Europe/Chisinau
+false Europe/Copenhagen
+true Europe/Dublin
+false Europe/Gibraltar
+false Europe/Guernsey
+false Europe/Helsinki
+false Europe/Isle_of_Man
 false Europe/Istanbul
-true Europe/Jersey
+false Europe/Jersey
 false Europe/Kaliningrad
-true Europe/Kiev
+false Europe/Kiev
 false Europe/Kirov
-true Europe/Kyiv
-true Europe/Lisbon
-true Europe/Ljubljana
-true Europe/London
-true Europe/Luxembourg
-true Europe/Madrid
-true Europe/Malta
-true Europe/Mariehamn
+false Europe/Kyiv
+false Europe/Lisbon
+false Europe/Ljubljana
+false Europe/London
+false Europe/Luxembourg
+false Europe/Madrid
+false Europe/Malta
+false Europe/Mariehamn
 false Europe/Minsk
-true Europe/Monaco
+false Europe/Monaco
 false Europe/Moscow
-true Europe/Nicosia
-true Europe/Oslo
-true Europe/Paris
-true Europe/Podgorica
-true Europe/Prague
-true Europe/Riga
-true Europe/Rome
+false Europe/Nicosia
+false Europe/Oslo
+false Europe/Paris
+false Europe/Podgorica
+false Europe/Prague
+false Europe/Riga
+false Europe/Rome
 false Europe/Samara
-true Europe/San_Marino
-true Europe/Sarajevo
+false Europe/San_Marino
+false Europe/Sarajevo
 false Europe/Saratov
 false Europe/Simferopol
-true Europe/Skopje
-true Europe/Sofia
-true Europe/Stockholm
-true Europe/Tallinn
-true Europe/Tirane
-true Europe/Tiraspol
+false Europe/Skopje
+false Europe/Sofia
+false Europe/Stockholm
+false Europe/Tallinn
+false Europe/Tirane
+false Europe/Tiraspol
 false Europe/Ulyanovsk
-true Europe/Uzhgorod
-true Europe/Vaduz
-true Europe/Vatican
-true Europe/Vienna
-true Europe/Vilnius
+false Europe/Uzhgorod
+false Europe/Vaduz
+false Europe/Vatican
+false Europe/Vienna
+false Europe/Vilnius
 false Europe/Volgograd
-true Europe/Warsaw
-true Europe/Zagreb
-true Europe/Zaporozhye
-true Europe/Zurich
+false Europe/Warsaw
+false Europe/Zagreb
+false Europe/Zaporozhye
+false Europe/Zurich
 false FET
 true FJST
 false FJT
@@ -581,8 +573,8 @@ false FNT
 false Factory
 false GALT
 false GAMT
-true GB
-true GB-Eire
+false GB
+false GB-Eire
 false GEST
 false GET
 false GFT
@@ -616,7 +608,7 @@ false Indian/Mauritius
 false Indian/Mayotte
 false Indian/Reunion
 false Iran
-true Israel
+false Israel
 false JAYT
 false JST
 false Jamaica
@@ -642,7 +634,7 @@ false MAWT
 true MDT
 true MEST
 true MESZ
-true MET
+false MET
 true METDST
 false MEZ
 false MHT
@@ -735,8 +727,8 @@ false Pacific/Truk
 false Pacific/Wake
 false Pacific/Wallis
 false Pacific/Yap
-true Poland
-true Portugal
+false Poland
+false Portugal
 false RET
 false ROC
 false ROK
@@ -787,7 +779,7 @@ false WAKT
 false WAST
 false WAT
 true WDT
-true WET
+false WET
 true WETDST
 false WFT
 true WGST
@@ -814,7 +806,7 @@ false Zulu
 14149||10|C|G
 14149||-9223372036854775808|U|G
 14149||10|U|G</Grants>
-      <IntrospectionStateNumber>934</IntrospectionStateNumber>
+      <IntrospectionStateNumber>40539</IntrospectionStateNumber>
       <ObjectId>5</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -4292,8 +4284,8 @@ default_transaction_read_only=off</Config>
     <schema id="271" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>934</IntrospectionStateNumber>
-      <LastIntrospectionLocalTimestamp>2024-10-10.16:04:27</LastIntrospectionLocalTimestamp>
+      <IntrospectionStateNumber>40539</IntrospectionStateNumber>
+      <LastIntrospectionLocalTimestamp>2024-11-02.12:18:41</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>524</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
@@ -4314,7 +4306,31 @@ default_transaction_read_only=off</Config>
       <StateNumber>925</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <sequence id="274" parent="271" name="tour_guide_id_seq">
+    <sequence id="274" parent="271" name="golf_course_id_seq">
+      <DasType>bigint|0s</DasType>
+      <ObjectId>16500</ObjectId>
+      <SequenceIdentity>1</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>37577</StateNumber>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="275" parent="271" name="office_id_seq">
+      <DasType>bigint|0s</DasType>
+      <ObjectId>16534</ObjectId>
+      <SequenceIdentity>1</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>40252</StateNumber>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="276" parent="271" name="tee_time_id_seq">
+      <DasType>bigint|0s</DasType>
+      <ObjectId>16512</ObjectId>
+      <SequenceIdentity>1</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>37579</StateNumber>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="277" parent="271" name="tour_guide_id_seq">
       <DasType>bigint|0s</DasType>
       <ObjectId>16485</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
@@ -4322,25 +4338,49 @@ default_transaction_read_only=off</Config>
       <StateNumber>926</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <table id="275" parent="271" name="app_user">
+    <table id="278" parent="271" name="app_user">
       <ObjectId>16468</ObjectId>
-      <StateNumber>924</StateNumber>
+      <StateNumber>40320</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="276" parent="271" name="driver">
+    <table id="279" parent="271" name="driver">
       <ObjectId>16477</ObjectId>
-      <StateNumber>925</StateNumber>
+      <StateNumber>40321</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="277" parent="271" name="tour_guide">
+    <table id="280" parent="271" name="golf_course">
+      <ObjectId>16501</ObjectId>
+      <StateNumber>40538</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="281" parent="271" name="office">
+      <ObjectId>16535</ObjectId>
+      <StateNumber>40322</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="282" parent="271" name="resort">
+      <ObjectId>16507</ObjectId>
+      <StateNumber>40530</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="283" parent="271" name="tee_time">
+      <ObjectId>16513</ObjectId>
+      <StateNumber>37581</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="284" parent="271" name="tour_guide">
       <ObjectId>16486</ObjectId>
-      <StateNumber>926</StateNumber>
+      <StateNumber>40323</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <column id="278" parent="275" name="id">
+    <column id="285" parent="278" name="id">
       <DasType>bigint|0s</DasType>
       <DefaultExpression>nextval(&apos;app_user_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
@@ -4349,33 +4389,39 @@ default_transaction_read_only=off</Config>
       <SequenceId>16467</SequenceId>
       <TypeId>20</TypeId>
     </column>
-    <column id="279" parent="275" name="email">
+    <column id="286" parent="278" name="email">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>924</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="280" parent="275" name="name">
+    <column id="287" parent="278" name="name">
       <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
       <StateNumber>924</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="281" parent="275" name="password">
+    <column id="288" parent="278" name="password">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>924</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="282" parent="275" name="profile_picture">
+    <column id="289" parent="278" name="profile_picture">
       <DasType>varchar(255)|0s</DasType>
       <Position>5</Position>
       <StateNumber>924</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="283" parent="275" name="app_user_pkey">
+    <column id="290" parent="278" name="role">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>6</Position>
+      <StateNumber>40320</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="291" parent="278" name="app_user_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16474</ObjectId>
@@ -4384,7 +4430,7 @@ default_transaction_read_only=off</Config>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="284" parent="275" name="uk_1j9d9a06i600gd43uu3km82jw">
+    <index id="292" parent="278" name="uk_1j9d9a06i600gd43uu3km82jw">
       <ColNames>email</ColNames>
       <ObjectId>16494</ObjectId>
       <StateNumber>928</StateNumber>
@@ -4394,19 +4440,19 @@ default_transaction_read_only=off</Config>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="285" parent="275" name="app_user_pkey">
+    <key id="293" parent="278" name="app_user_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16475</ObjectId>
       <Primary>1</Primary>
       <StateNumber>924</StateNumber>
       <UnderlyingIndexId>16474</UnderlyingIndexId>
     </key>
-    <key id="286" parent="275" name="uk_1j9d9a06i600gd43uu3km82jw">
+    <key id="294" parent="278" name="uk_1j9d9a06i600gd43uu3km82jw">
       <ObjectId>16495</ObjectId>
       <StateNumber>928</StateNumber>
       <UnderlyingIndexId>16494</UnderlyingIndexId>
     </key>
-    <column id="287" parent="276" name="id">
+    <column id="295" parent="279" name="id">
       <DasType>bigint|0s</DasType>
       <DefaultExpression>nextval(&apos;driver_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
@@ -4415,33 +4461,39 @@ default_transaction_read_only=off</Config>
       <SequenceId>16476</SequenceId>
       <TypeId>20</TypeId>
     </column>
-    <column id="288" parent="276" name="email">
+    <column id="296" parent="279" name="email">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>925</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="289" parent="276" name="name">
+    <column id="297" parent="279" name="name">
       <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
       <StateNumber>925</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="290" parent="276" name="password">
+    <column id="298" parent="279" name="password">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>925</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="291" parent="276" name="profile_picture">
+    <column id="299" parent="279" name="profile_picture">
       <DasType>varchar(255)|0s</DasType>
       <Position>5</Position>
       <StateNumber>925</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="292" parent="276" name="driver_pkey">
+    <column id="300" parent="279" name="role">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>6</Position>
+      <StateNumber>40321</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="301" parent="279" name="driver_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16483</ObjectId>
@@ -4450,7 +4502,7 @@ default_transaction_read_only=off</Config>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="293" parent="276" name="uk_fchuyotq64tagkwktlh4qttyy">
+    <index id="302" parent="279" name="uk_fchuyotq64tagkwktlh4qttyy">
       <ColNames>email</ColNames>
       <ObjectId>16496</ObjectId>
       <StateNumber>930</StateNumber>
@@ -4460,19 +4512,244 @@ default_transaction_read_only=off</Config>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="294" parent="276" name="driver_pkey">
+    <key id="303" parent="279" name="driver_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16484</ObjectId>
       <Primary>1</Primary>
       <StateNumber>925</StateNumber>
       <UnderlyingIndexId>16483</UnderlyingIndexId>
     </key>
-    <key id="295" parent="276" name="uk_fchuyotq64tagkwktlh4qttyy">
+    <key id="304" parent="279" name="uk_fchuyotq64tagkwktlh4qttyy">
       <ObjectId>16497</ObjectId>
       <StateNumber>930</StateNumber>
       <UnderlyingIndexId>16496</UnderlyingIndexId>
     </key>
-    <column id="296" parent="277" name="id">
+    <column id="305" parent="280" name="id">
+      <DasType>bigint|0s</DasType>
+      <DefaultExpression>nextval(&apos;golf_course_id_seq&apos;::regclass)</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>37577</StateNumber>
+      <SequenceId>16500</SequenceId>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="306" parent="280" name="resort_id">
+      <DasType>bigint|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>37577</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="307" parent="280" name="name">
+      <DasType>varchar(255)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>40538</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <foreign-key id="308" parent="280" name="fk1mywx91y1w3lj8n3e3v4g1pdk">
+      <ColNames>resort_id</ColNames>
+      <ObjectId>16519</ObjectId>
+      <StateNumber>37580</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>16507</RefTableId>
+    </foreign-key>
+    <index id="309" parent="280" name="golf_course_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16505</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>37577</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="310" parent="280" name="golf_course_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16506</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>37577</StateNumber>
+      <UnderlyingIndexId>16505</UnderlyingIndexId>
+    </key>
+    <column id="311" parent="281" name="id">
+      <DasType>bigint|0s</DasType>
+      <DefaultExpression>nextval(&apos;office_id_seq&apos;::regclass)</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>40252</StateNumber>
+      <SequenceId>16534</SequenceId>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="312" parent="281" name="email">
+      <DasType>varchar(255)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>40252</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="313" parent="281" name="name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>40252</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="314" parent="281" name="password">
+      <DasType>varchar(255)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StateNumber>40252</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="315" parent="281" name="profile_picture">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>5</Position>
+      <StateNumber>40252</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="316" parent="281" name="role">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>6</Position>
+      <StateNumber>40322</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="317" parent="281" name="office_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16541</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>40252</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <index id="318" parent="281" name="uk_6rpe72mcb93kwuldj3puayr4v">
+      <ColNames>email</ColNames>
+      <ObjectId>16543</ObjectId>
+      <StateNumber>40254</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationNames>default</CollationNames>
+      <CollationIds>100</CollationIds>
+      <CollationParentNames>pg_catalog</CollationParentNames>
+    </index>
+    <key id="319" parent="281" name="office_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16542</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>40252</StateNumber>
+      <UnderlyingIndexId>16541</UnderlyingIndexId>
+    </key>
+    <key id="320" parent="281" name="uk_6rpe72mcb93kwuldj3puayr4v">
+      <ObjectId>16544</ObjectId>
+      <StateNumber>40254</StateNumber>
+      <UnderlyingIndexId>16543</UnderlyingIndexId>
+    </key>
+    <column id="321" parent="282" name="id">
+      <DasType>bigint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>37578</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="322" parent="282" name="country">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>37578</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="323" parent="282" name="address">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>40529</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="324" parent="282" name="name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>4</Position>
+      <StateNumber>40530</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="325" parent="282" name="resort_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16510</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>37578</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="326" parent="282" name="resort_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16511</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>37578</StateNumber>
+      <UnderlyingIndexId>16510</UnderlyingIndexId>
+    </key>
+    <column id="327" parent="283" name="id">
+      <DasType>bigint|0s</DasType>
+      <DefaultExpression>nextval(&apos;tee_time_id_seq&apos;::regclass)</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>37579</StateNumber>
+      <SequenceId>16512</SequenceId>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="328" parent="283" name="group_size">
+      <DasType>integer|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>37579</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="329" parent="283" name="tee_time">
+      <DasType>timestamp(6)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>37579</StateNumber>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="330" parent="283" name="golf_course_id">
+      <DasType>bigint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StateNumber>37579</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="331" parent="283" name="user_id">
+      <DasType>bigint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StateNumber>37579</StateNumber>
+      <TypeId>20</TypeId>
+    </column>
+    <foreign-key id="332" parent="283" name="fkpr4v0a0xjwnq0f8bos26867ql">
+      <ColNames>golf_course_id</ColNames>
+      <ObjectId>16524</ObjectId>
+      <StateNumber>37581</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>16501</RefTableId>
+    </foreign-key>
+    <foreign-key id="333" parent="283" name="fkpxl6hq4qhlvsilbvf3g4eomw">
+      <ColNames>user_id</ColNames>
+      <ObjectId>16529</ObjectId>
+      <StateNumber>37582</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>16468</RefTableId>
+    </foreign-key>
+    <index id="334" parent="283" name="tee_time_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16517</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>37579</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="335" parent="283" name="tee_time_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16518</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>37579</StateNumber>
+      <UnderlyingIndexId>16517</UnderlyingIndexId>
+    </key>
+    <column id="336" parent="284" name="id">
       <DasType>bigint|0s</DasType>
       <DefaultExpression>nextval(&apos;tour_guide_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
@@ -4481,33 +4758,39 @@ default_transaction_read_only=off</Config>
       <SequenceId>16485</SequenceId>
       <TypeId>20</TypeId>
     </column>
-    <column id="297" parent="277" name="email">
+    <column id="337" parent="284" name="email">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>926</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="298" parent="277" name="name">
+    <column id="338" parent="284" name="name">
       <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
       <StateNumber>926</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="299" parent="277" name="password">
+    <column id="339" parent="284" name="password">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StateNumber>926</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="300" parent="277" name="profile_picture">
+    <column id="340" parent="284" name="profile_picture">
       <DasType>varchar(255)|0s</DasType>
       <Position>5</Position>
       <StateNumber>926</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="301" parent="277" name="tour_guide_pkey">
+    <column id="341" parent="284" name="role">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>6</Position>
+      <StateNumber>40323</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="342" parent="284" name="tour_guide_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16492</ObjectId>
@@ -4516,7 +4799,7 @@ default_transaction_read_only=off</Config>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="302" parent="277" name="uk_koej1q79f98vw66c1hevv9wjp">
+    <index id="343" parent="284" name="uk_koej1q79f98vw66c1hevv9wjp">
       <ColNames>email</ColNames>
       <ObjectId>16498</ObjectId>
       <StateNumber>932</StateNumber>
@@ -4526,14 +4809,14 @@ default_transaction_read_only=off</Config>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="303" parent="277" name="tour_guide_pkey">
+    <key id="344" parent="284" name="tour_guide_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>16493</ObjectId>
       <Primary>1</Primary>
       <StateNumber>926</StateNumber>
       <UnderlyingIndexId>16492</UnderlyingIndexId>
     </key>
-    <key id="304" parent="277" name="uk_koej1q79f98vw66c1hevv9wjp">
+    <key id="345" parent="284" name="uk_koej1q79f98vw66c1hevv9wjp">
       <ObjectId>16499</ObjectId>
       <StateNumber>932</StateNumber>
       <UnderlyingIndexId>16498</UnderlyingIndexId>

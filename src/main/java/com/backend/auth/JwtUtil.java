@@ -16,7 +16,7 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 86400000; // 24 hours in milliseconds
 
     // Generate a token using the user ID and role
-    public static String generateToken(Long userId, String role) {  // Add 'role' parameter
+    public String generateToken(Long userId, String role) {  // Add 'role' parameter
         SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
         return Jwts.builder()
