@@ -12,7 +12,7 @@ public class Office extends Person {
         super();
     }
 
-    public Office(String email, String password) {
-        super(email, password);
+    public Office(String email, String password, String role) {
+        super(email, password, role);
     }
 }

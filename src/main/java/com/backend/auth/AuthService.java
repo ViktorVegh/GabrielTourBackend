@@ -43,18 +43,19 @@ public class AuthService {
         // Save the appropriate user type and generate token
         switch (role.toLowerCase()) {
             case "driver":
-                newPerson = new Driver(email, hashedPassword, name, profilePicture);
+                newPerson = new Driver(email, hashedPassword, name, profilePicture, role);
                 driverRepository.save((Driver) newPerson);
                 break;
             case "tourguide":
-                newPerson = new TourGuide(email, hashedPassword, name, profilePicture);
+                newPerson = new TourGuide(email, hashedPassword, name, profilePicture,role);
                 tourGuideRepository.save((TourGuide) newPerson);
                 break;
             case "office":
-                newPerson = new Office(email,hashedPassword);
+                newPerson = new Office(email,hashedPassword,role);
                 officeRepository.save((Office) newPerson);
+                break;
             default:
-                newPerson = new User(email, hashedPassword, name, profilePicture);
+                newPerson = new User(email, hashedPassword, name, profilePicture,role);
                 userRepository.save((User) newPerson);
                 break;
         }

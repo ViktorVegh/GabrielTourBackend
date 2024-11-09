@@ -18,22 +18,22 @@ public class JwtHelper {
     private final OfficeRepository officeRepository;
 
     @Autowired
-    public JwtHelper(UserRepository userRepository, DriverRepository driverRepository, TourGuideRepository tourGuideRepository,OfficeRepository officeRepository) {
+    public JwtHelper(UserRepository userRepository, DriverRepository driverRepository, TourGuideRepository tourGuideRepository, OfficeRepository officeRepository) {
         this.userRepository = userRepository;
         this.driverRepository = driverRepository;
         this.tourGuideRepository = tourGuideRepository;
         this.officeRepository = officeRepository;
     }
 
-    // Validate the token and retrieve the Person entity (User, Driver, TourGuide)
+    // Validate the token and retrieve the Person entity based on userId
     public Person validateTokenAndRetrievePerson(String token) {
         Long userId = JwtUtil.validateToken(token);
 
         if (userId == null) {
-            return null;
+            return null;  // Invalid or expired token
         }
 
-        // Try to find the person in each repository
+        // Find the Person by ID from the relevant repositories
         Person person = userRepository.findById(userId).orElse(null);
         if (person == null) {
             person = driverRepository.findById(userId).orElse(null);
@@ -45,8 +45,10 @@ public class JwtHelper {
             person = officeRepository.findById(userId).orElse(null);
         }
 
-        return person;
+        return person;  // Returns null if no matching Person is found
     }
+
+    // Extract the role from the token's claims
     public String getRoleFromToken(String token) {
         Claims claims = JwtUtil.getClaimsFromToken(token);
         return claims != null ? claims.get("role", String.class) : null;
