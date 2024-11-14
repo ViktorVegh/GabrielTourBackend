@@ -2,10 +2,10 @@ package com.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -15,20 +15,48 @@ public class TeeTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    // Associated user who booked the tee time
+    @ManyToMany
+    @JoinTable(
+            name = "tee_time_users",
+            joinColumns = @JoinColumn(name = "tee_time_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
+
+    // Date and time of the tee time
     @Column(nullable = false)
     private LocalDateTime teeTime;
 
+    // Indicates whether the tee time is on the green
+    private boolean green;
 
+    // Number of holes (9 or 18)
+    private int holes;
+
+    // Associated golf course for the tee time
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "golf_course_id", nullable = false)
     private GolfCourse golfCourse;
 
+    // Group size for the tee time
     @Column(nullable = false)
     private Integer groupSize;
+
+    // Number of adults in the group
+    private int adults;
+
+    // Number of juniors in the group
+    private int juniors;
+
+    // Additional notes for the tee time reservation
+    private String note;
+
+    // Drive details (pickup, drop-off, driver, etc.)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "drive_id", referencedColumnName = "id")
+    private Drive drive;
 
     // Getters and Setters
 
@@ -48,12 +76,12 @@ public class TeeTime {
         this.teeTime = teeTime;
     }
 
-    public User getUser() {
-        return user;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public GolfCourse getGolfCourse() {
@@ -72,4 +100,51 @@ public class TeeTime {
         this.groupSize = groupSize;
     }
 
+    public boolean isGreen() {
+        return green;
+    }
+
+    public void setGreen(boolean green) {
+        this.green = green;
+    }
+
+    public int getHoles() {
+        return holes;
+    }
+
+    public void setHoles(int holes) {
+        this.holes = holes;
+    }
+
+    public int getAdults() {
+        return adults;
+    }
+
+    public void setAdults(int adults) {
+        this.adults = adults;
+    }
+
+    public int getJuniors() {
+        return juniors;
+    }
+
+    public void setJuniors(int juniors) {
+        this.juniors = juniors;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Drive getDrive() {
+        return drive;
+    }
+
+    public void setDrive(Drive drive) {
+        this.drive = drive;
+    }
 }

@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface TeeTimeRepository extends JpaRepository<TeeTime, Long> {
     // Additional custom queries can be added here if needed
-    List<TeeTime> findByUser(User user);
+    List<TeeTime> findByUsersContaining(User user);
 }

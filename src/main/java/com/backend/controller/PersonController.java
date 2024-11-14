@@ -16,14 +16,14 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @PreAuthorize("hasRole('office')")
+    @PreAuthorize("hasAuthority('office')")
     @GetMapping("/all")
     public ResponseEntity<List<PersonDTO>> getAllPersons() {
         List<PersonDTO> persons = personService.getAllPersonsFromAllRepositories();
         return ResponseEntity.ok(persons);
     }
 
-    @PreAuthorize("hasRole('office')")
+    @PreAuthorize("hasAuthority('office')")
     @GetMapping("/search_by_email")
     public ResponseEntity<PersonDTO> searchPersonByEmail(@RequestParam String email) {
         return personService.findPersonByEmail(email)
@@ -31,7 +31,7 @@ public class PersonController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('office')")
+    @PreAuthorize("hasAuthority('office')")
     @GetMapping(value = "/{id}/{role}", produces = "application/json")
     public ResponseEntity<PersonDTO> getPersonById(@PathVariable Long id, @PathVariable String role) {
         return personService.findPersonById(id, role)

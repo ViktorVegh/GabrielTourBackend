@@ -3,16 +3,15 @@ package com.backend.dtos;
 public class GolfCourseDTO {
     private Long id;
     private String name;
-    private ResortDTO resort; // Optional
 
-    // Constructor
+    // Default constructor
     public GolfCourseDTO() {
     }
 
-    public GolfCourseDTO(Long id, String name, ResortDTO resort) {
+    // Full constructor
+    public GolfCourseDTO(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.resort = resort;
     }
 
     // Getters and setters
@@ -30,13 +29,5 @@ public class GolfCourseDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ResortDTO getResort() {
-        return resort;
-    }
-
-    public void setResort(ResortDTO resort) {
-        this.resort = resort;
     }
 }
