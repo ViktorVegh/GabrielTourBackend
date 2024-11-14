@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -15,7 +13,7 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User extends Person {
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "users")
     private List<TeeTime> teeTimes;
 
     // Constructors
@@ -31,7 +29,6 @@ public class User extends Person {
         super(email, password, name, profilePicture, role);
     }
 
-    // Getter and Setter for TeeTimes
     public List<TeeTime> getTeeTimes() {
         return teeTimes;
     }
@@ -39,4 +36,6 @@ public class User extends Person {
     public void setTeeTimes(List<TeeTime> teeTimes) {
         this.teeTimes = teeTimes;
     }
+
+
 }

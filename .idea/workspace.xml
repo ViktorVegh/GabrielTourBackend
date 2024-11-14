@@ -5,31 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b3c05bd-13fd-4d80-a087-1603d980e559" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/controller/PersonController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/EntityToDTOMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/GetPersonRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/GolfCourseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/PersonDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/ResortDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/TeeTimeDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/profis_service/KlientService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/profis_service/PersonService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/2352c017-164e-452b-bbb1-5bd4c8a15a0e.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/2352c017-164e-452b-bbb1-5bd4c8a15a0e.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/2352c017-164e-452b-bbb1-5bd4c8a15a0e/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/2352c017-164e-452b-bbb1-5bd4c8a15a0e/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/controller/PersonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/controller/PersonController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/controller/TeeTimeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/controller/TeeTimeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/dtos/EntityToDTOMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/EntityToDTOMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/dtos/GolfCourseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/GolfCourseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/dtos/ResortDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/dtos/TeeTimeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/TeeTimeDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/dtos/TeeTimeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/dtos/TeeTimeRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/entity/Driver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/GolfCourse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/entity/GolfCourse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/Office.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/entity/Office.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/Resort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/entity/Resort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/Resort.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/TeeTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/entity/TeeTime.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/TourGuide.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/entity/TourGuide.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/profis_service/TeeTimeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/profis_service/TeeTimeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/repository/ResortRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/repository/TeeTimeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/repository/TeeTimeRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,30 +57,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.GabrielTourAppBackendApplication.executor&quot;: &quot;Run&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/viktorvegh/gabriel_tour_app/gabriel_tour_app_backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.18151815&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.GabrielTourAppBackendApplication.executor": "Run",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/viktorvegh/gabriel_tour_app/gabriel_tour_app_backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.18151815",
+    "settings.editor.selected.configurable": "advanced.settings",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="GabrielTourAppBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="gabriel_tour_app_backend" />

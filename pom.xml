@@ -102,8 +102,8 @@
             <groupId>jakarta.xml.soap</groupId>
             <artifactId>jakarta.xml.soap-api</artifactId>
             <version>3.0.1</version>
-<!--            <scope>system</scope>-->
-<!--            <systemPath>/Users/viktorvegh/Downloads/jakarta.xml.ws-api-4.0.1.jar</systemPath>-->
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>/Users/viktorvegh/Downloads/jakarta.xml.ws-api-4.0.1.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>jakarta.xml.ws</groupId>
@@ -119,6 +119,47 @@
             <groupId>jakarta.jws</groupId>
             <artifactId>jakarta.jws-api</artifactId>
             <version>3.0.0</version>
+        </dependency>
+        <!-- JUnit 5 BOM (Bill of Materials) to manage all JUnit dependencies easily -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.1</version> <!-- Ensure this version or newer -->
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito Core dependency -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito JUnit 5 Extension -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>4.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>4.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
@@ -186,6 +227,7 @@
                     </execution>
                 </executions>
             </plugin>
+
 
 
         </plugins>

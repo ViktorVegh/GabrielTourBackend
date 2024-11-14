@@ -29,28 +29,40 @@ public class TeeTimeService {
     private GolfCourseRepository golfCourseRepository;
 
     public List<TeeTimeDTO> getTeeTimesByUserId(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        return user.map(teeTimeRepository::findByUser)
-                .orElseThrow(() -> new RuntimeException("User not found"))
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return teeTimeRepository.findByUsersContaining(user) // Assuming `findByUsersContaining` is available in `TeeTimeRepository`
                 .stream()
-                .map(EntityToDTOMapper::mapToTeeTimeDTO)
+                .map(EntityToDTOMapper::toTeeTimeDTO) // Updated method name
                 .collect(Collectors.toList());
     }
 
     public TeeTimeDTO createTeeTime(TeeTimeRequest teeTimeRequest) {
-        User user = userRepository.findById(teeTimeRequest.getUserId())
-                .orElseThrow(() -> new RuntimeException("User with ID " + teeTimeRequest.getUserId() + " not found"));
+        // Retrieve all users from the provided user IDs
+        List<User> users = userRepository.findAllById(teeTimeRequest.getUserIds());
+        if (users.isEmpty()) {
+            throw new RuntimeException("No valid users found for provided user IDs");
+        }
 
+        // Fetch the golf course
         GolfCourse fetchedGolfCourse = golfCourseRepository.findById(teeTimeRequest.getGolfCourseId())
                 .orElseThrow(() -> new RuntimeException("GolfCourse with ID " + teeTimeRequest.getGolfCourseId() + " not found"));
 
+        // Create a new TeeTime
         TeeTime newTeeTime = new TeeTime();
-        newTeeTime.setUser(user);
+        newTeeTime.setUsers(users); // Set the list of users
         newTeeTime.setGolfCourse(fetchedGolfCourse);
         newTeeTime.setTeeTime(teeTimeRequest.getTeeTime());
         newTeeTime.setGroupSize(teeTimeRequest.getGroupSize());
+        newTeeTime.setGreen(teeTimeRequest.isGreen());
+        newTeeTime.setHoles(teeTimeRequest.getHoles());
+        newTeeTime.setAdults(teeTimeRequest.getAdults());
+        newTeeTime.setJuniors(teeTimeRequest.getJuniors());
+        newTeeTime.setNote(teeTimeRequest.getNote());
 
+        // Save and map to DTO
         TeeTime savedTeeTime = teeTimeRepository.save(newTeeTime);
-        return EntityToDTOMapper.mapToTeeTimeDTO(savedTeeTime);
+        return EntityToDTOMapper.toTeeTimeDTO(savedTeeTime);
     }
 }

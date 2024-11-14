@@ -11,9 +11,6 @@ public class GolfCourse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resort_id", nullable = true)
-    private Resort resort;
 
     @OneToMany(mappedBy = "golfCourse", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -37,19 +34,12 @@ public class GolfCourse {
         this.name = name;
     }
 
-    public Resort getResort() {
-        return resort;
-    }
 
-    public void setResort(Resort resort) {
-        this.resort = resort;
-    }
-
-    public List<TeeTime> getTeeTimes() {
-        return teeTimes;
-    }
-
-    public void setTeeTimes(List<TeeTime> teeTimes) {
-        this.teeTimes = teeTimes;
-    }
+//    public List<TeeTime> getTeeTimes() {
+//        return teeTimes;
+//    }
+//
+//    public void setTeeTimes(List<TeeTime> teeTimes) {
+//        this.teeTimes = teeTimes;
+//    }
 }

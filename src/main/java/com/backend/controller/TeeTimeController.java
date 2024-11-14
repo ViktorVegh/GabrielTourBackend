@@ -16,8 +16,7 @@ public class TeeTimeController {
     @Autowired
     private TeeTimeService teeTimeService;
 
-    @PreAuthorize("hasAuthority('office')")
-    @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyAuthority('user', 'office')")    @GetMapping("/user/{userId}")
     public List<TeeTimeDTO> getTeeTimesByUserId(@PathVariable Long userId) {
         return teeTimeService.getTeeTimesByUserId(userId);
     }
