@@ -102,8 +102,6 @@
             <groupId>jakarta.xml.soap</groupId>
             <artifactId>jakarta.xml.soap-api</artifactId>
             <version>3.0.1</version>
-            <!--            <scope>system</scope>-->
-            <!--            <systemPath>/Users/viktorvegh/Downloads/jakarta.xml.ws-api-4.0.1.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>jakarta.xml.ws</groupId>
@@ -203,17 +201,17 @@
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <sourceRoot>target/generated-sources/cxf</sourceRoot>
+                            <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>/Users/viktorvegh/Downloads/Klient.wsdl.xml</wsdl>
+                                    <wsdl>${project.basedir}/src/main/resources/wsdl/Klient.wsdl.xml</wsdl>
                                     <extraargs>
                                         <extraarg>-p</extraarg>
                                         <extraarg>com.example.klientsoapclient</extraarg>
                                     </extraargs>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>/Users/viktorvegh/Downloads/Objednavka.wsdl.xml</wsdl>
+                                    <wsdl>${project.basedir}/src/main/resources/wsdl/Objednavka.wsdl.xml</wsdl>
                                     <extraargs>
                                         <extraarg>-p</extraarg>
                                         <extraarg>com.example.objednavkasoapclient</extraarg>
