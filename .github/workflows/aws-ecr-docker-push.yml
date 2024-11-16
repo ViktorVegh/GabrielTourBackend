@@ -30,7 +30,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         env:
-          AWS_REGION: eu-north-1 # Replace with your desired regio
+          AWS_REGION: eu-north-1 # Replace with your desired region
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # Step 5: Build the Docker image
       - name: Build Docker Image
