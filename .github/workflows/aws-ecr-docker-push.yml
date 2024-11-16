@@ -3,7 +3,7 @@ name: Build and Push Docker Image to AWS ECR
 on:
   push:
     branches:
-      - TRAV-26  # Trigger the workflow on push to the branch
+      - main  # Trigger the workflow on push to the branch
 
 jobs:
   build-and-push:
