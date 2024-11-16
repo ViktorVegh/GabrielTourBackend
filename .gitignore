@@ -52,3 +52,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+# Ignore Maven configuration file
+pom.xml
