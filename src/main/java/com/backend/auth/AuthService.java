@@ -66,7 +66,7 @@ public class AuthService {
 
     // Login
     public String login(String email, String password) {
-        // Try finding the user in each repository
+        // Try finding the user in each repositoryoffice
         Person person = userRepository.findByEmail(email);
         if (person == null) {
             person = driverRepository.findByEmail(email);

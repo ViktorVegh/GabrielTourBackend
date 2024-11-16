@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +52,27 @@ public class AuthController {
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
         return response;
-    }/* //soap login
-    @PostMapping("/login")
-    public KlientPrihlasitResult login(@RequestBody LoginRequest loginRequest) {
+    } //soap login
+    @PostMapping("/login-klient")
+    public KlientPrihlasitResult loginClient(@RequestBody LoginRequest loginRequest) {
+        try {
+            URL url = new URL("https://checkip.amazonaws.com"); // AWS service to get the public IP
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String ipAddress = in.readLine();
+            in.close();
+
+            System.out.println("Public IP Address of this AWS instance: " + ipAddress);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         KlientPrihlasitResult result = loginService.login(loginRequest.getEmail(), loginRequest.getPassword());
         System.out.println(result);
         return result;
     }
-*/
+
     // Logout endpoint
     @PostMapping("/logout")
     public String logout() {

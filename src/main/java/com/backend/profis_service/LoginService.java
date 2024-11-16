@@ -49,7 +49,7 @@ public class LoginService {
     }
 
     public KlientPrihlasitResult login(String email, String password) {
-
+        System.out.println("i got to Login service for login-check123");
         // Set up context if required
         Context context = new Context();
         context.setUzivatelHeslo(passwordElement);    // Set the user's password
@@ -64,7 +64,7 @@ public class LoginService {
         return CallResponse;
     }
     public OveritEmailResult overitEmail(String email){
-        System.out.println("i got to service");
+        System.out.println("i got to Login service for email verification-check123");
         Context context = new Context();
         context.setUzivatelHeslo(passwordElement);    // Set the user's password
         context.setUzivatelLogin(usernameElement);    // Set the user's login
@@ -82,7 +82,7 @@ public class LoginService {
         context.setVypsatNazvy(false);               // Set to false as per request
         context.setIdJazyk(idElement);
         ResetHeslaOdeslatInput resetHeslaOdeslatInput= new ResetHeslaOdeslatInput();
-
+        System.out.println("i got to Login service for email sending-check123");
         try {
             // Set platnost to 24 hours from now
             GregorianCalendar gregorianCalendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
@@ -105,6 +105,7 @@ public class LoginService {
         return CallResponse;
     }
     public ResetHeslaOveritResult resetHeslaOverit(String authKey,String email,int clientId){
+        System.out.println("i got to Login service for key verification-check123");
         KlientContextBase klientContextBase = new KlientContextBase();
         klientContextBase.setUzivatelHeslo(passwordElement);
         klientContextBase.setUzivatelLogin(usernameElement);
