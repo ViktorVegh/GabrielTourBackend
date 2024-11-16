@@ -1,52 +1,83 @@
 package com.backend.dtos;
+import com.backend.entity.*;
 
-import com.backend.entity.GolfCourse;
-import com.backend.entity.Person;
-import com.backend.entity.Resort;
-import com.backend.entity.TeeTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EntityToDTOMapper {
 
-    public static TeeTimeDTO mapToTeeTimeDTO(TeeTime teeTime) {
+    // TeeTime to TeeTimeDTO
+    public static TeeTimeDTO toTeeTimeDTO(TeeTime teeTime) {
         if (teeTime == null) {
             return null;
         }
 
-        GolfCourseDTO golfCourseDTO = mapToGolfCourseDTO(teeTime.getGolfCourse());
+        // Convert the list of User objects to a list of user IDs
+        List<Long> userIds = teeTime.getUsers() != null ?
+                teeTime.getUsers().stream().map(User::getId).collect(Collectors.toList()) : null;
 
         return new TeeTimeDTO(
                 teeTime.getId(),
                 teeTime.getTeeTime(),
                 teeTime.getGroupSize(),
-                teeTime.getUser() != null ? teeTime.getUser().getId() : null, // Include userId
-                golfCourseDTO
+                userIds, // Updated to pass a list of user IDs
+                teeTime.getGolfCourse().getId(),                teeTime.isGreen(),
+                teeTime.getHoles(),
+                teeTime.getAdults(),
+                teeTime.getJuniors(),
+                teeTime.getNote()
         );
     }
 
-    public static GolfCourseDTO mapToGolfCourseDTO(GolfCourse golfCourse) {
+
+    // GolfCourse to GolfCourseDTO
+    public static GolfCourseDTO toGolfCourseDTO(GolfCourse golfCourse) {
         if (golfCourse == null) {
             return null;
         }
 
-        ResortDTO resortDTO = golfCourse.getResort() != null ? mapToResortDTO(golfCourse.getResort()) : null;
-
         return new GolfCourseDTO(
                 golfCourse.getId(),
-                golfCourse.getName(),
-                resortDTO
+                golfCourse.getName()
         );
     }
 
-    public static ResortDTO mapToResortDTO(Resort resort) {
-        if (resort == null) {
+    // Accommodation to AccommodationDTO
+    public static AccommodationDTO toAccommodationDTO(Accommodation accommodation) {
+        if (accommodation == null) {
             return null;
         }
 
-        return new ResortDTO(
-                resort.getId(),
-                resort.getName(),
-                resort.getAddress(),
-                resort.getCountry()
+        return new AccommodationDTO(
+                accommodation.getStartDate(),
+                accommodation.getReservationId(),
+                accommodation.getBeds(),
+                accommodation.getAccommodationName(),
+                accommodation.getNights(),
+                accommodation.getNotes(),
+                accommodation.getExtraBeds(),
+                accommodation.getMealPlan(),
+                toHotelDTO(accommodation.getHotelDetails()),
+                accommodation.getAccommodationTravelers() != null ?
+                        accommodation.getAccommodationTravelers().stream().map(User::getId).collect(Collectors.toList()) : null
+        );
+    }
+
+    // Hotel to HotelDTO
+    public static HotelDTO toHotelDTO(Hotel hotel) {
+        if (hotel == null) {
+            return null;
+        }
+
+        return new HotelDTO(
+                hotel.getExternalValues(),
+                hotel.getStars(),
+                hotel.getId(),
+                hotel.getName(),
+                hotel.getRegion(),
+                hotel.hasHalfStar(),
+                hotel.getCountry(),
+                hotel.getArea()
         );
     }
 

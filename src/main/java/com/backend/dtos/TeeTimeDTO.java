@@ -1,27 +1,40 @@
 package com.backend.dtos;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TeeTimeDTO {
     private Long id;
     private LocalDateTime teeTime;
     private int groupSize;
-    private Long userId; // Add userId
-    private GolfCourseDTO golfCourse;
+    private List<Long> userIds; // List of user IDs
+    private Long golfCourseId; // Changed to Long for golfCourseId
+    private boolean green;
+    private int holes;
+    private int adults;
+    private int juniors;
+    private String note;
 
-    // Constructor
+    // Default constructor
     public TeeTimeDTO() {
     }
 
-    public TeeTimeDTO(Long id, LocalDateTime teeTime, int groupSize, Long userId, GolfCourseDTO golfCourse) {
+    // Full constructor
+    public TeeTimeDTO(Long id, LocalDateTime teeTime, int groupSize, List<Long> userIds, Long golfCourseId,
+                      boolean green, int holes, int adults, int juniors, String note) {
         this.id = id;
         this.teeTime = teeTime;
         this.groupSize = groupSize;
-        this.userId = userId;
-        this.golfCourse = golfCourse;
+        this.userIds = userIds;
+        this.golfCourseId = golfCourseId; // Updated field to golfCourseId
+        this.green = green;
+        this.holes = holes;
+        this.adults = adults;
+        this.juniors = juniors;
+        this.note = note;
     }
 
-    // Getters and setters
+    // Getters and setters for all fields
     public Long getId() {
         return id;
     }
@@ -46,20 +59,59 @@ public class TeeTimeDTO {
         this.groupSize = groupSize;
     }
 
-    public Long getUserId() {
-        return userId;
+    public List<Long> getUserIds() {
+        return userIds;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserIds(List<Long> userIds) {
+        this.userIds = userIds;
     }
 
-    public GolfCourseDTO getGolfCourse() {
-        return golfCourse;
+    public Long getGolfCourseId() {
+        return golfCourseId; // Getter for golfCourseId
     }
 
-    public void setGolfCourse(GolfCourseDTO golfCourse) {
-        this.golfCourse = golfCourse;
+    public void setGolfCourseId(Long golfCourseId) {
+        this.golfCourseId = golfCourseId; // Setter for golfCourseId
+    }
+
+    public boolean isGreen() {
+        return green;
+    }
+
+    public void setGreen(boolean green) {
+        this.green = green;
+    }
+
+    public int getHoles() {
+        return holes;
+    }
+
+    public void setHoles(int holes) {
+        this.holes = holes;
+    }
+
+    public int getAdults() {
+        return adults;
+    }
+
+    public void setAdults(int adults) {
+        this.adults = adults;
+    }
+
+    public int getJuniors() {
+        return juniors;
+    }
+
+    public void setJuniors(int juniors) {
+        this.juniors = juniors;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
-
