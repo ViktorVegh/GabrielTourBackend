@@ -1,5 +1,6 @@
 package com.backend.profis_service;
 
+import com.backend.auth.EncryptionUtil;
 import com.backend.entity.User;
 import com.backend.repository.UserRepository;
 import com.example.klientsoapclient.Context;
@@ -53,14 +54,18 @@ public class OrderService {
 
     public KlientObjednavkaListResult klientObjednavkaList(int id){
         KlientHesloContext context = new KlientHesloContext();
-        try {
-            String password = userRepository.getPasswordById(id);
-            //int id = userRepository.getProfisId();
-            context.setKlientHeslo(new JAXBElement<>(new QName("http://xml.profis.profitour.cz", "Password"), String.class, password));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        String encryptedPassword = userRepository.getPasswordById(id);
+        System.out.println("HESLO"+encryptedPassword);
+        //int id = userRepository.getProfisId();
+        // Decrypt the password
+        String plaintextPassword = EncryptionUtil.decrypt(encryptedPassword);
+
+        // Set the plaintext password in the context
+        context.setKlientHeslo(new JAXBElement<>(
+                new QName("http://xml.profis.profitour.cz", "KlientHeslo"),
+                String.class,
+                plaintextPassword
+        ));
         context.setUzivatelHeslo(passwordElement);    // Set the user's password
         context.setUzivatelLogin(usernameElement);    // Set the user's login
         context.setVypsatNazvy(false);               // Set to false as per request
@@ -69,6 +74,8 @@ public class OrderService {
         context.setIdKlient(9388);
         KlientObjednavkaListResult result = klientPort.klientObjednavkaList(context);
         return result;
+
+
     }
 
 }

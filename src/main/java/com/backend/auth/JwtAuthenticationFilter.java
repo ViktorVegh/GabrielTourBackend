@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
             Person person = jwtHelper.validateTokenAndRetrievePerson(token); // Validate token and get the person
             String role = jwtHelper.getRoleFromToken(token); // Extract role from the token
-
+            System.out.println("Extracted person from token: "+ person.getId());
             System.out.println("Extracted role from token: " + role); // Debug statement
 
             if (person != null && role != null) {

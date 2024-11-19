@@ -25,10 +25,12 @@ public class OrderController {
     @Autowired
     private JwtHelper jwtHelper;
 
-    @GetMapping("/get-order")
-    public ResponseEntity<String> objednavkaListResult(@RequestBody int id) {
+    @PostMapping("/get-order")
+    public ResponseEntity<String> objednavkaListResult(@RequestBody Map<String, Object> body) {
         try {
-            System.out.println("I got to controller");
+            int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
+            System.out.println("I got to controller with ID: " + id);
+
             // Fetch order data using the service
             KlientObjednavkaListResult result = orderService.klientObjednavkaList(id);
 

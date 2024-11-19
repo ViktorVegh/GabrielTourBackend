@@ -30,38 +30,42 @@ public class AuthService {
 
     // Registration
     public String register(String email, String password, String name, String profilePicture, String role) {
-        // Check all repositories to see if the email is already registered
+        // Check if email is already registered
         if (userRepository.findByEmail(email) != null || driverRepository.findByEmail(email) != null || tourGuideRepository.findByEmail(email) != null) {
             throw new RuntimeException("Email is already registered!");
         }
 
-        String hashedPassword = passwordEncoder.encode(password);
-        String finalName = (name != null) ? name : "";  // Default to empty string if name is null
-        String finalProfilePicture = (profilePicture != null) ? profilePicture : "";  // Default to empty string if profile picture is null
+        // Encrypt the password before saving
+        String encryptedPassword = EncryptionUtil.encrypt(password);
+
+        // Handle optional fields
+        String finalName = (name != null) ? name : "";
+        String finalProfilePicture = (profilePicture != null) ? profilePicture : "";
+
         Person newPerson;
 
-        // Save the appropriate user type and generate token
+        // Save the appropriate user type
         switch (role.toLowerCase()) {
             case "driver":
-                newPerson = new Driver(email, hashedPassword, name, profilePicture, role);
+                newPerson = new Driver(email, encryptedPassword, finalName, finalProfilePicture, role);
                 driverRepository.save((Driver) newPerson);
                 break;
             case "tourguide":
-                newPerson = new TourGuide(email, hashedPassword, name, profilePicture,role);
+                newPerson = new TourGuide(email, encryptedPassword, finalName, finalProfilePicture, role);
                 tourGuideRepository.save((TourGuide) newPerson);
                 break;
             case "office":
-                newPerson = new Office(email,hashedPassword,role);
+                newPerson = new Office(email, encryptedPassword, role);
                 officeRepository.save((Office) newPerson);
                 break;
             default:
-                newPerson = new User(email, hashedPassword, name, profilePicture,role);
+                newPerson = new User(email, encryptedPassword, finalName, finalProfilePicture, role);
                 userRepository.save((User) newPerson);
                 break;
         }
 
         // Generate a token with the role
-        return jwtUtil.generateToken(newPerson.getId(), role);  // Pass the role when generating the token
+        return jwtUtil.generateToken(newPerson.getId(), role);
     }
 
     // Login
