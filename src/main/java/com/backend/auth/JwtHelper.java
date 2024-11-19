@@ -53,4 +53,22 @@ public class JwtHelper {
         Claims claims = JwtUtil.getClaimsFromToken(token);
         return claims != null ? claims.get("role", String.class) : null;
     }
+
+    public Integer getIdFromToken(String token) {
+        Claims claims;
+        try {
+            System.out.println("i got to token");
+            claims = JwtUtil.getClaimsFromToken(token);
+        } catch (Exception e) {
+            // Log exception (e.g., expired or malformed token)
+            return null;
+        }
+        if (claims == null) return null;
+        try {
+            return Integer.parseInt(claims.get("id", String.class));
+        } catch (NumberFormatException e) {
+            // Log error: Invalid format for 'id' in token claims
+            return null;
+        }
+    }
 }
