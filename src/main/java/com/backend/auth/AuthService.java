@@ -8,6 +8,9 @@ import com.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
 @Service
 public class AuthService {
 
@@ -22,8 +25,6 @@ public class AuthService {
     @Autowired
     private OfficeRepository officeRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -81,9 +82,9 @@ public class AuthService {
         if (person == null) {
             person = officeRepository.findByEmail(email);
         }
-
         // Check if the person was found and the password matches
-        if (person != null && passwordEncoder.matches(password, person.getPassword())) {
+        if (person != null && Objects.equals(password, EncryptionUtil.decrypt(person.getPassword())))
+        {
             String role;
 
             // Corrected role assignment with proper braces
