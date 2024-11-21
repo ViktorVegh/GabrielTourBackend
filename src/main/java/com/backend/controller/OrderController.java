@@ -6,6 +6,7 @@ import com.example.klientsoapclient.KlientKontakt;
 import com.example.klientsoapclient.KlientObjednavkaListResult;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.klientsoapclient.ResetHeslaOveritResult;
+import com.example.objednavkasoapclient.ObjednavkaDetailResult;
 import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,7 @@ public class OrderController {
                 xml.append("<DatumOd>").append(getJAXBElementValue(order.getDatumOd())).append("</DatumOd>");
                 xml.append("<DatumDo>").append(getJAXBElementValue(order.getDatumDo())).append("</DatumDo>");
                 xml.append("<Dospelych>").append(order.getDospelych() != null ? order.getDospelych() : 0).append("</Dospelych>");
+                xml.append("<Klic>").append(order.getKlic()).append("</Klic>");
                 xml.append("<Deti>").append(order.getDeti() != null ? order.getDeti() : 0).append("</Deti>");
                 xml.append("<Noci>").append(order.getNoci() != null ? order.getNoci() : 0).append("</Noci>");
                 xml.append("<Nazev>").append(getJAXBElementValue(order.getNazev())).append("</Nazev>");

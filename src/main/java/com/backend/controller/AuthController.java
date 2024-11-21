@@ -29,7 +29,7 @@ public class AuthController {
     // Register endpoint
     @PostMapping("/register")
     public Map<String, String> register(@RequestBody RegisterRequest registerRequest) {
-        String token = authService.register(
+        String token = authService.registerEmployee(
                 registerRequest.getEmail(),
                 registerRequest.getPassword(),
                 registerRequest.getName(),
@@ -136,14 +136,16 @@ public class AuthController {
             ResetHeslaOveritResult result = loginService.resetHeslaOverit(authKey, email, clientId);
 
             // Check if the response from the service indicates a valid key
-            if (result.getMessage() == null) {
+            if (result.getMessage() != null && result.getMessage().getValue() != null) {
+                response.put("status", "error");
+                System.out.println("Debug: result.getMessage() = " + result.getMessage());
+                response.put("message", "Authorization key is invalid or has expired.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+
+            } else {
                 response.put("status", "success");
                 response.put("message", "Authorization key is valid.");
                 return ResponseEntity.ok(response);
-            } else {
-                response.put("status", "error");
-                response.put("message", "Authorization key is invalid or has expired.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
         } catch (Exception e) {
             // Log the exception for debugging
@@ -163,15 +165,22 @@ public class AuthController {
         String authKey = request.get("authKey");
         String newPassword = request.get("newPassword");
         String email =request.get("email");
-        int clientId;
+        int profisId;
         Map<String, String> response = new HashMap<>();
 
         try {
-            clientId = Integer.parseInt(request.get("clientId"));
-            ZmenitHesloResult result = loginService.changePassword(authKey, newPassword,clientId,email);
+            profisId = Integer.parseInt(request.get("clientId"));
+            System.out.println(profisId+"KUrvaaaaaaaaaa");
+            ZmenitHesloResult result = loginService.changePassword(authKey, newPassword,profisId,email);
 
-            if (result.getMessage()==null) {
+            if (result.getMessage().getValue() == null) {
                 response.put("message", "Password has been successfully changed.");
+                try {
+                    authService.registerUser(email,newPassword, (long) profisId);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             } else {
                 response.put("message", "Error changing password.");
             }

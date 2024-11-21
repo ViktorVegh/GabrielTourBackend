@@ -63,7 +63,7 @@ class AuthTest {
 
         // Check that the exception is thrown and the message is correct
         RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> authService.register(email, password, null, null, "user"));
+                () -> authService.registerEmployee(email, password, null, null, "user"));
         assertEquals("Email is already registered!", exception.getMessage());
     }
 
@@ -119,7 +119,7 @@ class AuthTest {
         });
         when(jwtUtil.generateToken(anyLong(), eq(role))).thenReturn("testToken");
 
-        String result = authService.register(email, password, name, profilePicture, role);
+        String result = authService.registerEmployee(email, password, name, profilePicture, role);
 
         verify(userRepository, times(1)).save(any(User.class));
         assertEquals("testToken", result);

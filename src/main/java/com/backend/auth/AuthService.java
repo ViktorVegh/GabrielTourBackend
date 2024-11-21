@@ -30,7 +30,7 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     // Registration
-    public String register(String email, String password, String name, String profilePicture, String role) {
+    public String registerEmployee(String email, String password, String name, String profilePicture, String role) {
         // Check if email is already registered
         if (userRepository.findByEmail(email) != null || driverRepository.findByEmail(email) != null || tourGuideRepository.findByEmail(email) != null) {
             throw new RuntimeException("Email is already registered!");
@@ -68,7 +68,17 @@ public class AuthService {
         // Generate a token with the role
         return jwtUtil.generateToken(newPerson.getId(), role);
     }
+    public void registerUser(String email, String password,Long clientId){
+        try {
+            Person newPerson;
+            String role = "user";
+            String encryptedPassword = EncryptionUtil.encrypt(password);
+            newPerson = new User(email, encryptedPassword, clientId, role);
+            userRepository.save((User) newPerson);
+            }
+            catch (Exception e){e.printStackTrace();}
 
+    }
     // Login
     public String login(String email, String password) {
         // Try finding the user in each repositoryoffice

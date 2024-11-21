@@ -44,6 +44,12 @@ public abstract class Person {
         this.role = role;
     }
 
+    public Person(String email, String encryptedPassword, Long clientId, String role) {
+        this.email = email;
+        this.password=encryptedPassword;
+        this.id=clientId;
+        this.role=role;
+    }
 
 
     // Getters and Setters

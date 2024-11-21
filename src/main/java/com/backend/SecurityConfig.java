@@ -2,6 +2,7 @@ package com.backend;
 
 import com.backend.auth.JwtAuthenticationFilter;
 import com.backend.auth.JwtHelper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,7 +44,7 @@ public class SecurityConfig {
                 .csrf().disable() // Disable CSRF since we are using JWT
                 .cors().and() // Enable CORS
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/register", "/auth/login","/auth/verify-key/**","/auth/reset-password","/auth/login-klient","/auth/change-password","order/get-order").permitAll() // Allow public access to register and login endpoints
+                .requestMatchers("/auth/register", "/auth/login","/auth/verify-key","/auth/reset-password","/auth/login-klient","/auth/change-password","order/get-order").permitAll() // Allow public access to register and login endpoints
                 .anyRequest().authenticated() // All other requests require authentication
                 .and()
                 .sessionManagement()

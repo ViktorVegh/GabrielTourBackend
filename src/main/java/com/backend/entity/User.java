@@ -13,8 +13,12 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User extends Person {
 
+
+
+
     @ManyToMany(mappedBy = "users")
     private List<TeeTime> teeTimes;
+    private Long profis_id;
 
     // Constructors
     public User() {
@@ -29,6 +33,13 @@ public class User extends Person {
         super(email, password, name, profilePicture, role);
     }
 
+    public User(String email, String encryptedPassword, Long profis_id, String role) {
+        super(email,encryptedPassword,role);
+        this.profis_id=profis_id;
+    }
+    public Long getProfisId() {
+        return profis_id;
+    }
     public List<TeeTime> getTeeTimes() {
         return teeTimes;
     }
