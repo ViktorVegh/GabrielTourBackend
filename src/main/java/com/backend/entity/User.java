@@ -13,14 +13,16 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User extends Person {
 
-
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderUser> orderUsers; // Relationship to orders via OrderUser
 
     @ManyToMany(mappedBy = "users")
-    private List<TeeTime> teeTimes;
+    private List<TeeTime> teeTimes; // Independent relationship
+
     private Long profis_id;
 
-    // Constructors
+    // Constructors, Getters, and Setters
+
     public User() {
         super();
     }
@@ -34,12 +36,26 @@ public class User extends Person {
     }
 
     public User(String email, String encryptedPassword, Long profis_id, String role) {
-        super(email,encryptedPassword,role);
-        this.profis_id=profis_id;
+        super(email, encryptedPassword, role);
+        this.profis_id = profis_id;
     }
+
     public Long getProfisId() {
         return profis_id;
     }
+
+    public void setProfisId(Long profis_id) {
+        this.profis_id = profis_id;
+    }
+
+    public List<OrderUser> getOrderUsers() {
+        return orderUsers;
+    }
+
+    public void setOrderUsers(List<OrderUser> orderUsers) {
+        this.orderUsers = orderUsers;
+    }
+
     public List<TeeTime> getTeeTimes() {
         return teeTimes;
     }
@@ -47,6 +63,4 @@ public class User extends Person {
     public void setTeeTimes(List<TeeTime> teeTimes) {
         this.teeTimes = teeTimes;
     }
-
-
 }
