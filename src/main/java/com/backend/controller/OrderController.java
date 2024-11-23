@@ -6,6 +6,7 @@ import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.KlientKontakt;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.objednavkasoapclient.*;
+import com.example.objednavkasoapclient.IntegerNazev;
 import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -96,7 +97,7 @@ public class OrderController {
                 xml.append("<DatumOd>").append(getJAXBElementValue(order.getDatumOd())).append("</DatumOd>");
                 xml.append("<DatumDo>").append(getJAXBElementValue(order.getDatumDo())).append("</DatumDo>");
                 xml.append("<Dospelych>").append(order.getDospelych() != null ? order.getDospelych() : 0).append("</Dospelych>");
-                xml.append("<Klic>").append(order.getKlic()).append("</Klic>");
+                xml.append("<Klic>").append(getJAXBElementValue(order.getKlic())).append("</Klic>");
                 xml.append("<Deti>").append(order.getDeti() != null ? order.getDeti() : 0).append("</Deti>");
                 xml.append("<Noci>").append(order.getNoci() != null ? order.getNoci() : 0).append("</Noci>");
                 xml.append("<Nazev>").append(getJAXBElementValue(order.getNazev())).append("</Nazev>");
@@ -147,12 +148,12 @@ public class OrderController {
             xml.append("<Infantu>").append(data.getInfantu()).append("</Infantu>");
             xml.append("<Noci>").append(data.getNoci()).append("</Noci>");
             xml.append("<Klic>").append(data.getKlic()).append("</Klic>");
-            xml.append("<Nazev>").append(data.getNazev()).append("</Nazev>");
+            xml.append("<Nazev>").append(getJAXBElementValue(data.getNazev())).append("</Nazev>");
 
             // Letiste
             if (data.getLetiste() != null) {
                 xml.append("<Letiste>");
-                xml.append("<Nazev>").append(data.getLetiste().getName()).append("</Nazev>");
+                xml.append("<Nazev>").append(getJAXBElementValue(data.getLetiste())).append("</Nazev>");
                 xml.append("</Letiste>");
             }
 
@@ -197,11 +198,28 @@ public class OrderController {
             }
 
             // TypDoprava
-            if (data.getTypDoprava() != null) {
+            if (data.getTypDoprava() != null && data.getTypDoprava().getValue() != null) {
+                IntegerNazev typDoprava = data.getTypDoprava().getValue();
                 xml.append("<TypDoprava>");
-                xml.append("<Nazev>").append(data.getTypDoprava().getName()).append("</Nazev>");
-                xml.append("<ID>").append(data.getTypDoprava().getValue()).append("</ID>");
+
+                // Append the Nazev if available
+                if (typDoprava.getNazev() != null && typDoprava.getNazev().getValue() != null) {
+                    xml.append("<Nazev>").append(typDoprava.getNazev().getValue()).append("</Nazev>");
+                } else {
+                    xml.append("<Nazev/>");
+                }
+
+                // Append the ID if available
+                if (typDoprava.getID() != null) {
+                    xml.append("<ID>").append(typDoprava.getID()).append("</ID>");
+                } else {
+                    xml.append("<ID/>");
+                }
+
                 xml.append("</TypDoprava>");
+            } else {
+                // If TypDoprava is null, include an empty TypDoprava element
+                xml.append("<TypDoprava/>");
             }
 
             // TypStrava
@@ -216,8 +234,30 @@ public class OrderController {
                 xml.append("<RezervaceDoprava>");
                 xml.append("<CasNastupni>").append(rezervaceDopravy.getRezervaceDoprava().get(1).getCasNastupni()).append("</CasNastupni>");
                 xml.append("<CasVystupni>").append(rezervaceDopravy.getRezervaceDoprava().get(1).getCasVystupni()).append("</CasVystupni>");
-                xml.append("<LetisteNastupni>").append(rezervaceDopravy.getRezervaceDoprava().get(1).getLetisteNastupni().getName()).append("</LetisteNastupni>");
-                xml.append("<LetisteVystupni>").append(rezervaceDopravy.getRezervaceDoprava().get(1).getLetisteVystupni().toString()).append("</LetisteVystupni>");
+
+                // Safely extract and append LetisteNastupni
+                JAXBElement<IntegerNazev> letisteNastupniElement = rezervaceDopravy.getRezervaceDoprava().get(1).getLetisteNastupni();
+                if (letisteNastupniElement != null && letisteNastupniElement.getValue() != null) {
+                    IntegerNazev letisteNastupni = letisteNastupniElement.getValue();
+                    if (letisteNastupni.getNazev() != null && letisteNastupni.getNazev().getValue() != null) {
+                        xml.append("<LetisteNastupni>").append(letisteNastupni.getNazev().getValue()).append("</LetisteNastupni>");
+                    } else {
+                        xml.append("<LetisteNastupni/>");
+                    }
+                }
+
+// Safely extract and append LetisteVystupni
+                JAXBElement<IntegerNazev> letisteVystupniElement = rezervaceDopravy.getRezervaceDoprava().get(1).getLetisteVystupni();
+                if (letisteVystupniElement != null && letisteVystupniElement.getValue() != null) {
+                    IntegerNazev letisteVystupni = letisteVystupniElement.getValue();
+                    if (letisteVystupni.getNazev() != null && letisteVystupni.getNazev().getValue() != null) {
+                        xml.append("<LetisteVystupni>").append(letisteVystupni.getNazev().getValue()).append("</LetisteVystupni>");
+                    } else {
+                        xml.append("<LetisteVystupni/>");
+                    }
+                }
+
+                xml.append("</RezervaceDoprava>");
             }
 
     }
