@@ -1,25 +1,22 @@
 package com.backend.profis_service;
 
 import com.backend.auth.EncryptionUtil;
-import com.backend.entity.OrderUser;
-import com.backend.entity.TourOrder;
-import com.backend.entity.User;
-import com.backend.repository.TourOrderRepository;
-import com.backend.repository.UserRepository;
+import com.backend.entity.*;
+import com.backend.repository.*;
 import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.Klient;
-import com.example.klientsoapclient.KlientKontakt;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.objednavkasoapclient.*;
-import com.example.objednavkasoapclient.IntegerNazev;
 import com.example.objednavkasoapclient.Objednavka;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.ws.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +25,15 @@ public class OrderService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private TourOrderRepository tourOrderRepository;
-
-
+    private OrderDetailRepository tourOrderRepository;
+    @Autowired
+    private TransportationReservationRepository transportationReservationRepository;
+    @Autowired
+    private HotelRepository hotelRepository;
+    @Autowired
+    private AccommodationReservationRepository accommodationReservationRepository;
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     private static final String WSDL_URL = "https://xml.gabrieltour.sk/API/v1/Klient.svc?wsdl";
 
@@ -57,6 +60,8 @@ public class OrderService {
     JAXBElement<String> idElement = new JAXBElement<>(new QName(NAMESPACE_URI, "id_Jazyk"), String.class, id);
     private Klient klientPort;
     private Objednavka objednavkaPort;
+    @Autowired
+    private OrderUserRepository orderUserRepository;
 
 
     public OrderService() throws Exception {
@@ -97,14 +102,27 @@ public class OrderService {
 
 
     }
-    public ObjednavkaDetailResult ObjednavkaDetail(int id,String klic){
+
+    public ObjednavkaDetailResult ObjednavkaDetail(long id){
         ObjednavkaContext context = new ObjednavkaContext();
         context.setUzivatelHeslo(passwordElement);    // Set the user's password
         context.setUzivatelLogin(usernameElement);    // Set the user's login
         context.setVypsatNazvy(true);               // Set to false as per request
         context.setIdJazyk(idElement);
-        context.setIdObjednavka(id);
-        context.setKlic(new JAXBElement<>(new QName(NAMESPACE_URI, "Klic"), String.class, klic));
+        // Optional<OrderUser> optionalOrder = orderUserRepository.getLatestOrderByUserId(id);
+        //OrderUser orderUser = optionalOrder.get(); // Unwrap the Optional safely
+        //   OrderUserId orderUserId = orderUser.getId(); // Get the composite key
+            int orderId = 8291; // Extract orderId from the composite key
+            String klic = "D88A537D"; // Get the `klic` field
+
+            // Use `orderId` and `klic` as needed
+            System.out.println("Order ID: " + orderId);
+            System.out.println("Klic: " + klic);
+            context.setIdObjednavka(orderId);
+            context.setKlic(new JAXBElement<>(new QName(NAMESPACE_URI, "Klic"), String.class, klic));
+
+
+
         ObjednavkaDetailResult result = objednavkaPort.objednavkaDetail(context);
         return result;
     }
@@ -126,16 +144,16 @@ public class OrderService {
                         .orElseThrow(() -> new RuntimeException("User not found for ID: " + id));
 
                 // Create a new TourOrder
-                TourOrder tourOrder = new TourOrder();
-                tourOrder.setOrderNumber(order.getID()); // Example order number
-                tourOrder.setOrderDate(LocalDateTime.now());
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setId(order.getID());// Example order number
+                System.out.println(order.getID() + "AAAAAAAA");
                 String klicValue = getJAXBElementValue(order.getKlic());
                 // Create a new OrderUser
-                OrderUser orderUser = new OrderUser(tourOrder, user, klicValue);
-                tourOrder.setOrderUsers(List.of(orderUser));
+                OrderUser orderUser = new OrderUser(orderDetail, user, klicValue);
+                orderDetail.setOrderUsers(orderUser);
 
                 // Save the TourOrder (cascades to OrderUser)
-                tourOrderRepository.save(tourOrder);
+                tourOrderRepository.save(orderDetail);
                 xml.append("</ObjednavkaKlient>");
             }
             xml.append("</Data>");
@@ -163,119 +181,72 @@ public class OrderService {
             ObjednavkaPopis data = result.getData().getValue();
 
             // Basic fields
-            xml.append("<ID>").append(data.getID()).append("</ID>");
-            xml.append("<CenaCelkem>").append(data.getCenaCelkem()).append("</CenaCelkem>");
-            xml.append("<DatumOd>").append(data.getDatumOd()).append("</DatumOd>");
-            xml.append("<DatumDo>").append(data.getDatumDo()).append("</DatumDo>");
-            xml.append("<Dospelych>").append(data.getDospelych()).append("</Dospelych>");
-            xml.append("<Deti>").append(data.getDeti()).append("</Deti>");
-            xml.append("<Infantu>").append(data.getInfantu()).append("</Infantu>");
-            xml.append("<Noci>").append(data.getNoci()).append("</Noci>");
-            xml.append("<Klic>").append(data.getKlic()).append("</Klic>");
-            xml.append("<Nazev>").append(getJAXBElementValue(data.getNazev())).append("</Nazev>");
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setId(data.getID());
+            //orderDetail.setStartDate(data.getDatumOd().getValue());
+            //orderDetail.setEndDate(data.getDatumDo().getValue());
+            orderDetail.setAdults(data.getDospelych());
+            orderDetail.setChildren(data.getDeti());
+            orderDetail.setInfants(data.getInfantu());
+            orderDetail.setNumberOfNights(data.getNoci());
+            orderDetail.setName(getJAXBElementValue(data.getNazev()));
+            //orderDetail.setReservationStatus(data.getStavRezervace() != null ? data.getStavRezervace().getName() : null);
 
-            // Letiste
-            if (data.getLetiste() != null) {
-                xml.append("<Letiste>");
-                xml.append("<Nazev>").append(getJAXBElementValue(data.getLetiste())).append("</Nazev>");
-                xml.append("</Letiste>");
-            }
-
-            // StavObjednavka
-            if (data.getStavObjednavka() != null) {
-                xml.append("<StavObjednavka>");
-                xml.append("<Nazev>").append(data.getStavObjednavka().getName()).append("</Nazev>");
-                xml.append("<Nazev>").append(data.getStavObjednavka().getValue()).append("</Nazev>");
-                xml.append("</StavObjednavka>");
-            }
-
-            // StavPlatba
-            if (data.getStavPlatba() != null) {
-                xml.append("<StavPlatba>");
-                xml.append("<Nazev>").append(data.getStavPlatba().getName()).append("</Nazev>");
-                xml.append("<ID>").append(data.getStavPlatba().getValue()).append("</ID>");
-                xml.append("</StavPlatba>");
-            }
-
-            // StavRezervace
-            if (data.getStavRezervace() != null) {
-                xml.append("<StavRezervace>");
-                xml.append("<Nazev>").append(data.getStavRezervace().getName()).append("</Nazev>");
-                xml.append("<ID>").append(data.getStavRezervace().getValue()).append("</ID>");
-                xml.append("</StavRezervace>");
-            }
-
-            // StavSmlouva
-            if (data.getStavSmlouva() != null) {
-                xml.append("<StavSmlouva>");
-                xml.append("<Nazev>").append(data.getStavSmlouva().getName()).append("</Nazev>");
-                xml.append("<ID>").append(data.getStavSmlouva().getValue()).append("</ID>");
-                xml.append("</StavSmlouva>");
-            }
-
-            // TypDoprava
-            if (data.getTypDoprava() != null && data.getTypDoprava().getValue() != null) {
-                com.example.objednavkasoapclient.IntegerNazev typDoprava = data.getTypDoprava().getValue();
-                xml.append("<TypDoprava>");
-
-                // Append the Nazev if available
-                if (typDoprava.getNazev() != null && typDoprava.getNazev().getValue() != null) {
-                    xml.append("<Nazev>").append(typDoprava.getNazev().getValue()).append("</Nazev>");
-                } else {
-                    xml.append("<Nazev/>");
-                }
-
-                // Append the ID if available
-                if (typDoprava.getID() != null) {
-                    xml.append("<ID>").append(typDoprava.getID()).append("</ID>");
-                } else {
-                    xml.append("<ID/>");
-                }
-
-                xml.append("</TypDoprava>");
-            } else {
-                // If TypDoprava is null, include an empty TypDoprava element
-                xml.append("<TypDoprava/>");
-            }
-
-            // TypStrava
-            if (data.getTypStrava() != null) {
-                xml.append("<TypStrava>");
-                xml.append("<Nazev>").append(data.getTypStrava().getName()).append("</Nazev>");
-                xml.append("<ID>").append(data.getTypStrava().getValue()).append("</ID>");
-                xml.append("</TypStrava>");
-            }
+            // Save transportation reservations
+            List<TransportationReservation> transportations = new ArrayList<>();
             if (data.getRezervaceDopravy() != null && data.getRezervaceDopravy().getValue() != null) {
-                ArrayOfRezervaceDoprava rezervaceDopravy = data.getRezervaceDopravy().getValue();
-                xml.append("<RezervaceDoprava>");
-                xml.append("<CasNastupni>").append(rezervaceDopravy.getRezervaceDoprava().get(1).getCasNastupni()).append("</CasNastupni>");
-                xml.append("<CasVystupni>").append(rezervaceDopravy.getRezervaceDoprava().get(1).getCasVystupni()).append("</CasVystupni>");
+                for (RezervaceDoprava transportation : data.getRezervaceDopravy().getValue().getRezervaceDoprava()) {
+                    TransportationReservation transportReservation = new TransportationReservation();
+                    transportReservation.setId(transportation.getID());
+                    transportReservation.setPickupTime(toLocalDateTime(transportation.getCasNastupni()));
+                    transportReservation.setDropoffTime(toLocalDateTime(transportation.getCasVystupni()));
 
-                // Safely extract and append LetisteNastupni
-                JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteNastupniElement = rezervaceDopravy.getRezervaceDoprava().get(1).getLetisteNastupni();
-                if (letisteNastupniElement != null && letisteNastupniElement.getValue() != null) {
-                    com.example.objednavkasoapclient.IntegerNazev letisteNastupni = letisteNastupniElement.getValue();
-                    if (letisteNastupni.getNazev() != null && letisteNastupni.getNazev().getValue() != null) {
-                        xml.append("<LetisteNastupni>").append(letisteNastupni.getNazev().getValue()).append("</LetisteNastupni>");
-                    } else {
-                        xml.append("<LetisteNastupni/>");
-                    }
+                    transportReservation.setStartDate(toLocalDateTime(transportation.getDatum()));
+                    //transportReservation.setTransportId(transportation.getId_Doprava());
+                    //transportReservation.setRouteName(transportation.getNazev());
+                    transportReservation.setOrderDetail(orderDetail);
+                    transportations.add(transportReservation);
                 }
-
-// Safely extract and append LetisteVystupni
-                JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteVystupniElement = rezervaceDopravy.getRezervaceDoprava().get(1).getLetisteVystupni();
-                if (letisteVystupniElement != null && letisteVystupniElement.getValue() != null) {
-                    IntegerNazev letisteVystupni = letisteVystupniElement.getValue();
-                    if (letisteVystupni.getNazev() != null && letisteVystupni.getNazev().getValue() != null) {
-                        xml.append("<LetisteVystupni>").append(letisteVystupni.getNazev().getValue()).append("</LetisteVystupni>");
-                    } else {
-                        xml.append("<LetisteVystupni/>");
-                    }
-                }
-
-                xml.append("</RezervaceDoprava>");
+                transportationReservationRepository.saveAll(transportations);
             }
+            orderDetail.setTransportationReservations(transportations);
 
+            // Save accommodation reservations
+            List<AccommodationReservation> accommodations = new ArrayList<>();
+            if (data.getRezervaceUbytovani() != null && data.getRezervaceUbytovani().getValue() != null) {
+                for (RezervaceUbytovani accommodation : data.getRezervaceUbytovani().getValue().getRezervaceUbytovani()) {
+                    AccommodationReservation accReservation = new AccommodationReservation();
+                    accReservation.setId(accommodation.getID());
+                    accReservation.setStartDate(toLocalDateTime(accommodation.getDatumOd()));
+                    accReservation.setNumberOfNights(accommodation.getNoci());
+                    accReservation.setBeds(accommodation.getLuzek());
+                    accReservation.setExtraBeds(accommodation.getPristylek());
+                    accReservation.setAccommodationName(getJAXBElementValue(accommodation.getNazevUbytovani()));
+                    accReservation.setNote(getJAXBElementValue(accommodation.getPoznamka()));
+                    accReservation.setOrderDetail(orderDetail);
+
+                    // Save associated hotel
+                    Hotel hotel = new Hotel();
+                    if (accommodation.getObjednavkaHotel() != null) {
+                        hotel.setId(accommodation.getObjednavkaHotel().getValue().getID());
+                        hotel.setName(getJAXBElementValue(accommodation.getObjednavkaHotel().getValue().getNazev()));
+                        hotelRepository.save(hotel);
+                    }
+                    accReservation.setObjednavkaHotel(hotel);
+                    accommodations.add(accReservation);
+                }
+                accommodationReservationRepository.saveAll(accommodations);
+            }
+            orderDetail.setAccommodationReservations(accommodations);
+
+            // Save OrderDetail
+            orderDetailRepository.save(orderDetail);
+
+            xml.append("<Data>");
+            xml.append("<ObjednavkaDetail>");
+            xml.append("<ID>").append(data.getID()).append("</ID>");
+            xml.append("</ObjednavkaDetail>");
+            xml.append("</Data>");
         }
 
         xml.append("</ObjednavkaDetailResult>");
@@ -283,9 +254,22 @@ public class OrderService {
         xml.append("</s:Body>");
         xml.append("</s:Envelope>");
 
-        return xml.toString();
-    }
+        return xml.toString();}
+
     private <T > String getJAXBElementValue(JAXBElement < T > element) {
         return element != null && element.getValue() != null ? element.getValue().toString() : "";
     }
+
+
+
+        public static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
+            if (xmlGregorianCalendar == null) {
+                return null; // Handle null case
+            }
+            return xmlGregorianCalendar.toGregorianCalendar()
+                    .toZonedDateTime()
+                    .toLocalDateTime();
+        }
 }
+
+

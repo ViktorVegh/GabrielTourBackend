@@ -30,27 +30,22 @@ public class Drive {
     @JoinColumn(name = "tee_time_id")
     private TeeTime teeTime;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transportation_id", referencedColumnName = "id")
-    private Transportation transportation;
 
     // Constructors
 
     // Primary constructor with basic fields
-    public Drive(Reason reason, String customReason, TeeTime teeTime, Transportation transportation) {
+    public Drive(Reason reason, String customReason, TeeTime teeTime) {
         this.reason = reason;
         this.customReason = reason == Reason.OTHER ? customReason : null;
         this.teeTime = teeTime;
-        this.transportation = transportation;
     }
 
     // Constructor with driver field
-    public Drive(Reason reason, String customReason, Driver driver, TeeTime teeTime, Transportation transportation) {
+    public Drive(Reason reason, String customReason, Driver driver, TeeTime teeTime) {
         this.reason = reason;
         this.customReason = reason == Reason.OTHER ? customReason : null;
         this.driver = driver;
         this.teeTime = teeTime;
-        this.transportation = transportation;
     }
 
     // Default constructor
@@ -97,11 +92,5 @@ public class Drive {
         this.teeTime = teeTime;
     }
 
-    public Transportation getTransportation() {
-        return transportation;
-    }
 
-    public void setTransportation(Transportation transportation) {
-        this.transportation = transportation;
-    }
 }

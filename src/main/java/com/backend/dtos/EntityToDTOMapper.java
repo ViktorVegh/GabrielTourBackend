@@ -75,7 +75,6 @@ public class EntityToDTOMapper {
                 hotel.getId(),
                 hotel.getName(),
                 hotel.getRegion(),
-                hotel.hasHalfStar(),
                 hotel.getCountry(),
                 hotel.getArea()
         );

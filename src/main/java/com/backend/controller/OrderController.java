@@ -57,11 +57,9 @@ public class OrderController {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
             System.out.println("I got to controller with ID: " + id);
-            String klic = body.get("klic").toString();
-            System.out.println("Klic is: " + klic);
             // Fetch order data using the service
-            ObjednavkaDetailResult result = orderService.ObjednavkaDetail(id,klic);
-
+            ObjednavkaDetailResult result = orderService.ObjednavkaDetail(id);
+            System.out.println(result.getData().getValue().getNoci()+ "BBBBBBBB");
             // Convert the result to XML
             String xmlResponse = orderService.buildXmlResponseOrderDetail(result);
 

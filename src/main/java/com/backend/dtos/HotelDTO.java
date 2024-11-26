@@ -11,16 +11,13 @@ public class HotelDTO {
     private int stars;
 
     // Unique identifier
-    private String id;
+    private int id;
 
     // Hotel name
     private String name;
 
     // Region associated with the hotel
     private String region;
-
-    // Indicator for fractional star rating (e.g., 3.5 stars)
-    private boolean hasHalfStar;
 
     // Country associated with the hotel
     private String country;
@@ -32,14 +29,13 @@ public class HotelDTO {
     public HotelDTO() {
     }
 
-    public HotelDTO(Map<String, String> externalValues, int stars, String id, String name, String region,
-                    boolean hasHalfStar, String country, String area) {
+    public HotelDTO(Map<String, String> externalValues, int stars, int id, String name, String region,
+              String country, String area) {
         this.externalValues = externalValues;
         this.stars = stars;
         this.id = id;
         this.name = name;
         this.region = region;
-        this.hasHalfStar = hasHalfStar;
         this.country = country;
         this.area = area;
     }
@@ -61,11 +57,11 @@ public class HotelDTO {
         this.stars = stars;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -85,13 +81,6 @@ public class HotelDTO {
         this.region = region;
     }
 
-    public boolean isHasHalfStar() {
-        return hasHalfStar;
-    }
-
-    public void setHasHalfStar(boolean hasHalfStar) {
-        this.hasHalfStar = hasHalfStar;
-    }
 
     public String getCountry() {
         return country;

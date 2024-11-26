@@ -9,10 +9,10 @@ public class OrderUser {
     @EmbeddedId
     private OrderUserId id;
 
-    @ManyToOne
+    @OneToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id")
-    private TourOrder tourOrder;
+    private OrderDetail orderDetail;
 
     @ManyToOne
     @MapsId("userId")
@@ -25,11 +25,11 @@ public class OrderUser {
 
     public OrderUser() {}
 
-    public OrderUser(TourOrder tourOrder, User user, String klic) {
-        this.tourOrder = tourOrder;
+    public OrderUser(OrderDetail orderDetail, User user, String klic) {
+        this.orderDetail = orderDetail;
         this.user = user;
         this.klic = klic;
-        this.id = new OrderUserId(tourOrder.getId(), user.getId());
+        this.id = new OrderUserId(orderDetail.getId(), user.getId());
     }
 
     public OrderUserId getId() {
@@ -40,12 +40,12 @@ public class OrderUser {
         this.id = id;
     }
 
-    public TourOrder getTourOrder() {
-        return tourOrder;
+    public OrderDetail getOrderDetail() {
+        return orderDetail;
     }
 
-    public void setTourOrder(TourOrder tourOrder) {
-        this.tourOrder = tourOrder;
+    public void setOrderDetail(OrderDetail orderDetail) {
+        this.orderDetail = orderDetail;
     }
 
     public User getUser() {
