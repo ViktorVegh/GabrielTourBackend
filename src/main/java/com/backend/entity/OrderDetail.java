@@ -21,14 +21,7 @@ public class OrderDetail {
     private int children; // Deti
     private int infants; // Infantu
     private String currency; // Mena
-    private String reservationStatus; // StavRezervace
     private String paymentStatus; // StavPlatba
-    private String contractStatus; // StavSmlouva
-    private String requestStatus; // StavVyzadani
-    private String instructionsStatus; // StavPokyny
-    private String mealType; // TypStrava
-    private String transportationType; // TypDoprava
-    private LocalDateTime createdAt; // Vytvoreno
     private String name; // Nazev (Název objednávky)
 
     @ElementCollection
@@ -49,12 +42,10 @@ public class OrderDetail {
     @ElementCollection
     private List<String> travelers; // Cestujici (Active traveling individuals)
 
-    // Other fields
-    private String airport; // Letiste (Airport, optional)
     private LocalDateTime reservationValidity; // RezervaceDo (Validity of reservation if "Reserved" status)
     private int termId; // id_Termin (ID of the booked term)
     private String stateOfOrder; // StavObjednavka (State of the order)
-    private String agreementDetails; // Souhlasy (Details of agreements)
+
 
     // Getters and Setters
 
@@ -148,68 +139,12 @@ public class OrderDetail {
         this.currency = currency;
     }
 
-    public String getReservationStatus() {
-        return reservationStatus;
-    }
-
-    public void setReservationStatus(String reservationStatus) {
-        this.reservationStatus = reservationStatus;
-    }
-
     public String getPaymentStatus() {
         return paymentStatus;
     }
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
-    }
-
-    public String getContractStatus() {
-        return contractStatus;
-    }
-
-    public void setContractStatus(String contractStatus) {
-        this.contractStatus = contractStatus;
-    }
-
-    public String getRequestStatus() {
-        return requestStatus;
-    }
-
-    public void setRequestStatus(String requestStatus) {
-        this.requestStatus = requestStatus;
-    }
-
-    public String getInstructionsStatus() {
-        return instructionsStatus;
-    }
-
-    public void setInstructionsStatus(String instructionsStatus) {
-        this.instructionsStatus = instructionsStatus;
-    }
-
-    public String getMealType() {
-        return mealType;
-    }
-
-    public void setMealType(String mealType) {
-        this.mealType = mealType;
-    }
-
-    public String getTransportationType() {
-        return transportationType;
-    }
-
-    public void setTransportationType(String transportationType) {
-        this.transportationType = transportationType;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getName() {
@@ -254,14 +189,6 @@ public class OrderDetail {
         this.travelers = travelers;
     }
 
-    public String getAirport() {
-        return airport;
-    }
-
-    public void setAirport(String airport) {
-        this.airport = airport;
-    }
-
     public LocalDateTime getReservationValidity() {
         return reservationValidity;
     }
@@ -286,13 +213,6 @@ public class OrderDetail {
         this.stateOfOrder = stateOfOrder;
     }
 
-    public String getAgreementDetails() {
-        return agreementDetails;
-    }
-
-    public void setAgreementDetails(String agreementDetails) {
-        this.agreementDetails = agreementDetails;
-    }
 
 
 }

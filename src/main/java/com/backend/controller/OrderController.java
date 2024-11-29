@@ -61,7 +61,7 @@ public class OrderController {
             ObjednavkaDetailResult result = orderService.ObjednavkaDetail(id);
             System.out.println(result.getData().getValue().getNoci()+ "BBBBBBBB");
             // Convert the result to XML
-            String xmlResponse = orderService.buildXmlResponseOrderDetail(result);
+            String xmlResponse = orderService.createOrder(result);
 
             // Return the XML response
             return ResponseEntity.ok()

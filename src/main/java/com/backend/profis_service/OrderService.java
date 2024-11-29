@@ -7,6 +7,7 @@ import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.Klient;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.objednavkasoapclient.*;
+import com.example.objednavkasoapclient.IntegerNazev;
 import com.example.objednavkasoapclient.Objednavka;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.ws.Service;
@@ -167,7 +168,7 @@ public class OrderService {
         return xml.toString();
     }
 
-    public String buildXmlResponseOrderDetail(ObjednavkaDetailResult result) {
+    public String createOrder(ObjednavkaDetailResult result) {
         StringBuilder xml = new StringBuilder();
         xml.append("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">");
         xml.append("<s:Body>");
@@ -183,15 +184,15 @@ public class OrderService {
             // Basic fields
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setId(data.getID());
-            //orderDetail.setStartDate(data.getDatumOd().getValue());
-            //orderDetail.setEndDate(data.getDatumDo().getValue());
             orderDetail.setAdults(data.getDospelych());
             orderDetail.setChildren(data.getDeti());
             orderDetail.setInfants(data.getInfantu());
             orderDetail.setNumberOfNights(data.getNoci());
             orderDetail.setName(getJAXBElementValue(data.getNazev()));
+            orderDetail.setEndDate(toLocalDateTime(data.getDatumDo().getValue()));
+            orderDetail.setStartDate(toLocalDateTime(data.getDatumOd().getValue()));
             //orderDetail.setReservationStatus(data.getStavRezervace() != null ? data.getStavRezervace().getName() : null);
-
+            orderDetailRepository.save(orderDetail);
             // Save transportation reservations
             List<TransportationReservation> transportations = new ArrayList<>();
             if (data.getRezervaceDopravy() != null && data.getRezervaceDopravy().getValue() != null) {
@@ -200,8 +201,25 @@ public class OrderService {
                     transportReservation.setId(transportation.getID());
                     transportReservation.setPickupTime(toLocalDateTime(transportation.getCasNastupni()));
                     transportReservation.setDropoffTime(toLocalDateTime(transportation.getCasVystupni()));
-
+                    transportReservation.setDepartureAirportName(getJAXBElementValue(transportation.getLetisteVystupni()));
                     transportReservation.setStartDate(toLocalDateTime(transportation.getDatum()));
+
+                    JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteVystupniElement = transportation.getLetisteVystupni();
+                    if (letisteVystupniElement != null && letisteVystupniElement.getValue() != null) {
+                        IntegerNazev letisteVystupni = letisteVystupniElement.getValue();
+                        if (letisteVystupni.getNazev() != null && letisteVystupni.getNazev().getValue() != null) {
+                            transportReservation.setArrivalAirportName(letisteVystupni.getNazev().getValue());
+                        } else {
+                        }
+                    }
+                    JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteNastupniElement = transportation.getLetisteNastupni();
+                    if (letisteNastupniElement != null && letisteNastupniElement.getValue() != null) {
+                        IntegerNazev letisteNastupni = letisteNastupniElement.getValue();
+                        if (letisteNastupni.getNazev() != null && letisteNastupni.getNazev().getValue() != null) {
+                            transportReservation.setDepartureAirportName(letisteNastupni.getNazev().getValue());
+                        } else {
+                        }
+                    }
                     //transportReservation.setTransportId(transportation.getId_Doprava());
                     //transportReservation.setRouteName(transportation.getNazev());
                     transportReservation.setOrderDetail(orderDetail);
@@ -260,9 +278,7 @@ public class OrderService {
         return element != null && element.getValue() != null ? element.getValue().toString() : "";
     }
 
-
-
-        public static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
+    public static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
             if (xmlGregorianCalendar == null) {
                 return null; // Handle null case
             }

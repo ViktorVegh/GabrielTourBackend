@@ -20,6 +20,8 @@ public class TransportationReservation {
     private int seatingPlanId; // id_ZasedaciPlan (ID zasedacího plánu)
     private String departureAirportCode; // LetisteNastupni (Nástupní letiště)
     private String arrivalAirportCode; // LetisteVystupni (Výstupní letiště)
+    private String departureAirportName; // LetisteNastupni (Nástupní letiště)
+    private String arrivalAirportName; // LetisteVystupni (Výstupní letiště)
     private String routeName; // Nazev (Název trasy dopravy)
     private int reservedSeats; // Pocet (Počet rezervovaných míst)
     private String notes; // Poznamka (Poznámka k rezervaci dopravy)
@@ -142,6 +144,22 @@ public class TransportationReservation {
 
     public void setDepartureAirportCode(String departureAirportCode) {
         this.departureAirportCode = departureAirportCode;
+    }
+
+    public String getDepartureAirportName() {
+        return departureAirportName;
+    }
+
+    public void setDepartureAirportName(String departureAirportName) {
+        this.departureAirportName = departureAirportName;
+    }
+
+    public String getArrivalAirportName() {
+        return arrivalAirportName;
+    }
+
+    public void setArrivalAirportName(String arrivalAirportName) {
+        this.arrivalAirportName = arrivalAirportName;
     }
 
     public String getArrivalAirportCode() {
