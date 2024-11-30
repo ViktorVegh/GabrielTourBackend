@@ -8,8 +8,10 @@ import java.util.Map;
 public class Hotel {
 
     @Id
-    private int id; // Unique numeric identifier fetched from ProfiTour
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id; // Unique numeric identifier
 
+    //private int profisId;
     private String name; // Hotel name (from ObjednavkaHotel)
     private int stars; // Number of stars for the hotel
     private String region; // Region associated with the hotel
@@ -46,9 +48,15 @@ public class Hotel {
     public void setStars(int stars) {
         this.stars = stars;
     }
+    /*
+    public int getProfisId() {
+        return profisId;
+    }
 
-
-
+    public void setProfisId(int profisId) {
+        this.profisId = profisId;
+    }
+    */
     public String getRegion() {
         return region;
     }

@@ -1,6 +1,7 @@
 package com.backend.profis_service;
 
 import com.backend.auth.EncryptionUtil;
+import com.backend.dtos.OrderDTO;
 import com.backend.entity.*;
 import com.backend.repository.*;
 import com.example.klientsoapclient.*;
@@ -19,7 +20,9 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class OrderService {
@@ -27,6 +30,8 @@ public class OrderService {
     private UserRepository userRepository;
     @Autowired
     private OrderDetailRepository tourOrderRepository;
+    @Autowired
+    private PriceRepository priceRepository;
     @Autowired
     private TransportationReservationRepository transportationReservationRepository;
     @Autowired
@@ -182,7 +187,7 @@ public class OrderService {
             ObjednavkaPopis data = result.getData().getValue();
 
             // Basic fields
-            OrderDetail orderDetail = new OrderDetail();
+            OrderDetail orderDetail = orderDetailRepository.getReferenceById(result.getData().getValue().getID());
             orderDetail.setId(data.getID());
             orderDetail.setAdults(data.getDospelych());
             orderDetail.setChildren(data.getDeti());
@@ -192,51 +197,119 @@ public class OrderService {
             orderDetail.setEndDate(toLocalDateTime(data.getDatumDo().getValue()));
             orderDetail.setStartDate(toLocalDateTime(data.getDatumOd().getValue()));
             orderDetail.setPaymentStatus(getJAXBElementValue(data.getStavPlatba().getValue().getNazev()));
-            orderDetail.setCurrency(getJAXBElementValue(data.getMena()));
+            orderDetail.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
             orderDetail.setStateOfOrder(getJAXBElementValue(data.getStavObjednavka()));
-            //orderDetail.setReservationStatus(data.getStavRezervace() != null ? data.getStavRezervace().getName() : null);
-            orderDetailRepository.save(orderDetail);
-            // Save transportation reservations
-            List<TransportationReservation> transportations = new ArrayList<>();
-            if (data.getRezervaceDopravy() != null && data.getRezervaceDopravy().getValue() != null) {
-                for (RezervaceDoprava transportation : data.getRezervaceDopravy().getValue().getRezervaceDoprava()) {
-                    TransportationReservation transportReservation = new TransportationReservation();
-                    transportReservation.setId(transportation.getID());
-                    transportReservation.setPickupTime(toLocalDateTime(transportation.getCasNastupni()));
-                    transportReservation.setDropoffTime(toLocalDateTime(transportation.getCasVystupni()));
-                    transportReservation.setStartDate(toLocalDateTime(transportation.getDatum()));
 
-                    JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteVystupniElement = transportation.getLetisteVystupni();
-                    if (letisteVystupniElement != null && letisteVystupniElement.getValue() != null) {
-                        IntegerNazev letisteVystupni = letisteVystupniElement.getValue();
-                        if (letisteVystupni.getNazev() != null && letisteVystupni.getNazev().getValue() != null) {
-                            transportReservation.setArrivalAirportName(letisteVystupni.getNazev().getValue());
-                        } else {
-                        }
-                    }
-                    JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteNastupniElement = transportation.getLetisteNastupni();
-                    if (letisteNastupniElement != null && letisteNastupniElement.getValue() != null) {
-                        IntegerNazev letisteNastupni = letisteNastupniElement.getValue();
-                        if (letisteNastupni.getNazev() != null && letisteNastupni.getNazev().getValue() != null) {
-                            transportReservation.setDepartureAirportName(letisteNastupni.getNazev().getValue());
-                        } else {
-                        }
-                    }
-                    transportReservation.setTransportId(transportation.getIdDoprava());
-                    transportReservation.setRouteName(transportation.getSmer().value());
-                    transportReservation.setTransportType(transportation.getTypDoprava().getValue().getID());
-                    transportations.add(transportReservation);
+            // Step 1: Extract the list of RezervaceDoprava objects
+            List<RezervaceDoprava> reservations = result.getData().getValue()
+                    .getRezervaceDopravy().getValue()
+                    .getRezervaceDoprava();
 
+            // Step 2: Extract IDs from the reservations list
+            List<Integer> ids = reservations.stream()
+                    .map(RezervaceDoprava::getID)
+                    .collect(Collectors.toList());
+
+            List<TransportationReservation> existingTransportations = transportationReservationRepository.findAllById(ids);
+            Map<Integer, TransportationReservation> existingTransportationsMap = existingTransportations.stream()
+                    .collect(Collectors.toMap(TransportationReservation::getId, transport -> transport));
+            List<TransportationReservation> updatedTransportations = new ArrayList<>(existingTransportations);
+
+            for (RezervaceDoprava transportation : data.getRezervaceDopravy().getValue().getRezervaceDoprava()) {
+                TransportationReservation transportEntity = existingTransportationsMap.getOrDefault(transportation.getID(), new TransportationReservation());
+                transportEntity.setId(transportation.getID());
+                transportEntity.setPickupTime(toLocalDateTime(transportation.getCasNastupni()));
+                transportEntity.setDropoffTime(toLocalDateTime(transportation.getCasVystupni()));
+                transportEntity.setStartDate(toLocalDateTime(transportation.getDatum()));
+                transportEntity.setTransportId(transportation.getIdDoprava());
+                transportEntity.setRouteName(transportation.getSmer().value());
+                transportEntity.setTransportType(transportation.getTypDoprava().getValue().getID());
+                transportEntity.setOrderDetail(orderDetail);
+                JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteVystupniElement = transportation.getLetisteVystupni();
+                if (letisteVystupniElement != null && letisteVystupniElement.getValue() != null) {
+                    IntegerNazev letisteVystupni = letisteVystupniElement.getValue();
+                    if (letisteVystupni.getNazev() != null && letisteVystupni.getNazev().getValue() != null) {
+                        transportEntity.setArrivalAirportName(letisteVystupni.getNazev().getValue());
+                    } else {
+                    }
                 }
-                transportationReservationRepository.saveAll(transportations);
-            }
-            orderDetail.setTransportationReservations(transportations);
+                JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteNastupniElement = transportation.getLetisteNastupni();
+                if (letisteNastupniElement != null && letisteNastupniElement.getValue() != null) {
+                    IntegerNazev letisteNastupni = letisteNastupniElement.getValue();
+                    if (letisteNastupni.getNazev() != null && letisteNastupni.getNazev().getValue() != null) {
+                        transportEntity.setDepartureAirportName(letisteNastupni.getNazev().getValue());
+                    } else {
+                    }
+                }
 
-            // Save accommodation reservations
-            List<AccommodationReservation> accommodations = new ArrayList<>();
+                // Additional mappings...
+                if (!existingTransportationsMap.containsKey(transportation.getID())) {
+                    updatedTransportations.add(transportEntity);
+                }
+            }
+            orderDetail.getTransportationReservations().clear();
+            for (TransportationReservation transportEntity : updatedTransportations) {
+                transportEntity.setOrderDetail(orderDetail);
+                orderDetail.getTransportationReservations().add(transportEntity);
+            }
+            // Step 1: Extract the list of RezervaceDoprava objects
+            List<ObjednavkaCena> ListofPrices = result.getData().getValue().getCeny().getValue().getObjednavkaCena();
+
+            // Step 2: Extract IDs from the reservations list
+            List<Integer> ids2 = ListofPrices.stream()
+                    .map(ObjednavkaCena::getID) // Assuming RezervaceDoprava has a method getId()
+                    .collect(Collectors.toList());
+
+            // Fetch existing Prices entities
+            List<Prices> prices3 = priceRepository.findAllById(ids2);
+
+            // Map existing Prices entities by ID
+            Map<Integer, Prices> existingPricesMap = prices3.stream()
+                    .collect(Collectors.toMap(Prices::getId, price -> price));
+
+            // Prepare a list for updated prices
+            List<Prices> updatedPrices = new ArrayList<>(prices3);
+
+            // Update or create Prices entities
+            for (ObjednavkaCena price : data.getCeny().getValue().getObjednavkaCena()) {
+                Prices priceEntity = existingPricesMap.getOrDefault(price.getID(), new Prices());
+
+                // Update fields
+                priceEntity.setId(price.getID());
+                priceEntity.setPrice(price.getCena());
+                priceEntity.setName(getJAXBElementValue(price.getNazev()));
+                priceEntity.setOrderDetail(orderDetail);
+
+                // Only add new entities to updatedPrices
+                if (!existingPricesMap.containsKey(price.getID())) {
+                    updatedPrices.add(priceEntity);
+                }
+            }
+            orderDetail.getPrices().clear();
+            for (Prices priceEntity : updatedPrices) {
+                priceEntity.setOrderDetail(orderDetail);
+                orderDetail.getPrices().add(priceEntity);
+            }
+            // Step 1: Extract the list of RezervaceDoprava objects
+            List<RezervaceUbytovani> ListofAcccomodations = result.getData().getValue().getRezervaceUbytovani().getValue().getRezervaceUbytovani();
+
+            // Step 2: Extract IDs from the reservations list
+            List<Integer> ids3 = ListofAcccomodations.stream()
+                    .map(RezervaceUbytovani::getID)
+                    .collect(Collectors.toList());
+
+            List<AccommodationReservation> accommodations = accommodationReservationRepository.findAllById(ids3);
+
+            // Map existing Accomodation entities by ID
+            Map<Integer, AccommodationReservation> existingAccomodationsMap = accommodations.stream()
+                    .collect(Collectors.toMap(AccommodationReservation::getId, accommodation -> accommodation));
+
+            // Prepare a list for updated prices
+            List<AccommodationReservation> updatedAccomodations = new ArrayList<>(accommodations);
+
             if (data.getRezervaceUbytovani() != null && data.getRezervaceUbytovani().getValue() != null) {
                 for (RezervaceUbytovani accommodation : data.getRezervaceUbytovani().getValue().getRezervaceUbytovani()) {
-                    AccommodationReservation accReservation = new AccommodationReservation();
+                    AccommodationReservation accReservation = existingAccomodationsMap.getOrDefault(accommodation.getID(), new AccommodationReservation());
                     accReservation.setId(accommodation.getID());
                     accReservation.setStartDate(toLocalDateTime(accommodation.getDatumOd()));
                     accReservation.setNumberOfNights(accommodation.getNoci());
@@ -249,17 +322,26 @@ public class OrderService {
                     // Save associated hotel
                     Hotel hotel = new Hotel();
                     if (accommodation.getObjednavkaHotel() != null) {
-                        hotel.setId(accommodation.getObjednavkaHotel().getValue().getID());
+                        //hotel.setProfisId(accommodation.getObjednavkaHotel().getValue().getID());
                         hotel.setName(getJAXBElementValue(accommodation.getObjednavkaHotel().getValue().getNazev()));
                         hotelRepository.save(hotel);
                     }
                     accReservation.setObjednavkaHotel(hotel);
                     accommodations.add(accReservation);
+                    // Only add new entities to updatedPrices
+                    if (!existingAccomodationsMap.containsKey(accommodation.getID())) {
+                        updatedAccomodations.add(accReservation);
+                    }
                 }
-                accommodationReservationRepository.saveAll(accommodations);
-            }
-            orderDetail.setAccommodationReservations(accommodations);
 
+            }
+
+            orderDetail.getAccommodationReservations().clear();
+
+            for (AccommodationReservation accomodationEntity : updatedAccomodations) {
+                accomodationEntity.setOrderDetail(orderDetail);
+                orderDetail.getAccommodationReservations().add(accomodationEntity);
+            }
             // Save OrderDetail
             orderDetailRepository.save(orderDetail);
 
@@ -289,6 +371,17 @@ public class OrderService {
                     .toZonedDateTime()
                     .toLocalDateTime();
         }
+
+    public OrderDTO getObjednavkaDetail(int id) {
+        Optional<OrderUser> orderUser = orderUserRepository.findById(id);
+        //int Orderid = orderUser.get().getOrderDetail().getId();
+        OrderDetail orderDetail= orderDetailRepository.getReferenceById(orderUser.get().getId().getOrderId());
+        System.out.println(orderDetail+"FFFFFF");
+        /*TransportationReservationRepository transportationReservationRepository1 = transportationReservationRepository.findByOrderId()
+        AccommodationReservation accommodationReservation= accommodationReservationRepository.
+        OrderDTO = new OrderDTO(orderDetail,pr,orderDetail.getTransportationReservations(),orderDetail.getPrices());*/
+        return null;
+    }
 }
 
 

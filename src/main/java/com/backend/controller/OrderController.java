@@ -1,6 +1,8 @@
 package com.backend.controller;
 
 import com.backend.auth.JwtHelper;
+import com.backend.dtos.OrderDTO;
+import com.backend.dtos.TeeTimeRequest;
 import com.backend.profis_service.OrderService;
 import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.KlientKontakt;
@@ -52,7 +54,7 @@ public class OrderController {
                             "</s:Envelope>");
         }
     }
-    @PostMapping("/get-orderDetails")
+    @PostMapping("/create-orderDetails")
     public ResponseEntity<String> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
@@ -77,8 +79,10 @@ public class OrderController {
                             "</s:Body>" +
                             "</s:Envelope>");
         }
-    }
-
-
+    }/*
+    @GetMapping("/get-orderDetails")
+    public OrderDTO getObjednavkaDetail(@RequestBody int id){
+        return orderService.getObjednavkaDetail(id);
+    }*/
 
 }

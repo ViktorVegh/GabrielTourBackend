@@ -38,6 +38,8 @@ public class OrderDetail {
     @OneToMany(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransportationReservation> transportationReservations; // RezervaceDopravy
 
+    @OneToMany(mappedBy = "orderDetail", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Prices> prices;
 
     @ElementCollection
     private List<String> travelers; // Cestujici (Active traveling individuals)
@@ -179,6 +181,13 @@ public class OrderDetail {
         this.transportationReservations = transportationReservations;
     }
 
+    public List<Prices> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<Prices> prices) {
+        this.prices = prices;
+    }
 
     public List<String> getTravelers() {
         return travelers;

@@ -8,4 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TransportationReservationRepository extends JpaRepository<TransportationReservation, Integer> {
+    // Custom method to find reservations by orderId
+   // List<TransportationReservation> findByOrderId(Integer orderId);
 }
