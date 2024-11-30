@@ -191,6 +191,9 @@ public class OrderService {
             orderDetail.setName(getJAXBElementValue(data.getNazev()));
             orderDetail.setEndDate(toLocalDateTime(data.getDatumDo().getValue()));
             orderDetail.setStartDate(toLocalDateTime(data.getDatumOd().getValue()));
+            orderDetail.setPaymentStatus(getJAXBElementValue(data.getStavPlatba().getValue().getNazev()));
+            orderDetail.setCurrency(getJAXBElementValue(data.getMena()));
+            orderDetail.setStateOfOrder(getJAXBElementValue(data.getStavObjednavka()));
             //orderDetail.setReservationStatus(data.getStavRezervace() != null ? data.getStavRezervace().getName() : null);
             orderDetailRepository.save(orderDetail);
             // Save transportation reservations
@@ -201,7 +204,6 @@ public class OrderService {
                     transportReservation.setId(transportation.getID());
                     transportReservation.setPickupTime(toLocalDateTime(transportation.getCasNastupni()));
                     transportReservation.setDropoffTime(toLocalDateTime(transportation.getCasVystupni()));
-                    transportReservation.setDepartureAirportName(getJAXBElementValue(transportation.getLetisteVystupni()));
                     transportReservation.setStartDate(toLocalDateTime(transportation.getDatum()));
 
                     JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteVystupniElement = transportation.getLetisteVystupni();
@@ -220,10 +222,11 @@ public class OrderService {
                         } else {
                         }
                     }
-                    //transportReservation.setTransportId(transportation.getId_Doprava());
-                    //transportReservation.setRouteName(transportation.getNazev());
-                    transportReservation.setOrderDetail(orderDetail);
+                    transportReservation.setTransportId(transportation.getIdDoprava());
+                    transportReservation.setRouteName(transportation.getSmer().value());
+                    transportReservation.setTransportType(transportation.getTypDoprava().getValue().getID());
                     transportations.add(transportReservation);
+
                 }
                 transportationReservationRepository.saveAll(transportations);
             }

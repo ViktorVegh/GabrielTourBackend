@@ -42,7 +42,6 @@ public class OrderDetail {
     @ElementCollection
     private List<String> travelers; // Cestujici (Active traveling individuals)
 
-    private LocalDateTime reservationValidity; // RezervaceDo (Validity of reservation if "Reserved" status)
     private int termId; // id_Termin (ID of the booked term)
     private String stateOfOrder; // StavObjednavka (State of the order)
 
@@ -187,14 +186,6 @@ public class OrderDetail {
 
     public void setTravelers(List<String> travelers) {
         this.travelers = travelers;
-    }
-
-    public LocalDateTime getReservationValidity() {
-        return reservationValidity;
-    }
-
-    public void setReservationValidity(LocalDateTime reservationValidity) {
-        this.reservationValidity = reservationValidity;
     }
 
     public int getTermId() {
