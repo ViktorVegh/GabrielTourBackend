@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .csrf().disable() // Disable CSRF since we are using JWT
                 .cors().and() // Enable CORS
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/register", "/auth/login","/auth/verify-key","/auth/reset-password","/auth/login-klient","/auth/change-password","order/get-order","order/get-orderDetails").permitAll() // Allow public access to register and login endpoints
+                .requestMatchers("/auth/register", "/auth/login","/auth/verify-key","/auth/reset-password","/auth/login-klient","/auth/change-password","order/get-order","order/create-orderDetails","order/get-orderDetails").permitAll() // Allow public access to register and login endpoints
                 .anyRequest().authenticated() // All other requests require authentication
                 .and()
                 .sessionManagement()

@@ -13,6 +13,7 @@ import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -79,10 +80,12 @@ public class OrderController {
                             "</s:Body>" +
                             "</s:Envelope>");
         }
-    }/*
+    }
+
+    @PreAuthorize("hasAnyAuthority('office','user')")
     @GetMapping("/get-orderDetails")
-    public OrderDTO getObjednavkaDetail(@RequestBody int id){
+    public OrderDTO getObjednavkaDetail(@RequestParam int id) {
         return orderService.getObjednavkaDetail(id);
-    }*/
+    }
 
 }

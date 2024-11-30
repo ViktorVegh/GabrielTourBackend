@@ -1,19 +1,16 @@
 package com.backend.dtos;
 
 import com.backend.entity.*;
-import org.hibernate.mapping.List;
+import java.util.List;
 
 public class OrderDTO {
     private OrderDetail orderDetail;
-    private Prices pricesList;
-    private AccommodationReservation accommodationReservation;
-    private TransportationReservation transportationReservation;
+    private List<Prices> pricesList;
+    private List<AccommodationReservation> accommodationReservation;
+    private List<TransportationReservation> transportationReservation;
 
-    public OrderDTO(OrderDetail orderDetail, Prices prices, AccommodationReservation accommodationReservation, TransportationReservation transportationReservation) {
+    public OrderDTO(OrderDetail orderDetail) {
         this.orderDetail = orderDetail;
-        this.pricesList = prices;
-        this.accommodationReservation = accommodationReservation;
-        this.transportationReservation = transportationReservation;
     }
 
     public OrderDetail getOrderDetail() {
@@ -24,19 +21,27 @@ public class OrderDTO {
         this.orderDetail = orderDetail;
     }
 
-    public AccommodationReservation getAccommodationReservation() {
+    public List<Prices> getPricesList() {
+        return pricesList;
+    }
+
+    public void setPricesList(List<Prices> pricesList) {
+        this.pricesList = pricesList;
+    }
+
+    public List<AccommodationReservation> getAccommodationReservation() {
         return accommodationReservation;
     }
 
-    public void setAccommodationReservation(AccommodationReservation accommodationReservation) {
+    public void setAccommodationReservation(List<AccommodationReservation> accommodationReservation) {
         this.accommodationReservation = accommodationReservation;
     }
 
-    public TransportationReservation getTransportationReservation() {
+    public List<TransportationReservation> getTransportationReservation() {
         return transportationReservation;
     }
 
-    public void setTransportationReservation(TransportationReservation transportationReservation) {
+    public void setTransportationReservation(List<TransportationReservation> transportationReservation) {
         this.transportationReservation = transportationReservation;
     }
 }

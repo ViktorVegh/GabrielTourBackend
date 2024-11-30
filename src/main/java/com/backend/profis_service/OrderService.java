@@ -373,14 +373,17 @@ public class OrderService {
         }
 
     public OrderDTO getObjednavkaDetail(int id) {
-        Optional<OrderUser> orderUser = orderUserRepository.findById(id);
+        OrderUserId userId = new OrderUserId();
+        userId.setOrderId(id);
+        Optional<OrderUser> orderUser = orderUserRepository.findById(userId);
         //int Orderid = orderUser.get().getOrderDetail().getId();
-        OrderDetail orderDetail= orderDetailRepository.getReferenceById(orderUser.get().getId().getOrderId());
+        OrderDetail orderDetail= orderDetailRepository.getReferenceById(8291);
         System.out.println(orderDetail+"FFFFFF");
-        /*TransportationReservationRepository transportationReservationRepository1 = transportationReservationRepository.findByOrderId()
-        AccommodationReservation accommodationReservation= accommodationReservationRepository.
-        OrderDTO = new OrderDTO(orderDetail,pr,orderDetail.getTransportationReservations(),orderDetail.getPrices());*/
-        return null;
+        List<TransportationReservation> transportationReservation = transportationReservationRepository.findByOrderDetail_Id(8291);
+        List<AccommodationReservation> accommodationReservation= accommodationReservationRepository.findByOrderDetail_Id(8291);
+        List<Prices> prices = priceRepository.findByOrderDetail_Id(8291);
+        OrderDTO orderDTO= new OrderDTO(orderDetail);
+        return orderDTO;
     }
 }
 
