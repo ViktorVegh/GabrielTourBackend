@@ -148,21 +148,25 @@ public class OrderService {
                 User user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("User not found for ID: " + id));
 
-                OrderDetail orderDetail2 = orderDetailRepository.getReferenceById(order.getID());
-                System.out.println(orderDetail2.getId()+"CCCC");
-    ;
+                OrderDetail orderDetail;
 
+                // Check if the order detail exists
+                Optional<OrderDetail> existingOrderDetail = orderDetailRepository.findById(order.getID());
 
+                if (existingOrderDetail.isPresent()) {
+                    // If it exists, retrieve the existing order detail
+                    orderDetail = existingOrderDetail.get();
+                } else {
+                    // If it does not exist, create a new one
+                    orderDetail = new OrderDetail();
+                    orderDetail.setId(order.getID()); // Example order number
+                    orderDetailRepository.save(orderDetail); // Save the new order detail
 
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setId(order.getID());// Example order number
-                //In order to fix Id Problem use method below
-                //orderDetail.setEndDate(order.getDatumDo().getValue());
-                System.out.println(order.getID() + "AAAAAAAA");
-                String klicValue = getJAXBElementValue(order.getKlic());
-                // Create a new OrderUser
-                OrderUser orderUser = new OrderUser(orderDetail, user, klicValue);
-                orderDetail.setOrderUsers(orderUser);
+                    // Only create an OrderUser if the OrderDetail is newly created
+                    String klicValue = getJAXBElementValue(order.getKlic());
+                    OrderUser orderUser = new OrderUser(orderDetail, user, klicValue);
+                    orderDetail.setOrderUsers(orderUser);
+                }
 
                 // Save the TourOrder (cascades to OrderUser)
                 tourOrderRepository.save(orderDetail);
@@ -286,7 +290,7 @@ public class OrderService {
                 priceEntity.setName(getJAXBElementValue(price.getNazev()));
                 priceEntity.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
                 priceEntity.setOrderDetail(orderDetail);
-                priceEntity.setPocet(price.getPocet());
+                priceEntity.setQuantity(price.getPocet());
 
                 // Only add new entities to updatedPrices
                 if (!existingPricesMap.containsKey(price.getID())) {

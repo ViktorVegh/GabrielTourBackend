@@ -15,7 +15,7 @@ public class Prices {
     private int id;
     private String name;
     private BigDecimal price;
-    private int pocet;
+    private int quantity;
 
     private String currency; // Mena
 
@@ -66,12 +66,12 @@ public class Prices {
         return currency;
     }
 
-    public int getPocet() {
-        return pocet;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setPocet(int pocet) {
-        this.pocet = pocet;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public OrderDetail getOrderDetail() {
