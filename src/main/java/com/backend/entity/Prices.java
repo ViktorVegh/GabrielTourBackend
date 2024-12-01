@@ -1,6 +1,7 @@
 package com.backend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -38,6 +39,7 @@ public class Prices {
         return id;
     }
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "order_id", nullable = false)
     private OrderDetail orderDetail;
 

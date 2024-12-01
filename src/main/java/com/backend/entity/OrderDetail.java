@@ -44,6 +44,7 @@ public class OrderDetail {
     private List<TransportationReservation> transportationReservations; // RezervaceDopravy
 
     @OneToMany(mappedBy = "orderDetail", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
     private List<Prices> prices;
 
     @ElementCollection

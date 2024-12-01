@@ -147,8 +147,9 @@ public class OrderService {
 
                 User user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("User not found for ID: " + id));
+
                 OrderDetail orderDetail2 = orderDetailRepository.getReferenceById(order.getID());
-                System.out.println(orderDetail2.getId());
+                System.out.println(orderDetail2.getId()+"CCCC");
     ;
 
 
