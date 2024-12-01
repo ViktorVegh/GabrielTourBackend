@@ -14,6 +14,7 @@ public class Prices {
     private int id;
     private String name;
     private BigDecimal price;
+    private int pocet;
 
     private String currency; // Mena
 
@@ -61,6 +62,18 @@ public class Prices {
 
     public String getCurrency() {
         return currency;
+    }
+
+    public int getPocet() {
+        return pocet;
+    }
+
+    public void setPocet(int pocet) {
+        this.pocet = pocet;
+    }
+
+    public OrderDetail getOrderDetail() {
+        return orderDetail;
     }
 
     public void setCurrency(String currency) {

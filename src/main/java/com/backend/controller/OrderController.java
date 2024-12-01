@@ -62,7 +62,6 @@ public class OrderController {
             System.out.println("I got to controller with ID: " + id);
             // Fetch order data using the service
             ObjednavkaDetailResult result = orderService.ObjednavkaDetail(id);
-            System.out.println(result.getData().getValue().getNoci()+ "BBBBBBBB");
             // Convert the result to XML
             String xmlResponse = orderService.createOrderDetail(result);
 

@@ -42,26 +42,6 @@ public class EntityToDTOMapper {
         );
     }
 
-    // Accommodation to AccommodationDTO
-    public static AccommodationDTO toAccommodationDTO(Accommodation accommodation) {
-        if (accommodation == null) {
-            return null;
-        }
-
-        return new AccommodationDTO(
-                accommodation.getStartDate(),
-                accommodation.getReservationId(),
-                accommodation.getBeds(),
-                accommodation.getAccommodationName(),
-                accommodation.getNights(),
-                accommodation.getNotes(),
-                accommodation.getExtraBeds(),
-                accommodation.getMealPlan(),
-                toHotelDTO(accommodation.getHotelDetails()),
-                accommodation.getAccommodationTravelers() != null ?
-                        accommodation.getAccommodationTravelers().stream().map(User::getId).collect(Collectors.toList()) : null
-        );
-    }
 
     // Hotel to HotelDTO
     public static HotelDTO toHotelDTO(Hotel hotel) {

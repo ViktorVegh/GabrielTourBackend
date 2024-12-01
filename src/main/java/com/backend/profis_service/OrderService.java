@@ -17,11 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
@@ -148,15 +147,16 @@ public class OrderService {
 
                 User user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("User not found for ID: " + id));
-                /*
-                KlientObjednavkaListResult existingOrderUser = orderUserRepository;
-                Map<Integer, TransportationReservation> existingTransportationsMap = existingTransportations.stream()
-                        .collect(Collectors.toMap(TransportationReservation::getId, transport -> transport));
-                List<TransportationReservation> updatedTransportations = new ArrayList<>(existingTransportations);
-    ;           */
-                // Create a new TourOrder
+                OrderDetail orderDetail2 = orderDetailRepository.getReferenceById(order.getID());
+                System.out.println(orderDetail2.getId());
+    ;
+
+
+
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setId(order.getID());// Example order number
+                //In order to fix Id Problem use method below
+                //orderDetail.setEndDate(order.getDatumDo().getValue());
                 System.out.println(order.getID() + "AAAAAAAA");
                 String klicValue = getJAXBElementValue(order.getKlic());
                 // Create a new OrderUser
@@ -203,7 +203,7 @@ public class OrderService {
             orderDetail.setStartDate(toLocalDateTime(data.getDatumOd().getValue()));
             orderDetail.setPaymentStatus(getJAXBElementValue(data.getStavPlatba().getValue().getNazev()));
             orderDetail.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
-            orderDetail.setStateOfOrder(getJAXBElementValue(data.getStavObjednavka()));
+            orderDetail.setStateOfOrder(getJAXBElementValue(data.getStavObjednavka().getValue().getNazev()));
 
             // Step 1: Extract the list of RezervaceDoprava objects
             List<RezervaceDoprava> reservations = result.getData().getValue()
@@ -285,6 +285,7 @@ public class OrderService {
                 priceEntity.setName(getJAXBElementValue(price.getNazev()));
                 priceEntity.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
                 priceEntity.setOrderDetail(orderDetail);
+                priceEntity.setPocet(price.getPocet());
 
                 // Only add new entities to updatedPrices
                 if (!existingPricesMap.containsKey(price.getID())) {
@@ -323,13 +324,19 @@ public class OrderService {
                     accReservation.setExtraBeds(accommodation.getPristylek());
                     accReservation.setAccommodationName(getJAXBElementValue(accommodation.getNazevUbytovani()));
                     accReservation.setNote(getJAXBElementValue(accommodation.getPoznamka()));
+                    accReservation.setMealType(getJAXBElementValue(accommodation.getTypStrava().getValue().getNazev()));
                     accReservation.setOrderDetail(orderDetail);
+
 
                     // Save associated hotel
                     Hotel hotel = new Hotel();
                     if (accommodation.getObjednavkaHotel() != null) {
                         //hotel.setProfisId(accommodation.getObjednavkaHotel().getValue().getID());
                         hotel.setName(getJAXBElementValue(accommodation.getObjednavkaHotel().getValue().getNazev()));
+                        hotel.setCountry(getJAXBElementValue(accommodation.getObjednavkaHotel().getValue().getStat().getValue().getNazev()));
+                        hotel.setStars(accommodation.getObjednavkaHotel().getValue().getHvezdy());
+                        hotel.setArea(getJAXBElementValue(accommodation.getObjednavkaHotel().getValue().getStredisko().getValue().getNazev()));
+                        hotel.setRegion(getJAXBElementValue(accommodation.getObjednavkaHotel().getValue().getOblast().getValue().getNazev()));
                         hotelRepository.save(hotel);
                     }
                     accReservation.setObjednavkaHotel(hotel);
@@ -379,16 +386,15 @@ public class OrderService {
         }
 
     public OrderDTO getObjednavkaDetail(int id) {
+        OrderDetail orderDetail= findOrderByUserId(id);
+        return new OrderDTO(orderDetail);
+    }
+
+    public OrderDetail findOrderByUserId(long id){
         OrderUserId userId = new OrderUserId();
-        userId.setOrderId(id);
-        //Optional<OrderUser> orderUser = orderUserRepository.findById(userId);
-        //int Orderid = orderUser.get().getOrderDetail().getId();
-        OrderDetail orderDetail= orderDetailRepository.getReferenceById(8291);
-        //List<TransportationReservation> transportationReservation = transportationReservationRepository.findByOrderDetail_Id(8291);
-        //List<AccommodationReservation> accommodationReservation= accommodationReservationRepository.findByOrderDetail_Id(8291);
-        //List<Prices> prices = priceRepository.findByOrderDetail_Id(8291);
-        OrderDTO orderDTO= new OrderDTO(orderDetail);
-        return orderDTO;
+        userId.setUserId( id);
+        OrderUser orderUser =orderUserRepository.findClosestOrderByUserId(userId.getUserId());
+        return orderUser.getOrderDetail();
     }
 }
 
