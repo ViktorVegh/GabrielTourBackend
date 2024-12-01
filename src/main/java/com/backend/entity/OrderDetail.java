@@ -1,11 +1,14 @@
 package com.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class OrderDetail {
 
     @Id
@@ -29,6 +32,7 @@ public class OrderDetail {
 
     // Relationships
     @OneToMany(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<AccommodationReservation> accommodationReservations; // RezervaceUbytovani
 
     @OneToOne(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -36,6 +40,7 @@ public class OrderDetail {
 
 
     @OneToMany(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<TransportationReservation> transportationReservations; // RezervaceDopravy
 
     @OneToMany(mappedBy = "orderDetail", cascade = CascadeType.ALL,orphanRemoval = true)

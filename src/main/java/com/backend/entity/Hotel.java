@@ -1,5 +1,6 @@
 package com.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class Hotel {
     @ElementCollection
     private Map<String, String> externalValues; // External values as key-value pairs (Externi)
 
+    @JsonIgnore
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccommodationReservation> reservations; // Reservations associated with this hotel
 

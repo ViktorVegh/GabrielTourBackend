@@ -1,5 +1,7 @@
 package com.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +36,7 @@ public class TransportationReservation {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private OrderDetail orderDetail; // Link to OrderDetail (RezervaceDoprava belongs to an Order)
 
     @ManyToMany

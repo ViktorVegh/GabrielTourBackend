@@ -103,7 +103,7 @@ public class OrderService {
         //will be modified my variable above in try clause
         context.setIdKlient(ProfisId);
         KlientObjednavkaListResult result = klientPort.klientObjednavkaList(context);
-        String FinalResult = buildXmlResponseOrderList(result,id);
+        String FinalResult = createOrderList(result,id);
         return FinalResult;
 
 
@@ -132,7 +132,7 @@ public class OrderService {
         ObjednavkaDetailResult result = objednavkaPort.objednavkaDetail(context);
         return result;
     }
-    private String buildXmlResponseOrderList(KlientObjednavkaListResult result,Long id) {
+    private String createOrderList(KlientObjednavkaListResult result,Long id) {
         StringBuilder xml = new StringBuilder();
         xml.append("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">");
         xml.append("<s:Body>");
@@ -148,7 +148,12 @@ public class OrderService {
 
                 User user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("User not found for ID: " + id));
-
+                /*
+                KlientObjednavkaListResult existingOrderUser = orderUserRepository;
+                Map<Integer, TransportationReservation> existingTransportationsMap = existingTransportations.stream()
+                        .collect(Collectors.toMap(TransportationReservation::getId, transport -> transport));
+                List<TransportationReservation> updatedTransportations = new ArrayList<>(existingTransportations);
+    ;           */
                 // Create a new TourOrder
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setId(order.getID());// Example order number
@@ -173,7 +178,7 @@ public class OrderService {
         return xml.toString();
     }
 
-    public String createOrder(ObjednavkaDetailResult result) {
+    public String createOrderDetail(ObjednavkaDetailResult result) {
         StringBuilder xml = new StringBuilder();
         xml.append("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">");
         xml.append("<s:Body>");
@@ -278,6 +283,7 @@ public class OrderService {
                 priceEntity.setId(price.getID());
                 priceEntity.setPrice(price.getCena());
                 priceEntity.setName(getJAXBElementValue(price.getNazev()));
+                priceEntity.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
                 priceEntity.setOrderDetail(orderDetail);
 
                 // Only add new entities to updatedPrices
@@ -375,13 +381,12 @@ public class OrderService {
     public OrderDTO getObjednavkaDetail(int id) {
         OrderUserId userId = new OrderUserId();
         userId.setOrderId(id);
-        Optional<OrderUser> orderUser = orderUserRepository.findById(userId);
+        //Optional<OrderUser> orderUser = orderUserRepository.findById(userId);
         //int Orderid = orderUser.get().getOrderDetail().getId();
         OrderDetail orderDetail= orderDetailRepository.getReferenceById(8291);
-        System.out.println(orderDetail+"FFFFFF");
-        List<TransportationReservation> transportationReservation = transportationReservationRepository.findByOrderDetail_Id(8291);
-        List<AccommodationReservation> accommodationReservation= accommodationReservationRepository.findByOrderDetail_Id(8291);
-        List<Prices> prices = priceRepository.findByOrderDetail_Id(8291);
+        //List<TransportationReservation> transportationReservation = transportationReservationRepository.findByOrderDetail_Id(8291);
+        //List<AccommodationReservation> accommodationReservation= accommodationReservationRepository.findByOrderDetail_Id(8291);
+        //List<Prices> prices = priceRepository.findByOrderDetail_Id(8291);
         OrderDTO orderDTO= new OrderDTO(orderDetail);
         return orderDTO;
     }
