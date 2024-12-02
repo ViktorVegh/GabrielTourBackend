@@ -83,8 +83,8 @@ public class OrderController {
 
     @PreAuthorize("hasAnyAuthority('office','user')")
     @GetMapping("/get-orderDetails")
-    public OrderDTO getObjednavkaDetail(@RequestParam int id) {
-        return orderService.getObjednavkaDetail(id);
+    public OrderDTO getOrderDetail(@RequestParam int id) {
+        return orderService.getOrderDetail(id);
     }
 
 }

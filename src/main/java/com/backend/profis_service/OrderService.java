@@ -390,16 +390,20 @@ public class OrderService {
                     .toLocalDateTime();
         }
 
-    public OrderDTO getObjednavkaDetail(int id) {
-        OrderDetail orderDetail= findOrderByUserId(id);
-        return new OrderDTO(orderDetail);
-    }
-
-    public OrderDetail findOrderByUserId(long id){
+    public OrderDTO getOrderDetail(int id) {
         OrderUserId userId = new OrderUserId();
-        userId.setUserId( id);
-        OrderUser orderUser =orderUserRepository.findClosestOrderByUserId(userId.getUserId());
-        return orderUser.getOrderDetail();
+        userId.setUserId((long) id);
+
+        // Fetch the orderUser from the repository
+        OrderUser orderUser = orderUserRepository.findClosestOrderByUserId(userId.getUserId());
+
+        // Check if the orderUser is null and throw an exception if necessary
+        if (orderUser == null) {
+            throw new NoSuchElementException("No order found for user ID: " + id);
+        }
+
+        // Return the OrderDTO if orderUser is not null
+        return new OrderDTO(orderUser.getOrderDetail());
     }
 }
 
