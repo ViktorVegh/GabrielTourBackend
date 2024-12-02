@@ -2,7 +2,7 @@ package com.backend.controller;
 
 import com.backend.dtos.TeeTimeDTO;
 import com.backend.dtos.TeeTimeRequest;
-import com.backend.profis_service.TeeTimeService;
+import com.backend.service.TeeTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

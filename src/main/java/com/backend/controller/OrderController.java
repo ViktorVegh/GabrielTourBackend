@@ -2,21 +2,14 @@ package com.backend.controller;
 
 import com.backend.auth.JwtHelper;
 import com.backend.dtos.OrderDTO;
-import com.backend.dtos.TeeTimeRequest;
-import com.backend.profis_service.OrderService;
-import com.example.klientsoapclient.*;
-import com.example.klientsoapclient.KlientKontakt;
-import com.example.klientsoapclient.ObjednavkaKlient;
+import com.backend.profis_service.ProfisOrderService;
+import com.backend.service.OrderService;
 import com.example.objednavkasoapclient.*;
-import com.example.objednavkasoapclient.IntegerNazev;
-import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -28,15 +21,16 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private JwtHelper jwtHelper;
+    @Autowired
+    private ProfisOrderService profisOrderService;
 
     @PostMapping("/get-order")
-    public ResponseEntity<String> objednavkaListResult(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<String> CreateOrderList(@RequestBody Map<String, Object> body) {
         try {
             long id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
-            System.out.println("I got to controller with ID: " + id);
 
             // Fetch order data using the service
-            String result = orderService.klientObjednavkaList(id);
+            String result = profisOrderService.CreateOrderListRequest(id);
 
 
 
@@ -56,19 +50,17 @@ public class OrderController {
         }
     }
     @PostMapping("/create-orderDetails")
-    public ResponseEntity<String> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<String> CreateOrderDetail(@RequestBody Map<String, Object> body) {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
             System.out.println("I got to controller with ID: " + id);
             // Fetch order data using the service
-            ObjednavkaDetailResult result = orderService.ObjednavkaDetail(id);
-            // Convert the result to XML
-            String xmlResponse = orderService.createOrderDetail(result);
+            String result = profisOrderService.CreateOrderDetailRequest(id);
 
             // Return the XML response
             return ResponseEntity.ok()
                     .header("Content-Type", "application/xml")
-                    .body(xmlResponse);
+                    .body(result);
 
         } catch (Exception e) {
             e.printStackTrace();

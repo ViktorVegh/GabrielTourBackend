@@ -1,7 +1,6 @@
-package com.backend.profis_service;
+package com.backend.service;
 
 import com.backend.dtos.PersonDTO;
-import com.backend.entity.Person;
 import com.backend.entity.User;
 import com.backend.entity.Driver;
 import com.backend.entity.TourGuide;
@@ -16,7 +15,6 @@ import com.backend.dtos.EntityToDTOMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
