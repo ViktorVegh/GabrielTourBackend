@@ -390,16 +390,11 @@ public class OrderService {
                     .toLocalDateTime();
         }
 
-    public OrderDTO getObjednavkaDetail(int id) {
-        OrderDetail orderDetail= findOrderByUserId(id);
-        return new OrderDTO(orderDetail);
-    }
-
-    public OrderDetail findOrderByUserId(long id){
+    public OrderDTO getOrderDetail(int id) {
         OrderUserId userId = new OrderUserId();
-        userId.setUserId( id);
+        userId.setUserId((long) id);
         OrderUser orderUser =orderUserRepository.findClosestOrderByUserId(userId.getUserId());
-        return orderUser.getOrderDetail();
+        return new OrderDTO(orderUser.getOrderDetail());
     }
 }
 

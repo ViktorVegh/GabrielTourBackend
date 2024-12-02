@@ -30,16 +30,11 @@ public class OrderController {
     private JwtHelper jwtHelper;
 
     @PostMapping("/get-order")
-    public ResponseEntity<String> objednavkaListResult(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<String> getOrderList(@RequestBody Map<String, Object> body) {
         try {
             long id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
-            System.out.println("I got to controller with ID: " + id);
-
             // Fetch order data using the service
             String result = orderService.klientObjednavkaList(id);
-
-
-
             // Return the XML response
             return ResponseEntity.ok()
                     .header("Content-Type", "application/xml")
@@ -56,7 +51,7 @@ public class OrderController {
         }
     }
     @PostMapping("/create-orderDetails")
-    public ResponseEntity<String> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<String> createOrderDetail(@RequestBody Map<String, Object> body) {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
             System.out.println("I got to controller with ID: " + id);
@@ -83,8 +78,8 @@ public class OrderController {
 
     @PreAuthorize("hasAnyAuthority('office','user')")
     @GetMapping("/get-orderDetails")
-    public OrderDTO getObjednavkaDetail(@RequestParam int id) {
-        return orderService.getObjednavkaDetail(id);
+    public OrderDTO getOrderDetail(@RequestParam int id) {
+        return orderService.getOrderDetail(id);
     }
 
 }
