@@ -20,8 +20,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private JwtHelper jwtHelper;
-    @Autowired
     private ProfisOrderService profisOrderService;
 
     @PostMapping("/get-order")
@@ -49,6 +47,7 @@ public class OrderController {
                             "</s:Envelope>");
         }
     }
+
     @PostMapping("/create-orderDetails")
     public ResponseEntity<String> CreateOrderDetail(@RequestBody Map<String, Object> body) {
         try {

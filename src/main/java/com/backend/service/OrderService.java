@@ -26,8 +26,6 @@ public class OrderService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private OrderDetailRepository tourOrderRepository;
-    @Autowired
     private PriceRepository priceRepository;
     @Autowired
     private TransportationReservationRepository transportationReservationRepository;
@@ -46,15 +44,9 @@ public class OrderService {
 
     public String createOrderList(KlientObjednavkaListResult result,Long id) {
         StringBuilder xml = new StringBuilder();
-        xml.append("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">");
-        xml.append("<s:Body>");
-        xml.append("<KlientObjednavkaListResponse xmlns=\"http://xml.profis.profitour.cz\">");
-        xml.append("<KlientObjednavkaListResult>");
-
         if (result != null && result.getData() != null && result.getData().getValue() != null) {
             xml.append("<Data>");
             for (ObjednavkaKlient order : result.getData().getValue().getObjednavkaKlient()) {
-                xml.append("<ObjednavkaKlient>");
                 xml.append("<ID>").append(order.getID()).append("</ID>");
                 xml.append("<Klic>").append(getJAXBElementValue(order.getKlic())).append("</Klic>");
 
@@ -82,31 +74,18 @@ public class OrderService {
                 }
 
                 // Save the TourOrder (cascades to OrderUser)
-                tourOrderRepository.save(orderDetail);
+                orderDetailRepository.save(orderDetail);
                 xml.append("</ObjednavkaKlient>");
             }
             xml.append("</Data>");
         }
-
-        xml.append("</KlientObjednavkaListResult>");
-        xml.append("</KlientObjednavkaListResponse>");
-        xml.append("</s:Body>");
-        xml.append("</s:Envelope>");
-
         return xml.toString();
     }
 
     public String createOrderDetail(ObjednavkaDetailResult result) {
         StringBuilder xml = new StringBuilder();
-        xml.append("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">");
-        xml.append("<s:Body>");
-        xml.append("<ObjednavkaDetailResponse xmlns=\"http://xml.profis.profitour.cz\">");
-        xml.append("<ObjednavkaDetailResult>");
 
         if (result != null && result.getData() != null && result.getData().getValue() != null) {
-            xml.append("<Data>");
-            xml.append("<ObjednavkaDetail>");
-
             ObjednavkaPopis data = result.getData().getValue();
 
             // Basic fields
@@ -277,16 +256,9 @@ public class OrderService {
             orderDetailRepository.save(orderDetail);
 
             xml.append("<Data>");
-            xml.append("<ObjednavkaDetail>");
             xml.append("<ID>").append(data.getID()).append("</ID>");
-            xml.append("</ObjednavkaDetail>");
             xml.append("</Data>");
         }
-
-        xml.append("</ObjednavkaDetailResult>");
-        xml.append("</ObjednavkaDetailResponse>");
-        xml.append("</s:Body>");
-        xml.append("</s:Envelope>");
 
         return xml.toString();}
 

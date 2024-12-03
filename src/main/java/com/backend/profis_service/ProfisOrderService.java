@@ -18,7 +18,7 @@ import java.net.URL;
 @org.springframework.stereotype.Service
 
 public class ProfisOrderService {
-
+    @Autowired
     private OrderService orderService;
     @Autowired
     private UserRepository userRepository;
