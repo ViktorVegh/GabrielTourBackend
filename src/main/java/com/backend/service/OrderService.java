@@ -102,6 +102,19 @@ public class OrderService {
             orderDetail.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
             orderDetail.setStateOfOrder(getJAXBElementValue(data.getStavObjednavka().getValue().getNazev()));
 
+            List<String> travelerIds = data.getCestujici() != null && data.getCestujici().getValue() != null
+                    ? data.getCestujici().getValue().getCestujici().stream()
+                    .map(cestujici -> {
+                        if (cestujici.getKlient() != null && cestujici.getKlient().getValue() != null) {
+                            return String.valueOf(cestujici.getKlient().getValue().getID()); // Convert ID to String
+                        }
+                        return null;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList())
+                    : Collections.emptyList();
+
+            orderDetail.setTravelers(travelerIds);
             // Step 1: Extract the list of RezervaceDoprava objects
             List<RezervaceDoprava> reservations = result.getData().getValue()
                     .getRezervaceDopravy().getValue()
@@ -278,7 +291,16 @@ public class OrderService {
     public OrderDTO getOrderDetail(int id) {
         OrderUserId userId = new OrderUserId();
         userId.setUserId((long) id);
-        OrderUser orderUser =orderUserRepository.findClosestOrderByUserId(userId.getUserId());
+
+        // Fetch the order user object
+        OrderUser orderUser = orderUserRepository.findClosestOrderByUserId(userId.getUserId());
+
+        // Check if orderUser is null and throw an exception
+        if (orderUser == null) {
+            throw new IllegalArgumentException("No order details found for user ID: " + id);
+        }
+
+        // Return the order details
         return new OrderDTO(orderUser.getOrderDetail());
     }
 }

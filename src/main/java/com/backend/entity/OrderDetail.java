@@ -53,6 +53,31 @@ public class OrderDetail {
     private int termId; // id_Termin (ID of the booked term)
     private String stateOfOrder; // StavObjednavka (State of the order)
 
+    public OrderDetail() {
+    }
+
+    public OrderDetail(int id, double totalPrice, String pricing, LocalDateTime startDate, LocalDateTime endDate, int numberOfDays, int numberOfNights, int adults, int children, int infants, String currency, String paymentStatus, String name, Map<String, String> externalValues, List<AccommodationReservation> accommodationReservations, List<TransportationReservation> transportationReservations, List<Prices> prices, List<String> travelers, int termId, String stateOfOrder) {
+        this.id = id;
+        this.totalPrice = totalPrice;
+        this.pricing = pricing;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.numberOfDays = numberOfDays;
+        this.numberOfNights = numberOfNights;
+        this.adults = adults;
+        this.children = children;
+        this.infants = infants;
+        this.currency = currency;
+        this.paymentStatus = paymentStatus;
+        this.name = name;
+        this.externalValues = externalValues;
+        this.accommodationReservations = accommodationReservations;
+        this.transportationReservations = transportationReservations;
+        this.prices = prices;
+        this.travelers = travelers;
+        this.termId = termId;
+        this.stateOfOrder = stateOfOrder;
+    }
 
     // Getters and Setters
 
@@ -220,5 +245,11 @@ public class OrderDetail {
     }
 
 
+    public OrderUser getOrderUser() {
+        return orderUser;
+    }
 
+    public void setOrderUser(OrderUser orderUser) {
+        this.orderUser = orderUser;
+    }
 }

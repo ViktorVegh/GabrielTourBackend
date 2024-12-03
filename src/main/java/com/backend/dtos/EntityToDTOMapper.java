@@ -73,4 +73,34 @@ public class EntityToDTOMapper {
                 person.getProfilePicture().orElse(null)
         );
     }
+
+    public static OrderDTO mapToOrderDTO(OrderDetail detail) {
+        if (detail == null) {
+            return null;
+        }
+        return new OrderDTO(
+                new OrderDetail(
+                        detail.getId(),
+                        detail.getTotalPrice(),
+                        detail.getPricing(),
+                        detail.getStartDate(),
+                        detail.getEndDate(),
+                        detail.getNumberOfDays(),
+                        detail.getNumberOfNights(),
+                        detail.getAdults(),
+                        detail.getChildren(),
+                        detail.getInfants(),
+                        detail.getCurrency(),
+                        detail.getPaymentStatus(),
+                        detail.getName(),
+                        detail.getExternalValues(),
+                        detail.getAccommodationReservations(),
+                        detail.getTransportationReservations(),
+                        detail.getPrices(),
+                        detail.getTravelers(),
+                        detail.getTermId(),
+                        detail.getStateOfOrder()
+                )
+        );
+    }
 }
