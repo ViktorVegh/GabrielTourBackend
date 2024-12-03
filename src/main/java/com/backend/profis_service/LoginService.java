@@ -3,7 +3,6 @@ package com.backend.profis_service;
 import com.example.klientsoapclient.*;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.ws.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;

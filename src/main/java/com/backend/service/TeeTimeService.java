@@ -1,4 +1,4 @@
-package com.backend.profis_service;
+package com.backend.service;
 
 import com.backend.dtos.TeeTimeDTO;
 import com.backend.dtos.TeeTimeRequest;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,12 +38,13 @@ public class TeeTimeService {
     }
 
     public TeeTimeDTO createTeeTime(TeeTimeRequest teeTimeRequest) {
+        System.out.println(teeTimeRequest.getUserIds());
         // Retrieve all users from the provided user IDs
         List<User> users = userRepository.findAllById(teeTimeRequest.getUserIds());
         if (users.isEmpty()) {
             throw new RuntimeException("No valid users found for provided user IDs");
         }
-
+        System.out.println(teeTimeRequest.getGolfCourseId()+" golf c id");
         // Fetch the golf course
         GolfCourse fetchedGolfCourse = golfCourseRepository.findById(teeTimeRequest.getGolfCourseId())
                 .orElseThrow(() -> new RuntimeException("GolfCourse with ID " + teeTimeRequest.getGolfCourseId() + " not found"));

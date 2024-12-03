@@ -27,14 +27,18 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private JwtHelper jwtHelper;
+    private ProfisOrderService profisOrderService;
 
     @PostMapping("/get-order")
-    public ResponseEntity<String> getOrderList(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<String> CreateOrderList(@RequestBody Map<String, Object> body) {
         try {
             long id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
+
             // Fetch order data using the service
-            String result = orderService.klientObjednavkaList(id);
+            String result = profisOrderService.CreateOrderListRequest(id);
+
+
+
             // Return the XML response
             return ResponseEntity.ok()
                     .header("Content-Type", "application/xml")
@@ -51,19 +55,17 @@ public class OrderController {
         }
     }
     @PostMapping("/create-orderDetails")
-    public ResponseEntity<String> createOrderDetail(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<String> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
             System.out.println("I got to controller with ID: " + id);
             // Fetch order data using the service
-            ObjednavkaDetailResult result = orderService.ObjednavkaDetail(id);
-            // Convert the result to XML
-            String xmlResponse = orderService.createOrderDetail(result);
+            String result = profisOrderService.CreateOrderDetailRequest(id);
 
             // Return the XML response
             return ResponseEntity.ok()
                     .header("Content-Type", "application/xml")
-                    .body(xmlResponse);
+                    .body(result);
 
         } catch (Exception e) {
             e.printStackTrace();
