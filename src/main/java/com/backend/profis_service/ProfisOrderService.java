@@ -1,6 +1,8 @@
 package com.backend.profis_service;
 
 import com.backend.auth.EncryptionUtil;
+import com.backend.entity.OrderUser;
+import com.backend.repository.OrderUserRepository;
 import com.backend.repository.UserRepository;
 import com.backend.service.OrderService;
 import com.example.klientsoapclient.Klient;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
+import java.util.Optional;
+
 @org.springframework.stereotype.Service
 
 public class ProfisOrderService {
@@ -22,6 +26,8 @@ public class ProfisOrderService {
     private OrderService orderService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderUserRepository orderUserRepository;
 
     private static final String WSDL_URL = "https://xml.gabrieltour.sk/API/v1/Klient.svc?wsdl";
 
@@ -86,17 +92,21 @@ public class ProfisOrderService {
         return FinalResult;
 
     }
-    public String CreateOrderDetailRequest(long id){
+    public String CreateOrderDetailRequest(long id) {
         ObjednavkaContext context = new ObjednavkaContext();
-        context.setUzivatelHeslo(passwordElement);    // Set the user's password
-        context.setUzivatelLogin(usernameElement);    // Set the user's login
-        context.setVypsatNazvy(true);               // Set to false as per request
+        context.setUzivatelHeslo(passwordElement); // Set the user's password
+        context.setUzivatelLogin(usernameElement); // Set the user's login
+        context.setVypsatNazvy(true);              // Set to false as per request
         context.setIdJazyk(idElement);
-        // Optional<OrderUser> optionalOrder = orderUserRepository.getLatestOrderByUserId(id);
-        //OrderUser orderUser = optionalOrder.get(); // Unwrap the Optional safely
-        //   OrderUserId orderUserId = orderUser.getId(); // Get the composite key
-        int orderId = 8291; // Extract orderId from the composite key
-        String klic = "D88A537D"; // Get the `klic` field
+
+        // Fetch the OrderUser and handle the case where it might be null
+        OrderUser orderUser = orderUserRepository.findClosestOrderByUserId(id);
+        if (orderUser == null) {
+            throw new IllegalArgumentException("No OrderUser found for the given user ID: " + id+" in database");
+        }
+
+        int orderId = orderUser.getOrderDetail().getId(); // Extract orderId from the composite key
+        String klic = orderUser.getKlic(); // Get the `klic` field
 
         // Use `orderId` and `klic` as needed
         System.out.println("Order ID: " + orderId);
@@ -104,9 +114,10 @@ public class ProfisOrderService {
         context.setIdObjednavka(orderId);
         context.setKlic(new JAXBElement<>(new QName(NAMESPACE_URI, "Klic"), String.class, klic));
 
-
-
         ObjednavkaDetailResult result = objednavkaPort.objednavkaDetail(context);
+        if (result == null) {
+            throw new IllegalArgumentException("OrderUser does not exist in Profis system");
+        }
         String FinalResult = orderService.createOrderDetail(result);
         return FinalResult;
     }

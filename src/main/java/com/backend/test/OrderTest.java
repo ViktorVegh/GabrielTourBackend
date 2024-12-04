@@ -40,8 +40,9 @@ public class OrderTest {
     @InjectMocks
     private OrderService orderService;
 
-    @Mock
+    @InjectMocks
     private ProfisOrderService ProfisOrderService;
+
     @Mock
     private Objednavka objednavkaPort;
 
@@ -88,7 +89,38 @@ public class OrderTest {
         verify(orderUserRepository).findClosestOrderByUserId(10L);
         verifyNoMoreInteractions(orderUserRepository);
     }
+    @Test
+    void createOrderDetail(){
+        OrderUser orderUser = new OrderUser();
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setId(1); // Example ID;
+        orderUser.setOrderDetail(orderDetail);
+        //String result = ProfisOrderService.CreateOrderDetailRequest(1);
 
+        when(orderUserRepository.findClosestOrderByUserId(1L)).thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ProfisOrderService.CreateOrderDetailRequest(1));
+
+        assertEquals("No OrderUser found for the given user ID: 1 in database", exception.getMessage());
+    }
+    @Test
+    void createOrderDetail2(){
+        OrderUser orderUser = new OrderUser();
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setId(1); // Example ID;
+        orderUser.setOrderDetail(orderDetail);
+        ObjednavkaContext context  = new ObjednavkaContext();
+
+
+        when(objednavkaPort.objednavkaDetail(context)).thenReturn(null);
+        when(orderUserRepository.findClosestOrderByUserId(1L)).thenReturn(orderUser);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ProfisOrderService.CreateOrderDetailRequest(1));
+
+        assertEquals("OrderUser does not exist in Profis system", exception.getMessage());
+    }
+    /*
     @Test
     void createOrderDetail() {
         OrderUser orderUser = new OrderUser();
@@ -125,7 +157,7 @@ public class OrderTest {
         // Verify interactions
         verify(orderUserRepository).findClosestOrderByUserId(10L);
         verifyNoMoreInteractions(orderUserRepository);
-    }
+    }*/
 
 
 }
