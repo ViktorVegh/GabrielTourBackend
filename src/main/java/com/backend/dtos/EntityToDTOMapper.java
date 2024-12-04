@@ -73,4 +73,22 @@ public class EntityToDTOMapper {
                 person.getProfilePicture().orElse(null)
         );
     }
+
+    public static DriveDTO mapToDriveDTO(Drive drive) {
+        if (drive == null) {
+            return null;
+        }
+
+        return new DriveDTO(
+                drive.getId(),
+                drive.getDate(),
+                drive.getPickupTime(),
+                drive.getDropoffTime(),
+                drive.getCustomReason(),
+                drive.getDriver() != null ? drive.getDriver().getId() : null,
+                drive.getDeparturePlace(),
+                drive.getArrivalPlace(),
+                drive.getUserIds()
+        );
+    }
 }

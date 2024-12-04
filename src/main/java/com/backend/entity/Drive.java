@@ -1,6 +1,9 @@
 package com.backend.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Drive {
@@ -9,18 +12,15 @@ public class Drive {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Enum for predefined drive reasons
-    public enum Reason {
-        TEE_TIME,
-        AIRPORT,
-        OTHER
-    }
+    private LocalDate date;
 
-    // Drive reason with the option for custom reasons
-    @Enumerated(EnumType.STRING)
-    private Reason reason;
+    private LocalDateTime pickupTime;
+    private LocalDateTime dropoffTime;
 
     private String customReason;
+
+    private String departurePlace;
+    private String arrivalPlace;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
@@ -30,38 +30,47 @@ public class Drive {
     @JoinColumn(name = "tee_time_id")
     private TeeTime teeTime;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transportation_reservation_id")
+    private TransportationReservation transportationReservation;
 
-    // Constructors
+    @ElementCollection
+    @CollectionTable(name = "drive_user_ids", joinColumns = @JoinColumn(name = "drive_id"))
+    @Column(name = "user_id")
+    private List<Long> userIds;
 
-    // Primary constructor with basic fields
-    public Drive(Reason reason, String customReason, TeeTime teeTime) {
-        this.reason = reason;
-        this.customReason = reason == Reason.OTHER ? customReason : null;
-        this.teeTime = teeTime;
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
     }
 
-    // Constructor with driver field
-    public Drive(Reason reason, String customReason, Driver driver, TeeTime teeTime) {
-        this.reason = reason;
-        this.customReason = reason == Reason.OTHER ? customReason : null;
-        this.driver = driver;
-        this.teeTime = teeTime;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    // Default constructor
-    public Drive() {}
-
-    // Getters and Setters for all fields
-
-    public Reason getReason() {
-        return reason;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setReason(Reason reason) {
-        this.reason = reason;
-        if (reason != Reason.OTHER) {
-            this.customReason = null; // Clear custom reason if a standard reason is selected
-        }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalDateTime getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(LocalDateTime pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public LocalDateTime getDropoffTime() {
+        return dropoffTime;
+    }
+
+    public void setDropoffTime(LocalDateTime dropoffTime) {
+        this.dropoffTime = dropoffTime;
     }
 
     public String getCustomReason() {
@@ -69,11 +78,23 @@ public class Drive {
     }
 
     public void setCustomReason(String customReason) {
-        if (this.reason == Reason.OTHER) {
-            this.customReason = customReason; // Only set if reason is OTHER
-        } else {
-            throw new UnsupportedOperationException("Custom reason is only applicable if reason is OTHER.");
-        }
+        this.customReason = customReason;
+    }
+
+    public String getDeparturePlace() {
+        return departurePlace;
+    }
+
+    public void setDeparturePlace(String departurePlace) {
+        this.departurePlace = departurePlace;
+    }
+
+    public String getArrivalPlace() {
+        return arrivalPlace;
+    }
+
+    public void setArrivalPlace(String arrivalPlace) {
+        this.arrivalPlace = arrivalPlace;
     }
 
     public Driver getDriver() {
@@ -92,5 +113,19 @@ public class Drive {
         this.teeTime = teeTime;
     }
 
+    public TransportationReservation getTransportationReservation() {
+        return transportationReservation;
+    }
 
+    public void setTransportationReservation(TransportationReservation transportationReservation) {
+        this.transportationReservation = transportationReservation;
+    }
+
+    public List<Long> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<Long> userIds) {
+        this.userIds = userIds;
+    }
 }

@@ -48,7 +48,7 @@ public class OrderDetail {
     private List<Prices> prices;
 
     @ElementCollection
-    private List<String> travelers; // Cestujici (Active traveling individuals)
+    private List<String> travelers;
 
     private int termId; // id_Termin (ID of the booked term)
     private String stateOfOrder; // StavObjednavka (State of the order)
@@ -193,6 +193,14 @@ public class OrderDetail {
 
     public void setPrices(List<Prices> prices) {
         this.prices = prices;
+    }
+
+    public OrderUser getOrderUser() {
+        return orderUser;
+    }
+
+    public void setOrderUser(OrderUser orderUser) {
+        this.orderUser = orderUser;
     }
 
     public List<String> getTravelers() {

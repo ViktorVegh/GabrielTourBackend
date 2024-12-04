@@ -244,4 +244,6 @@ public class TransportationReservation {
     public void setOrderDetail(OrderDetail orderDetail) {
         this.orderDetail = orderDetail;
     }
+
+
 }
