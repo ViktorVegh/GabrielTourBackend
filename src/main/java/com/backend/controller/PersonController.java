@@ -2,6 +2,7 @@ package com.backend.controller;
 
 import com.backend.dtos.PersonDTO;
 import com.backend.service.PersonService;
+import com.backend.service_interface.PersonServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 public class PersonController {
 
     @Autowired
-    private PersonService personService;
+    private PersonServiceInterface personService;
 
     @PreAuthorize("hasAuthority('office')")
     @GetMapping("/all")

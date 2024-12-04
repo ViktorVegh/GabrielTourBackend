@@ -3,6 +3,7 @@ package com.backend.controller;
 import com.backend.dtos.TeeTimeDTO;
 import com.backend.dtos.TeeTimeRequest;
 import com.backend.service.TeeTimeService;
+import com.backend.service_interface.TeeTimeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 public class TeeTimeController {
 
     @Autowired
-    private TeeTimeService teeTimeService;
+    private TeeTimeServiceInterface teeTimeService;
 
     @PreAuthorize("hasAnyAuthority('user', 'office')")    @GetMapping("/user/{userId}")
     public List<TeeTimeDTO> getTeeTimesByUserId(@PathVariable Long userId) {

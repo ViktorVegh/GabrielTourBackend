@@ -5,6 +5,8 @@ import com.backend.dtos.EditDriveRequest;
 import com.backend.entity.Drive;
 import com.backend.service.DriveScheduleService;
 import com.backend.service.DriveService;
+import com.backend.service_interface.DriveScheduleServiceInterface;
+import com.backend.service_interface.DriveServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +18,10 @@ import java.util.List;
 public class DriveController {
 
     @Autowired
-    private DriveScheduleService driveScheduleService;
+    private DriveScheduleServiceInterface driveScheduleService;
 
     @Autowired
-    private DriveService driveService;
+    private DriveServiceInterface driveService;
 
     /**
      * Updates the calendar for the current week and returns all drives.

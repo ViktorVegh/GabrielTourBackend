@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 @Service
-public class AuthService {
+public class AuthService implements AuthServiceInterface {
 
     @Autowired
     private UserRepository userRepository;
@@ -27,6 +27,7 @@ public class AuthService {
     private DriverManagerRepository driverManagerRepository;
 
     // Registration
+    @Override
     public String registerEmployee(String email, String password, String name, String profilePicture, String role) {
         // Check if email is already registered
         if (userRepository.findByEmail(email) != null || driverRepository.findByEmail(email) != null || tourGuideRepository.findByEmail(email) != null  || driverManagerRepository.findByEmail(email) != null){
@@ -71,7 +72,8 @@ public class AuthService {
         // Generate a token with the role
         return jwtUtil.generateToken(newPerson.getId(), role);
     }
-    public void registerUser(String email, String password,Long clientId){
+    @Override
+    public void registerUser(String email, String password, Long clientId){
         try {
             Person newPerson;
             String role = "user";
@@ -83,6 +85,7 @@ public class AuthService {
 
     }
     // Login
+    @Override
     public String login(String email, String password) {
         // Try finding the user in each repositoryoffice
         Person person = userRepository.findByEmail(email);
@@ -122,6 +125,7 @@ public class AuthService {
         throw new RuntimeException("Invalid login credentials!");
     }
 
+    @Override
     public void logout() {
 
     }

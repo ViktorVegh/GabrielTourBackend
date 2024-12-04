@@ -4,7 +4,9 @@ import com.backend.auth.JwtHelper;
 import com.backend.dtos.OrderDTO;
 import com.backend.dtos.TeeTimeRequest;
 import com.backend.profis_service.ProfisOrderService;
+import com.backend.profis_service_interface.ProfisOrderServiceInterface;
 import com.backend.service.OrderService;
+import com.backend.service_interface.OrderServiceInterface;
 import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.KlientKontakt;
 import com.example.klientsoapclient.ObjednavkaKlient;
@@ -26,9 +28,9 @@ public class OrderController {
 
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceInterface orderService;
     @Autowired
-    private ProfisOrderService profisOrderService;
+    private ProfisOrderServiceInterface profisOrderService;
 
     @PostMapping("/get-order")
     public ResponseEntity<String> CreateOrderList(@RequestBody Map<String, Object> body) {

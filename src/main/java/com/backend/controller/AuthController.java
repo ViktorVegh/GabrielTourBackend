@@ -1,9 +1,11 @@
 package com.backend.controller;
 
 import com.backend.auth.AuthService;
+import com.backend.auth.AuthServiceInterface;
 import com.backend.dtos.LoginRequest;
 import com.backend.dtos.RegisterRequest;
 import com.backend.profis_service.LoginService;
+import com.backend.profis_service_interface.LoginServiceInterface;
 import com.example.klientsoapclient.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,9 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private AuthServiceInterface authService;
     @Autowired
-    private LoginService loginService;
+    private LoginServiceInterface loginService;
     // Register endpoint
     @PostMapping("/register")
     public Map<String, String> register(@RequestBody RegisterRequest registerRequest) {
