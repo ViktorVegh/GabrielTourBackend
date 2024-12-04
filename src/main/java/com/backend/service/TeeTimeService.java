@@ -9,6 +9,7 @@ import com.backend.entity.User;
 import com.backend.repository.GolfCourseRepository;
 import com.backend.repository.TeeTimeRepository;
 import com.backend.repository.UserRepository;
+import com.backend.service_interface.TeeTimeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TeeTimeService {
+public class TeeTimeService implements TeeTimeServiceInterface {
 
     @Autowired
     private TeeTimeRepository teeTimeRepository;
@@ -27,6 +28,7 @@ public class TeeTimeService {
     @Autowired
     private GolfCourseRepository golfCourseRepository;
 
+    @Override
     public List<TeeTimeDTO> getTeeTimesByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -37,6 +39,7 @@ public class TeeTimeService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public TeeTimeDTO createTeeTime(TeeTimeRequest teeTimeRequest) {
         System.out.println(teeTimeRequest.getUserIds());
         // Retrieve all users from the provided user IDs

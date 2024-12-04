@@ -1,6 +1,7 @@
 package com.backend.profis_service;
 
 
+import com.backend.profis_service_interface.KlientServiceInterface;
 import com.example.klientsoapclient.*;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.ws.Service;
@@ -11,7 +12,7 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 
 @org.springframework.stereotype.Service
-public class KlientService {
+public class KlientService implements KlientServiceInterface {
     private static final String WSDL_URL = "https://xml.gabrieltour.sk/API/v1/Klient.svc?wsdl";
 
     private static final QName SERVICE_NAME = new QName("http://tempuri.org/", "KlientService");
@@ -31,6 +32,7 @@ public class KlientService {
     KlientDataInput klientDataInput = new KlientDataInput();
 
 
+    @Override
     public void initialize()throws Exception{
         narozeniDate = DatatypeFactory.newInstance().newXMLGregorianCalendar("1980-01-01");
         vydaniDokladuDate = DatatypeFactory.newInstance().newXMLGregorianCalendar("2020-01-01");
@@ -43,6 +45,7 @@ public class KlientService {
     }
 
     // Create JAXBElement values for each field and set them
+    @Override
     public KlientDataInput setKlientDataInput() throws Exception {
         initialize();
         klientDataInput.setAdresa(new JAXBElement<>(new QName(NAMESPACE_URI, "Adresa"), AdresaInputBase.class, adresaValue)); // Assuming adresaValue is of type AdresaInputBase
@@ -75,6 +78,7 @@ public class KlientService {
         Service service = Service.create(wsdlLocation, SERVICE_NAME);
         klientPort = service.getPort(PORT_NAME, Klient.class);
     }
+    @Override
     public RegistrovatResult Registrovat(){
         Context context = new Context();
         try {

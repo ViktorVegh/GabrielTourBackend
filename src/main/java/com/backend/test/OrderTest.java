@@ -20,10 +20,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
+import com.example.klientsoapclient.Klient;
 import javax.xml.namespace.QName;
 
 import java.lang.reflect.Array;
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,6 +37,8 @@ public class OrderTest {
 
     @Mock
     private OrderDetailRepository orderDetailRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private OrderService orderService;
@@ -45,6 +48,9 @@ public class OrderTest {
 
     @Mock
     private Objednavka objednavkaPort;
+
+    @Mock
+    private com.example.klientsoapclient.Klient klientPort;
 
 
     @BeforeEach
@@ -90,7 +96,7 @@ public class OrderTest {
         verifyNoMoreInteractions(orderUserRepository);
     }
     @Test
-    void createOrderDetail(){
+    void createOrderDetailException1(){
         OrderUser orderUser = new OrderUser();
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setId(1); // Example ID;
@@ -105,7 +111,7 @@ public class OrderTest {
         assertEquals("No OrderUser found for the given user ID: 1 in database", exception.getMessage());
     }
     @Test
-    void createOrderDetail2(){
+    void createOrderDetailException2(){
         OrderUser orderUser = new OrderUser();
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setId(1); // Example ID;
@@ -120,6 +126,40 @@ public class OrderTest {
 
         assertEquals("OrderUser does not exist in Profis system", exception.getMessage());
     }
+
+    @Test
+    void CreateOrderListRequestException1() {
+        // Mock dependencies
+        ObjednavkaContext context = mock(ObjednavkaContext.class);
+        KlientObjednavkaListResult klientObjednavkaListResult = mock(KlientObjednavkaListResult.class);
+        OrderService orderService = mock(OrderService.class); // Ensure this is mocked
+        UserRepository userRepository = mock(UserRepository.class);
+        Klient klientPort = mock(Klient.class);
+
+        // Valid encrypted password (ensure it works with the decryption logic)
+        String validEncryptedPassword = Base64.getEncoder().encodeToString("validPassword".getBytes());
+
+        // Stub methods
+        when(userRepository.getPasswordById(anyInt())).thenReturn(validEncryptedPassword); // Provide valid encrypted text
+        when(userRepository.getProfisId(anyInt())).thenReturn(1234);
+        when(klientPort.klientObjednavkaList(any())).thenReturn(null); // Simulate no orders
+        when(orderService.createOrderList(any(KlientObjednavkaListResult.class), anyLong())).thenReturn("1");
+        System.out.println("Password: " + userRepository.getPasswordById(1));
+
+        // Act & Assert: Validate behavior and exception
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ProfisOrderService.CreateOrderListRequest(1L)); // Ensure ProfisOrderService is instantiated correctly
+
+        // Assert that the exception message matches the expected behavior
+        assertEquals("No orders found for the given user ID: 1 in profis", exception.getMessage());
+
+        // Verify that the expected interactions occurred
+        verify(userRepository).getPasswordById(anyInt());
+        verify(userRepository).getProfisId(anyInt());
+        verify(klientPort).klientObjednavkaList(any());
+    }
+
+
     /*
     @Test
     void createOrderDetail() {
@@ -146,7 +186,7 @@ public class OrderTest {
         ObjednavkaDetailResult detailResult = objednavkaPort.objednavkaDetail(context);
 
         System.out.println(detailResult.getData().getValue().getID()+" id");
-
+        System.out.println("test");
         when(orderService.createOrderDetail(detailResult)).thenReturn("1");
 
         String finalResult = orderService.createOrderDetail(detailResult);
@@ -157,7 +197,7 @@ public class OrderTest {
         // Verify interactions
         verify(orderUserRepository).findClosestOrderByUserId(10L);
         verifyNoMoreInteractions(orderUserRepository);
-    }*/
-
+    }
+     */
 
 }

@@ -1,29 +1,24 @@
 package com.backend.service;
 
-import com.backend.auth.EncryptionUtil;
 import com.backend.dtos.EntityToDTOMapper;
 import com.backend.dtos.OrderDTO;
 import com.backend.entity.*;
 import com.backend.repository.*;
+import com.backend.service_interface.OrderServiceInterface;
 import com.example.klientsoapclient.*;
-import com.example.klientsoapclient.Klient;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.objednavkasoapclient.*;
 import com.example.objednavkasoapclient.IntegerNazev;
-import com.example.objednavkasoapclient.Objednavka;
 import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.ws.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public class OrderService {
+public class OrderService implements OrderServiceInterface {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -43,7 +38,8 @@ public class OrderService {
     public OrderService() {
     }
 
-    public String createOrderList(KlientObjednavkaListResult result,Long id) {
+    @Override
+    public String createOrderList(KlientObjednavkaListResult result, Long id) {
         StringBuilder xml = new StringBuilder();
         if (result != null && result.getData() != null && result.getData().getValue() != null) {
             xml.append("<Data>");
@@ -83,6 +79,7 @@ public class OrderService {
         return xml.toString();
     }
 
+    @Override
     public String createOrderDetail(ObjednavkaDetailResult result) {
         StringBuilder xml = new StringBuilder();
 
@@ -281,15 +278,7 @@ public class OrderService {
         return element != null && element.getValue() != null ? element.getValue().toString() : "";
     }
 
-    public static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
-            if (xmlGregorianCalendar == null) {
-                return null; // Handle null case
-            }
-            return xmlGregorianCalendar.toGregorianCalendar()
-                    .toZonedDateTime()
-                    .toLocalDateTime();
-        }
-
+    @Override
     public OrderDTO getOrderDetail(int id) {
         OrderUserId userId = new OrderUserId();
         userId.setUserId((long) id);
@@ -304,6 +293,14 @@ public class OrderService {
         OrderDTO dto = EntityToDTOMapper.mapToOrderDTO(orderUser.getOrderDetail());;
         // Return the order details
         return dto;
+    }
+    static LocalDateTime toLocalDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
+        if (xmlGregorianCalendar == null) {
+            return null; // Handle null case
+        }
+        return xmlGregorianCalendar.toGregorianCalendar()
+                .toZonedDateTime()
+                .toLocalDateTime();
     }
 }
 

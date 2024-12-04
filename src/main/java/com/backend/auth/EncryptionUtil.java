@@ -25,6 +25,9 @@ public class EncryptionUtil {
 
     // Decrypts an encrypted password
     public static String decrypt(String encryptedText) {
+        if (encryptedText == null) {
+            throw new IllegalArgumentException("Encrypted text cannot be null");
+        }
         try {
             SecretKey key = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
             Cipher cipher = Cipher.getInstance(ALGORITHM);

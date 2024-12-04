@@ -8,6 +8,7 @@ import com.backend.repository.UserRepository;
 import com.backend.repository.DriverRepository;
 import com.backend.repository.TourGuideRepository;
 import com.backend.repository.OfficeRepository;
+import com.backend.service_interface.PersonServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.backend.dtos.EntityToDTOMapper;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PersonService {
+public class PersonService implements PersonServiceInterface {
 
     @Autowired
     private UserRepository userRepository;
@@ -31,6 +32,7 @@ public class PersonService {
     @Autowired
     private OfficeRepository officeRepository;
 
+    @Override
     public List<PersonDTO> getAllPersonsFromAllRepositories() {
         List<PersonDTO> allPersons = new ArrayList<>();
 
@@ -48,6 +50,7 @@ public class PersonService {
     }
 
 
+    @Override
     public Optional<PersonDTO> findPersonByEmail(String email) {
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
         if (user.isPresent()) {
@@ -67,6 +70,7 @@ public class PersonService {
         return Optional.empty();
     }
 
+    @Override
     public Optional<PersonDTO> findPersonById(Long id, String role) {
         switch (role.toUpperCase()) {
             case "USER":

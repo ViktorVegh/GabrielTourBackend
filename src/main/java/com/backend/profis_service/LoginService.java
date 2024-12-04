@@ -1,5 +1,6 @@
 package com.backend.profis_service;
 
+import com.backend.profis_service_interface.LoginServiceInterface;
 import com.example.klientsoapclient.*;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.ws.Service;
@@ -13,7 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 @org.springframework.stereotype.Service
-public class LoginService {
+public class LoginService implements LoginServiceInterface {
 
     private static final String WSDL_URL = "https://xml.gabrieltour.sk/API/v1/Klient.svc?wsdl";
 
@@ -47,6 +48,7 @@ public class LoginService {
         klientPort = service.getPort(PORT_NAME, Klient.class);
     }
 
+    @Override
     public KlientPrihlasitResult login(String email, String password) {
         System.out.println("i got to Login service for login-check123");
         // Set up context if required
@@ -62,6 +64,7 @@ public class LoginService {
         System.out.println(CallResponse);
         return CallResponse;
     }
+    @Override
     public OveritEmailResult overitEmail(String email){
         System.out.println("i got to Login service for email verification-check123");
         Context context = new Context();
@@ -74,6 +77,7 @@ public class LoginService {
         System.out.println(CallResponse);
         return CallResponse;
     }
+    @Override
     public ResetHeslaOdeslatResult resetHeslaOdeslat(int clientId){
         Context context = new Context();
         context.setUzivatelHeslo(passwordElement);    // Set the user's password
@@ -103,7 +107,8 @@ public class LoginService {
         System.out.println(CallResponse);
         return CallResponse;
     }
-    public ResetHeslaOveritResult resetHeslaOverit(String authKey,String email,int clientId){
+    @Override
+    public ResetHeslaOveritResult resetHeslaOverit(String authKey, String email, int clientId){
         System.out.println("i got to Login service for key verification-check123");
         KlientContextBase klientContextBase = new KlientContextBase();
         klientContextBase.setUzivatelHeslo(passwordElement);
@@ -129,7 +134,8 @@ public class LoginService {
         System.out.println(result);
         return result;
     }
-    public ZmenitHesloResult changePassword(String authKey,String password,int clientId,String email){
+    @Override
+    public ZmenitHesloResult changePassword(String authKey, String password, int clientId, String email){
         KlientContextBase klientContextBase = new KlientContextBase();
         klientContextBase.setUzivatelHeslo(passwordElement);
         klientContextBase.setUzivatelLogin(usernameElement);

@@ -6,6 +6,7 @@ import com.backend.entity.TeeTime;
 import com.backend.entity.TransportationReservation;
 import com.backend.entity.User;
 import com.backend.repository.*;
+import com.backend.service_interface.DriveServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 import com.backend.entity.Hotel;
 
 @Service
-public class DriveService {
+public class DriveService implements DriveServiceInterface {
 
     @Autowired
     private TeeTimeRepository teeTimeRepository;
@@ -42,6 +43,7 @@ public class DriveService {
     /**
      * Fetch drives for the given date range.
      */
+    @Override
     public List<Drive> getDrivesForDateRange(LocalDate startDate, LocalDate endDate) {
         List<Drive> drives = new ArrayList<>();
 
@@ -81,7 +83,8 @@ public class DriveService {
         return drives;
     }
 
-    private List<Drive> createDrivesForTeeTime(TeeTime teeTime) {
+    @Override
+    public List<Drive> createDrivesForTeeTime(TeeTime teeTime) {
         List<Drive> drives = new ArrayList<>();
 
         // Fetch hotel name from accommodation reservation
@@ -129,7 +132,8 @@ public class DriveService {
 
 
 
-    private List<Drive> createDrivesForTransportation(TransportationReservation reservation) {
+    @Override
+    public List<Drive> createDrivesForTransportation(TransportationReservation reservation) {
         List<Drive> drives = new ArrayList<>();
 
         // Extract user IDs from TransportationReservation
@@ -177,6 +181,7 @@ public class DriveService {
     /**
      * Edit an existing drive.
      */
+    @Override
     public Drive editDrive(Long driveId, LocalDateTime pickupTime, LocalDateTime dropoffTime, Driver driver) {
         Drive drive = driveRepository.findById(driveId)
                 .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
@@ -196,6 +201,7 @@ public class DriveService {
     }
 
 
+    @Override
     public void populateMissingPlacesForDrives() {
         List<Drive> allDrives = driveRepository.findAll();
 

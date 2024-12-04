@@ -2,6 +2,7 @@ package com.backend.profis_service;
 
 import com.backend.auth.EncryptionUtil;
 import com.backend.entity.OrderUser;
+import com.backend.profis_service_interface.ProfisOrderServiceInterface;
 import com.backend.repository.OrderUserRepository;
 import com.backend.repository.UserRepository;
 import com.backend.service.OrderService;
@@ -17,11 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
-import java.util.Optional;
 
 @org.springframework.stereotype.Service
 
-public class ProfisOrderService {
+public class ProfisOrderService implements ProfisOrderServiceInterface {
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -67,10 +67,10 @@ public class ProfisOrderService {
         objednavkaPort = service2.getPort(PORT_NAME2, Objednavka.class);
     }
 
+    @Override
     public String CreateOrderListRequest(Long id){
         KlientHesloContext context = new KlientHesloContext();
         String encryptedPassword = userRepository.getPasswordById(id.intValue());
-        System.out.println("HESLO"+encryptedPassword);
         int ProfisId = userRepository.getProfisId(id.intValue());
         // Decrypt the password
         String plaintextPassword = EncryptionUtil.decrypt(encryptedPassword);
@@ -88,10 +88,14 @@ public class ProfisOrderService {
         //will be modified my variable above in try clause
         context.setIdKlient(ProfisId);
         KlientObjednavkaListResult result = klientPort.klientObjednavkaList(context);
+        if (result == null) {
+            throw new IllegalArgumentException("No orders found for the given user ID: " + id+" in profis");
+        }
         String FinalResult = orderService.createOrderList(result,id);
         return FinalResult;
 
     }
+    @Override
     public String CreateOrderDetailRequest(long id) {
         ObjednavkaContext context = new ObjednavkaContext();
         context.setUzivatelHeslo(passwordElement); // Set the user's password
