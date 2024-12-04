@@ -1,6 +1,7 @@
 package com.backend.service;
 
 import com.backend.auth.EncryptionUtil;
+import com.backend.dtos.EntityToDTOMapper;
 import com.backend.dtos.OrderDTO;
 import com.backend.entity.*;
 import com.backend.repository.*;
@@ -300,9 +301,9 @@ public class OrderService {
         if (orderUser == null) {
             throw new IllegalArgumentException("No order details found for user ID: " + id);
         }
-
+        OrderDTO dto = EntityToDTOMapper.mapToOrderDTO(orderUser.getOrderDetail());;
         // Return the order details
-        return new OrderDTO(orderUser.getOrderDetail());
+        return dto;
     }
 }
 

@@ -1,5 +1,7 @@
 package com.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class OrderUser {
     @OneToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private OrderDetail orderDetail;
 
     @ManyToOne

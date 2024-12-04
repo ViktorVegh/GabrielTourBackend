@@ -36,6 +36,7 @@ public class OrderDetail {
     private List<AccommodationReservation> accommodationReservations; // RezervaceUbytovani
 
     @OneToOne(mappedBy = "orderDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private OrderUser orderUser;
 
 
@@ -253,11 +254,4 @@ public class OrderDetail {
     }
 
 
-    public OrderUser getOrderUser() {
-        return orderUser;
-    }
-
-    public void setOrderUser(OrderUser orderUser) {
-        this.orderUser = orderUser;
-    }
 }
