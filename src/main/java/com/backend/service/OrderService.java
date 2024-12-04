@@ -115,6 +115,22 @@ public class OrderService {
                     : Collections.emptyList();
 
             orderDetail.setTravelers(travelerIds);
+
+
+
+            List<String> travelerIds = data.getCestujici() != null && data.getCestujici().getValue() != null
+                    ? data.getCestujici().getValue().getCestujici().stream()
+                    .map(cestujici -> {
+                        if (cestujici.getKlient() != null && cestujici.getKlient().getValue() != null) {
+                            return String.valueOf(cestujici.getKlient().getValue().getID()); // Convert ID to String
+                        }
+                        return null;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList())
+                    : Collections.emptyList();
+
+            orderDetail.setTravelers(travelerIds);
             // Step 1: Extract the list of RezervaceDoprava objects
             List<RezervaceDoprava> reservations = result.getData().getValue()
                     .getRezervaceDopravy().getValue()

@@ -1,12 +1,8 @@
 package com.backend.auth;
 
 import com.backend.entity.*;
-import com.backend.repository.DriverRepository;
-import com.backend.repository.OfficeRepository;
-import com.backend.repository.TourGuideRepository;
-import com.backend.repository.UserRepository;
+import com.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -25,14 +21,15 @@ public class AuthService {
     @Autowired
     private OfficeRepository officeRepository;
 
-
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private DriverManagerRepository driverManagerRepository;
 
     // Registration
     public String registerEmployee(String email, String password, String name, String profilePicture, String role) {
         // Check if email is already registered
-        if (userRepository.findByEmail(email) != null || driverRepository.findByEmail(email) != null || tourGuideRepository.findByEmail(email) != null) {
+        if (userRepository.findByEmail(email) != null || driverRepository.findByEmail(email) != null || tourGuideRepository.findByEmail(email) != null  || driverManagerRepository.findByEmail(email) != null){
             throw new RuntimeException("Email is already registered!");
         }
 
@@ -59,6 +56,12 @@ public class AuthService {
                 newPerson = new Office(email, encryptedPassword, role);
                 officeRepository.save((Office) newPerson);
                 break;
+            case "drivermanager":
+                newPerson = new DriverManager(email, encryptedPassword, finalName, finalProfilePicture, role);
+                driverManagerRepository.save((DriverManager) newPerson);
+                break;
+
+
             default:
                 newPerson = new User(email, encryptedPassword, finalName, finalProfilePicture, role);
                 userRepository.save((User) newPerson);
@@ -92,6 +95,9 @@ public class AuthService {
         if (person == null) {
             person = officeRepository.findByEmail(email);
         }
+        if (person == null) {
+            person = driverManagerRepository.findByEmail(email);
+        }
         // Check if the person was found and the password matches
         if (person != null && Objects.equals(password, EncryptionUtil.decrypt(person.getPassword())))
         {
@@ -104,6 +110,8 @@ public class AuthService {
                 role = "tourguide";
             } else if (person instanceof Office) {
                 role = "office";
+            } else if (person instanceof DriverManager) {
+                role = "drivermanager";
             } else {
                 role = "user";
             }

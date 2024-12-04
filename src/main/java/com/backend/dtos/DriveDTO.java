@@ -1,45 +1,33 @@
-package com.backend.entity;
+package com.backend.dtos;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-public class Drive {
+public class DriveDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private LocalDate date;
-
     private LocalDateTime pickupTime;
     private LocalDateTime dropoffTime;
-
     private String customReason;
-
+    private Long driverId;
     private String departurePlace;
     private String arrivalPlace;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "driver_id")
-    private Driver driver;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tee_time_id")
-    private TeeTime teeTime;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transportation_reservation_id")
-    private TransportationReservation transportationReservation;
-
-    @ElementCollection
-    @CollectionTable(name = "drive_user_ids", joinColumns = @JoinColumn(name = "drive_id"))
-    @Column(name = "user_id")
     private List<Long> userIds;
 
-    // Getters and Setters
+    // Constructor, Getters, and Setters
+    public DriveDTO(Long id, LocalDate date, LocalDateTime pickupTime, LocalDateTime dropoffTime, String customReason, Long driverId, String departurePlace, String arrivalPlace, List<Long> userIds) {
+        this.id = id;
+        this.date = date;
+        this.pickupTime = pickupTime;
+        this.dropoffTime = dropoffTime;
+        this.customReason = customReason;
+        this.driverId = driverId;
+        this.departurePlace = departurePlace;
+        this.arrivalPlace = arrivalPlace;
+        this.userIds = userIds;
+    }
 
     public Long getId() {
         return id;
@@ -81,6 +69,14 @@ public class Drive {
         this.customReason = customReason;
     }
 
+    public Long getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Long driverId) {
+        this.driverId = driverId;
+    }
+
     public String getDeparturePlace() {
         return departurePlace;
     }
@@ -95,30 +91,6 @@ public class Drive {
 
     public void setArrivalPlace(String arrivalPlace) {
         this.arrivalPlace = arrivalPlace;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
-    public TeeTime getTeeTime() {
-        return teeTime;
-    }
-
-    public void setTeeTime(TeeTime teeTime) {
-        this.teeTime = teeTime;
-    }
-
-    public TransportationReservation getTransportationReservation() {
-        return transportationReservation;
-    }
-
-    public void setTransportationReservation(TransportationReservation transportationReservation) {
-        this.transportationReservation = transportationReservation;
     }
 
     public List<Long> getUserIds() {
