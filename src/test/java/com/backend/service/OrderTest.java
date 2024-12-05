@@ -1,4 +1,4 @@
-package com.backend.test;
+package com.backend.service;
 
 import com.backend.auth.AuthService;
 import com.backend.dtos.EntityToDTOMapper;
