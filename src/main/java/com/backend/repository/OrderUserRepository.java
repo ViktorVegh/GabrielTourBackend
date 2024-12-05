@@ -14,12 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface OrderUserRepository extends JpaRepository<OrderUser, OrderUserId> {
-
-    @Query("SELECT o.klic FROM OrderUser o WHERE o.user.id = :userId ORDER BY o.id.orderId DESC")
-    String getLatestOrderKlicByUserId(@Param("userId") Long userId);
-
-    @Query("SELECT o FROM OrderUser o WHERE o.user.id = :userId ORDER BY o.id.orderId DESC")
-    List<OrderUser> findFirstByUserId(@Param("userId") Long userId);
     @Query("SELECT o FROM OrderUser o WHERE o.user.id = :userId")
     List<OrderUser> findAllOrdersByUserId(@Param("userId") Long userId);
 
@@ -41,6 +35,4 @@ public interface OrderUserRepository extends JpaRepository<OrderUser, OrderUserI
                 })
                 .orElse(null);
     }
-
-
 }
