@@ -52,7 +52,8 @@ public class OrderTest {
 
     @Mock
     private Objednavka objednavkaPort;
-
+    @Mock
+    private Klient klientPort;
 
     @BeforeEach
     void setUp() {
@@ -206,10 +207,11 @@ public class OrderTest {
 
         // Valid encrypted password (ensure it works with the decryption logic)
         String validEncryptedPassword = EncryptionUtil.encrypt("validPassword");
+        KlientHesloContext context = new KlientHesloContext();
         // Stub methods
         when(userRepository.getPasswordById(1)).thenReturn(validEncryptedPassword); // Provide valid encrypted text
         when(userRepository.getProfisId(anyInt())).thenReturn(1234);
-
+        when(klientPort.klientObjednavkaList(context)).thenReturn(null);
         // Act & Assert: Validate behavior and exception
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> ProfisOrderService.CreateOrderListRequest(1L)); // Ensure ProfisOrderService is instantiated correctly
