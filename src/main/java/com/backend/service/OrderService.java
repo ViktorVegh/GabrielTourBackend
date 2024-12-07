@@ -9,10 +9,12 @@ import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.objednavkasoapclient.*;
 import com.example.objednavkasoapclient.IntegerNazev;
+import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,11 +59,15 @@ public class OrderService implements OrderServiceInterface {
 
                 if (existingOrderDetail.isPresent()) {
                     // If it exists, retrieve the existing order detail
+                    System.out.println("present"+existingOrderDetail.get().getId());
                     orderDetail = existingOrderDetail.get();
                 } else {
                     // If it does not exist, create a new one
                     orderDetail = new OrderDetail();
                     orderDetail.setId(order.getID()); // Example order number
+                    orderDetail.setStartDate(toLocalDateTime(order.getDatumOd().getValue()));
+                    orderDetail.setEndDate(toLocalDateTime(order.getDatumDo().getValue()));
+                    System.out.println("not present"+orderDetail.getId());
                     orderDetailRepository.save(orderDetail); // Save the new order detail
 
                     // Only create an OrderUser if the OrderDetail is newly created
@@ -72,7 +78,6 @@ public class OrderService implements OrderServiceInterface {
 
                 // Save the TourOrder (cascades to OrderUser)
                 orderDetailRepository.save(orderDetail);
-                xml.append("</ObjednavkaKlient>");
             }
             xml.append("</Data>");
         }
@@ -80,9 +85,10 @@ public class OrderService implements OrderServiceInterface {
     }
 
     @Override
-    public String createOrderDetail(ObjednavkaDetailResult result) {
+    @Transactional
+    public int createOrderDetail(ObjednavkaDetailResult result) {
         StringBuilder xml = new StringBuilder();
-
+        int resultid=0;
         if (result != null && result.getData() != null && result.getData().getValue() != null) {
             ObjednavkaPopis data = result.getData().getValue();
 
@@ -90,16 +96,29 @@ public class OrderService implements OrderServiceInterface {
             OrderDetail orderDetail = orderDetailRepository.getReferenceById(result.getData().getValue().getID());
             orderDetail.setId(data.getID());
             orderDetail.setAdults(data.getDospelych());
-            orderDetail.setChildren(data.getDeti());
-            orderDetail.setInfants(data.getInfantu());
-            orderDetail.setNumberOfNights(data.getNoci());
+            orderDetail.setChildren(data.getDeti()!= null ? data.getDeti() : 0);
+            orderDetail.setInfants(data.getInfantu()!= null ? data.getInfantu() : 0);
+            orderDetail.setNumberOfNights(data.getNoci()!= null ? data.getNoci() : 0);
             orderDetail.setName(getJAXBElementValue(data.getNazev()));
-            orderDetail.setEndDate(toLocalDateTime(data.getDatumDo().getValue()));
-            orderDetail.setStartDate(toLocalDateTime(data.getDatumOd().getValue()));
-            orderDetail.setPaymentStatus(getJAXBElementValue(data.getStavPlatba().getValue().getNazev()));
-            orderDetail.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
-            orderDetail.setStateOfOrder(getJAXBElementValue(data.getStavObjednavka().getValue().getNazev()));
-
+            orderDetail.setEndDate(data.getDatumDo() != null && data.getDatumDo().getValue() != null
+                    ? toLocalDateTime(data.getDatumDo().getValue())
+                    : null);
+            orderDetail.setStartDate(data.getDatumOd() != null && data.getDatumOd().getValue() != null
+                    ? toLocalDateTime(data.getDatumOd().getValue())
+                    : null);
+            orderDetail.setPaymentStatus(data.getStavPlatba() != null && data.getStavPlatba().getValue() != null
+                    ? getJAXBElementValue(data.getStavPlatba().getValue().getNazev())
+                    : null);
+            orderDetail.setCurrency(
+                    data.getMena() != null && data.getMena().getValue() != null && data.getMena().getValue().getNazev() != null
+                            ? getJAXBElementValue(data.getMena().getValue().getNazev())
+                            : null
+            );
+            orderDetail.setStateOfOrder(
+                    data.getStavObjednavka() != null && data.getStavObjednavka().getValue() != null && data.getStavObjednavka().getValue().getNazev() != null
+                            ? getJAXBElementValue(data.getStavObjednavka().getValue().getNazev())
+                            : null
+            );
             List<String> travelerIds = data.getCestujici() != null && data.getCestujici().getValue() != null
                     ? data.getCestujici().getValue().getCestujici().stream()
                     .map(cestujici -> {
@@ -115,45 +134,62 @@ public class OrderService implements OrderServiceInterface {
             orderDetail.setTravelers(travelerIds);
 
             // Step 1: Extract the list of RezervaceDoprava objects
-            List<RezervaceDoprava> reservations = result.getData().getValue()
-                    .getRezervaceDopravy().getValue()
-                    .getRezervaceDoprava();
+            List<RezervaceDoprava> reservations =
+                    result != null && result.getData() != null && result.getData().getValue() != null &&
+                            result.getData().getValue().getRezervaceDopravy() != null &&
+                            result.getData().getValue().getRezervaceDopravy().getValue() != null
+                            ? result.getData().getValue().getRezervaceDopravy().getValue().getRezervaceDoprava()
+                            : Collections.emptyList(); // Return an empty list if any part is null
 
             // Step 2: Extract IDs from the reservations list
             List<Integer> ids = reservations.stream()
                     .map(RezervaceDoprava::getID)
+                    .filter(Objects::nonNull) // Filter out null IDs to prevent errors
                     .collect(Collectors.toList());
 
+            // Step 3: Fetch existing transportations and map them by ID
             List<TransportationReservation> existingTransportations = transportationReservationRepository.findAllById(ids);
             Map<Integer, TransportationReservation> existingTransportationsMap = existingTransportations.stream()
                     .collect(Collectors.toMap(TransportationReservation::getId, transport -> transport));
+
+            // Step 4: Create a list for updated transportation entities
             List<TransportationReservation> updatedTransportations = new ArrayList<>(existingTransportations);
 
-            for (RezervaceDoprava transportation : data.getRezervaceDopravy().getValue().getRezervaceDoprava()) {
+            for (RezervaceDoprava transportation : reservations) {
+                if (transportation == null) continue; // Skip null reservations
+
                 TransportationReservation transportEntity = existingTransportationsMap.getOrDefault(transportation.getID(), new TransportationReservation());
                 transportEntity.setId(transportation.getID());
-                transportEntity.setPickupTime(toLocalDateTime(transportation.getCasNastupni()));
-                transportEntity.setDropoffTime(toLocalDateTime(transportation.getCasVystupni()));
-                transportEntity.setStartDate(toLocalDateTime(transportation.getDatum()));
-                transportEntity.setTransportId(transportation.getIdDoprava());
-                transportEntity.setRouteName(transportation.getSmer().value());
-                transportEntity.setTransportType(transportation.getTypDoprava().getValue().getID());
+                transportEntity.setPickupTime(transportation.getCasNastupni() != null ? toLocalDateTime(transportation.getCasNastupni()) : null);
+                transportEntity.setDropoffTime(transportation.getCasVystupni() != null ? toLocalDateTime(transportation.getCasVystupni()) : null);
+                transportEntity.setStartDate(transportation.getDatum() != null ? toLocalDateTime(transportation.getDatum()) : null);
+                transportEntity.setTransportId(transportation.getIdDoprava() != null ? transportation.getIdDoprava() : null);
+                transportEntity.setRouteName(transportation.getSmer() != null ? transportation.getSmer().value() : null);
+                transportEntity.setTransportType(
+                        transportation.getTypDoprava() != null && transportation.getTypDoprava().getValue() != null
+                                ? transportation.getTypDoprava().getValue().getID()
+                                : null
+                );
                 transportEntity.setOrderDetail(orderDetail);
                 JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteVystupniElement = transportation.getLetisteVystupni();
                 if (letisteVystupniElement != null && letisteVystupniElement.getValue() != null) {
                     IntegerNazev letisteVystupni = letisteVystupniElement.getValue();
-                    if (letisteVystupni.getNazev() != null && letisteVystupni.getNazev().getValue() != null) {
-                        transportEntity.setArrivalAirportName(letisteVystupni.getNazev().getValue());
-                    } else {
-                    }
+                    transportEntity.setArrivalAirportName(
+                            letisteVystupni.getNazev() != null && letisteVystupni.getNazev().getValue() != null
+                                    ? letisteVystupni.getNazev().getValue()
+                                    : null
+                    );
                 }
+
+                // Handle Departure Airport Name
                 JAXBElement<com.example.objednavkasoapclient.IntegerNazev> letisteNastupniElement = transportation.getLetisteNastupni();
                 if (letisteNastupniElement != null && letisteNastupniElement.getValue() != null) {
                     IntegerNazev letisteNastupni = letisteNastupniElement.getValue();
-                    if (letisteNastupni.getNazev() != null && letisteNastupni.getNazev().getValue() != null) {
-                        transportEntity.setDepartureAirportName(letisteNastupni.getNazev().getValue());
-                    } else {
-                    }
+                    transportEntity.setDepartureAirportName(
+                            letisteNastupni.getNazev() != null && letisteNastupni.getNazev().getValue() != null
+                                    ? letisteNastupni.getNazev().getValue()
+                                    : null
+                    );
                 }
 
                 // Additional mappings...
@@ -166,12 +202,17 @@ public class OrderService implements OrderServiceInterface {
                 transportEntity.setOrderDetail(orderDetail);
                 orderDetail.getTransportationReservations().add(transportEntity);
             }
-            // Step 1: Extract the list of RezervaceDoprava objects
-            List<ObjednavkaCena> ListofPrices = result.getData().getValue().getCeny().getValue().getObjednavkaCena();
+            // Step 1: Extract the list of ObjednavkaCena objects
+            List<ObjednavkaCena> listOfPrices = result != null && result.getData() != null && result.getData().getValue() != null &&
+                    result.getData().getValue().getCeny() != null &&
+                    result.getData().getValue().getCeny().getValue() != null
+                    ? result.getData().getValue().getCeny().getValue().getObjednavkaCena()
+                    : Collections.emptyList(); // Return an empty list if any part is null
 
-            // Step 2: Extract IDs from the reservations list
-            List<Integer> ids2 = ListofPrices.stream()
-                    .map(ObjednavkaCena::getID) // Assuming RezervaceDoprava has a method getId()
+            // Step 2: Extract IDs from the list of prices
+            List<Integer> ids2 = listOfPrices.stream()
+                    .map(ObjednavkaCena::getID) // Assuming ObjednavkaCena has a method getID()
+                    .filter(Objects::nonNull) // Filter out null IDs to prevent issues
                     .collect(Collectors.toList());
 
             // Fetch existing Prices entities
@@ -185,20 +226,31 @@ public class OrderService implements OrderServiceInterface {
             List<Prices> updatedPrices = new ArrayList<>(prices3);
 
             // Update or create Prices entities
-            for (ObjednavkaCena price : data.getCeny().getValue().getObjednavkaCena()) {
-                Prices priceEntity = existingPricesMap.getOrDefault(price.getID(), new Prices());
+            if (data.getCeny() != null && data.getCeny().getValue() != null) {
+                List<ObjednavkaCena> cenyList = data.getCeny().getValue().getObjednavkaCena();
+                if (cenyList != null) {
+                    for (ObjednavkaCena price : cenyList) {
+                        if (price == null) continue; // Skip null entries
 
-                // Update fields
-                priceEntity.setId(price.getID());
-                priceEntity.setPrice(price.getCena());
-                priceEntity.setName(getJAXBElementValue(price.getNazev()));
-                priceEntity.setCurrency(getJAXBElementValue(data.getMena().getValue().getNazev()));
-                priceEntity.setOrderDetail(orderDetail);
-                priceEntity.setQuantity(price.getPocet());
+                        Prices priceEntity = existingPricesMap.getOrDefault(price.getID(), new Prices());
 
-                // Only add new entities to updatedPrices
-                if (!existingPricesMap.containsKey(price.getID())) {
-                    updatedPrices.add(priceEntity);
+                        // Update fields safely
+                        priceEntity.setId(price.getID());
+                        priceEntity.setPrice(price.getCena() != null ? price.getCena() : BigDecimal.ZERO); // Default to 0 if null
+                        priceEntity.setName(price.getNazev() != null ? getJAXBElementValue(price.getNazev()) : null);
+                        priceEntity.setCurrency(
+                                data.getMena() != null && data.getMena().getValue() != null
+                                        ? getJAXBElementValue(data.getMena().getValue().getNazev())
+                                        : null
+                        );
+                        priceEntity.setOrderDetail(orderDetail);
+                        priceEntity.setQuantity(price.getPocet() != null ? price.getPocet() : 0); // Default to 0 if null
+
+                        // Only add new entities to updatedPrices
+                        if (!existingPricesMap.containsKey(price.getID())) {
+                            updatedPrices.add(priceEntity);
+                        }
+                    }
                 }
             }
             orderDetail.getPrices().clear();
@@ -206,12 +258,17 @@ public class OrderService implements OrderServiceInterface {
                 priceEntity.setOrderDetail(orderDetail);
                 orderDetail.getPrices().add(priceEntity);
             }
-            // Step 1: Extract the list of RezervaceDoprava objects
-            List<RezervaceUbytovani> ListofAcccomodations = result.getData().getValue().getRezervaceUbytovani().getValue().getRezervaceUbytovani();
+            // Step 1: Extract the list of RezervaceUbytovani objects
+            List<RezervaceUbytovani> listOfAccommodations = result != null && result.getData() != null && result.getData().getValue() != null &&
+                    result.getData().getValue().getRezervaceUbytovani() != null &&
+                    result.getData().getValue().getRezervaceUbytovani().getValue() != null
+                    ? result.getData().getValue().getRezervaceUbytovani().getValue().getRezervaceUbytovani()
+                    : Collections.emptyList(); // Return an empty list if any part is null
 
-            // Step 2: Extract IDs from the reservations list
-            List<Integer> ids3 = ListofAcccomodations.stream()
-                    .map(RezervaceUbytovani::getID)
+            // Step 2: Extract IDs from the accommodations list
+            List<Integer> ids3 = listOfAccommodations.stream()
+                    .map(RezervaceUbytovani::getID) // Assuming RezervaceUbytovani has a method getID()
+                    .filter(Objects::nonNull) // Filter out null IDs to avoid issues
                     .collect(Collectors.toList());
 
             List<AccommodationReservation> accommodations = accommodationReservationRepository.findAllById(ids3);
@@ -267,12 +324,13 @@ public class OrderService implements OrderServiceInterface {
             // Save OrderDetail
             orderDetailRepository.save(orderDetail);
 
-            xml.append("<Data>");
-            xml.append("<ID>").append(data.getID()).append("</ID>");
-            xml.append("</Data>");
+            //xml.append("<Data>");
+            //xml.append(data.getID());
+            //xml.append("</Data>");
+            resultid = data.getID();
         }
 
-        return xml.toString();}
+        return resultid;}
 
     private <T > String getJAXBElementValue(JAXBElement < T > element) {
         return element != null && element.getValue() != null ? element.getValue().toString() : "";

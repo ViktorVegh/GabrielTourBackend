@@ -2,6 +2,7 @@ package com.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +40,10 @@ public class TransportationReservation {
     @JsonBackReference
     private OrderDetail orderDetail; // Link to OrderDetail (RezervaceDoprava belongs to an Order)
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "drive_id", referencedColumnName = "id")
+    @JsonManagedReference
+    private Drive drive;
     @ManyToMany
     @JoinTable(
             name = "transportation_reservation_passengers",
@@ -147,6 +152,14 @@ public class TransportationReservation {
 
     public void setDepartureAirportCode(String departureAirportCode) {
         this.departureAirportCode = departureAirportCode;
+    }
+
+    public Drive getDrive() {
+        return drive;
+    }
+
+    public void setDrive(Drive drive) {
+        this.drive = drive;
     }
 
     public String getDepartureAirportName() {

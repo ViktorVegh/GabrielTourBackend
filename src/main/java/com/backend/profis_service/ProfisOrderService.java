@@ -49,7 +49,6 @@ public class ProfisOrderService implements ProfisOrderServiceInterface {
     private String id="01";
 
     JAXBElement<String> passwordElement = new JAXBElement<>(new QName(NAMESPACE_URI, "UzivatelHeslo"), String.class, passwordUser);
-    JAXBElement<String> passwordClientElement = new JAXBElement<>(new QName(NAMESPACE_URI, "Heslo"), String.class, passwordClient);
     JAXBElement<String> usernameElement = new JAXBElement<>(new QName(NAMESPACE_URI, "UzivatelLogin"), String.class, usernameUser);
     JAXBElement<String> idElement = new JAXBElement<>(new QName(NAMESPACE_URI, "id_Jazyk"), String.class, id);
     private Klient klientPort;
@@ -69,11 +68,31 @@ public class ProfisOrderService implements ProfisOrderServiceInterface {
 
     @Override
     public String CreateOrderListRequest(Long id){
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         KlientHesloContext context = new KlientHesloContext();
+
+        // Fetch the encrypted password and check for null
         String encryptedPassword = userRepository.getPasswordById(id.intValue());
-        int ProfisId = userRepository.getProfisId(id.intValue());
-        // Decrypt the password
-        String plaintextPassword = EncryptionUtil.decrypt(encryptedPassword);
+        if (encryptedPassword == null) {
+            throw new IllegalStateException("Encrypted password not found for ID: " + id);
+        }
+
+        // Fetch the ProfisId and check for a valid value
+        Integer profisId = userRepository.getProfisId(id.intValue());
+        if (profisId == null) {
+            throw new IllegalStateException("ProfisId not found for ID: " + id);
+        }
+
+        // Decrypt the password and handle potential errors
+        String plaintextPassword;
+        try {
+            plaintextPassword = EncryptionUtil.decrypt(encryptedPassword);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to decrypt password for ID: " + id, e);
+        }
 
         // Set the plaintext password in the context
         context.setKlientHeslo(new JAXBElement<>(
@@ -86,7 +105,7 @@ public class ProfisOrderService implements ProfisOrderServiceInterface {
         context.setVypsatNazvy(false);               // Set to false as per request
         context.setIdJazyk(idElement);
         //will be modified my variable above in try clause
-        context.setIdKlient(ProfisId);
+        context.setIdKlient(profisId);
         KlientObjednavkaListResult result = klientPort.klientObjednavkaList(context);
         if (result == null) {
             throw new IllegalArgumentException("No orders found for the given user ID: " + id+" in profis");
@@ -96,7 +115,7 @@ public class ProfisOrderService implements ProfisOrderServiceInterface {
 
     }
     @Override
-    public String CreateOrderDetailRequest(long id) {
+    public int CreateOrderDetailRequest(long id) {
         ObjednavkaContext context = new ObjednavkaContext();
         context.setUzivatelHeslo(passwordElement); // Set the user's password
         context.setUzivatelLogin(usernameElement); // Set the user's login
@@ -106,7 +125,7 @@ public class ProfisOrderService implements ProfisOrderServiceInterface {
         // Fetch the OrderUser and handle the case where it might be null
         OrderUser orderUser = orderUserRepository.findClosestOrderByUserId(id);
         if (orderUser == null) {
-            throw new IllegalArgumentException("No OrderUser found for the given user ID: " + id+" in database");
+            throw new IllegalArgumentException("No Order found for the given user ID: " + id+" in database");
         }
 
         int orderId = orderUser.getOrderDetail().getId(); // Extract orderId from the composite key
@@ -122,7 +141,7 @@ public class ProfisOrderService implements ProfisOrderServiceInterface {
         if (result == null) {
             throw new IllegalArgumentException("OrderUser does not exist in Profis system");
         }
-        String FinalResult = orderService.createOrderDetail(result);
+        int FinalResult = orderService.createOrderDetail(result);
         return FinalResult;
     }
 }

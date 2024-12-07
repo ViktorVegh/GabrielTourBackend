@@ -58,12 +58,11 @@ public class OrderController {
         }
     }
     @PostMapping("/create-orderDetails")
-    public ResponseEntity<String> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<Integer> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
-            System.out.println("I got to controller with ID: " + id);
             // Fetch order data using the service
-            String result = profisOrderService.CreateOrderDetailRequest(id);
+            int result = profisOrderService.CreateOrderDetailRequest(id);
 
             // Return the XML response
             return ResponseEntity.ok()
@@ -72,12 +71,7 @@ public class OrderController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500)
-                    .body("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
-                            "<s:Body>" +
-                            "<Error>Error processing request.</Error>" +
-                            "</s:Body>" +
-                            "</s:Envelope>");
+            return ResponseEntity.status(500).body(0);
         }
     }
 

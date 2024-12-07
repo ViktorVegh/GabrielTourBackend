@@ -11,7 +11,7 @@ public interface OrderServiceInterface {
 
     String createOrderList(KlientObjednavkaListResult result, Long id);
 
-    String createOrderDetail(ObjednavkaDetailResult result);
+    int createOrderDetail(ObjednavkaDetailResult result);
 
     OrderDTO getOrderDetail(int id);
 }

@@ -1,6 +1,7 @@
 package com.backend.service;
 
 import com.backend.auth.AuthService;
+import com.backend.auth.EncryptionUtil;
 import com.backend.dtos.EntityToDTOMapper;
 import com.backend.dtos.OrderDTO;
 import com.backend.entity.OrderDetail;
@@ -21,6 +22,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import com.example.klientsoapclient.Klient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import javax.xml.namespace.QName;
 
 import java.lang.reflect.Array;
@@ -48,9 +52,6 @@ public class OrderTest {
 
     @Mock
     private Objednavka objednavkaPort;
-
-    @Mock
-    private com.example.klientsoapclient.Klient klientPort;
 
 
     @BeforeEach
@@ -95,6 +96,7 @@ public class OrderTest {
         verify(orderUserRepository).findClosestOrderByUserId(10L);
         verifyNoMoreInteractions(orderUserRepository);
     }
+
     @Test
     void createOrderDetailException1(){
         OrderUser orderUser = new OrderUser();
@@ -108,7 +110,7 @@ public class OrderTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> ProfisOrderService.CreateOrderDetailRequest(1));
 
-        assertEquals("No OrderUser found for the given user ID: 1 in database", exception.getMessage());
+        assertEquals("No Order found for the given user ID: 1 in database", exception.getMessage());
     }
     @Test
     void createOrderDetailException2(){
@@ -126,25 +128,87 @@ public class OrderTest {
 
         assertEquals("OrderUser does not exist in Profis system", exception.getMessage());
     }
+    @Test
+    void CreateOrderListRequestException0() {
 
+        // Stub methods
+        when(userRepository.getPasswordById(1)).thenReturn(null); // Provide valid encrypted text
+        when(userRepository.getProfisId(anyInt())).thenReturn(1234);
+
+        // Act & Assert: Validate behavior and exception
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> ProfisOrderService.CreateOrderListRequest(null)); // Ensure ProfisOrderService is instantiated correctly
+
+        // Assert that the exception message matches the expected behavior
+        assertEquals("ID cannot be null", exception.getMessage());
+
+    }
     @Test
     void CreateOrderListRequestException1() {
-        // Mock dependencies
-        ObjednavkaContext context = mock(ObjednavkaContext.class);
-        KlientObjednavkaListResult klientObjednavkaListResult = mock(KlientObjednavkaListResult.class);
-        OrderService orderService = mock(OrderService.class); // Ensure this is mocked
-        UserRepository userRepository = mock(UserRepository.class);
-        Klient klientPort = mock(Klient.class);
+
+        // Stub methods
+        when(userRepository.getPasswordById(1)).thenReturn(null); // Provide valid encrypted text
+        when(userRepository.getProfisId(anyInt())).thenReturn(1234);
+
+        // Act & Assert: Validate behavior and exception
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> ProfisOrderService.CreateOrderListRequest(1L)); // Ensure ProfisOrderService is instantiated correctly
+
+        // Assert that the exception message matches the expected behavior
+        assertEquals("Encrypted password not found for ID: 1", exception.getMessage());
+
+        // Verify that the expected interactions occurred
+        verify(userRepository).getPasswordById(anyInt());
+    }
+    @Test
+    void CreateOrderListRequestException2() {
+
+        // Valid encrypted password (ensure it works with the decryption logic)
+        String validEncryptedPassword = EncryptionUtil.encrypt("validPassword");
+        // Stub methods
+        when(userRepository.getPasswordById(1)).thenReturn(validEncryptedPassword); // Provide valid encrypted text
+        when(userRepository.getProfisId(anyInt())).thenReturn(null);
+
+        // Act & Assert: Validate behavior and exception
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> ProfisOrderService.CreateOrderListRequest(1L)); // Ensure ProfisOrderService is instantiated correctly
+
+        // Assert that the exception message matches the expected behavior
+        assertEquals("ProfisId not found for ID: 1", exception.getMessage());
+
+        // Verify that the expected interactions occurred
+        verify(userRepository).getPasswordById(anyInt());
+        verify(userRepository).getProfisId(anyInt());
+    }
+
+    @Test
+    void CreateOrderListRequestException3() {
 
         // Valid encrypted password (ensure it works with the decryption logic)
         String validEncryptedPassword = Base64.getEncoder().encodeToString("validPassword".getBytes());
-
         // Stub methods
-        when(userRepository.getPasswordById(anyInt())).thenReturn(validEncryptedPassword); // Provide valid encrypted text
+        when(userRepository.getPasswordById(1)).thenReturn(validEncryptedPassword); // Provide valid encrypted text
         when(userRepository.getProfisId(anyInt())).thenReturn(1234);
-        when(klientPort.klientObjednavkaList(any())).thenReturn(null); // Simulate no orders
-        when(orderService.createOrderList(any(KlientObjednavkaListResult.class), anyLong())).thenReturn("1");
-        System.out.println("Password: " + userRepository.getPasswordById(1));
+
+        // Act & Assert: Validate behavior and exception
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> ProfisOrderService.CreateOrderListRequest(1L)); // Ensure ProfisOrderService is instantiated correctly
+
+        // Assert that the exception message matches the expected behavior
+        assertEquals("Failed to decrypt password for ID: 1", exception.getMessage());
+
+        // Verify that the expected interactions occurred
+        verify(userRepository).getPasswordById(anyInt());
+        verify(userRepository).getProfisId(anyInt());
+    }
+    @Test
+    void CreateOrderListRequestException4() {
+
+        // Valid encrypted password (ensure it works with the decryption logic)
+        String validEncryptedPassword = EncryptionUtil.encrypt("validPassword");
+        // Stub methods
+        when(userRepository.getPasswordById(1)).thenReturn(validEncryptedPassword); // Provide valid encrypted text
+        when(userRepository.getProfisId(anyInt())).thenReturn(1234);
 
         // Act & Assert: Validate behavior and exception
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -156,48 +220,22 @@ public class OrderTest {
         // Verify that the expected interactions occurred
         verify(userRepository).getPasswordById(anyInt());
         verify(userRepository).getProfisId(anyInt());
-        verify(klientPort).klientObjednavkaList(any());
     }
 
-
-    /*
     @Test
-    void createOrderDetail() {
-        OrderUser orderUser = new OrderUser();
-        OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setId(1); // Example ID;
-        orderUser.setOrderDetail(orderDetail);
-        ObjednavkaContext context  = new ObjednavkaContext();
+    void getOrderDetailException1() {
 
-        when(orderDetailRepository.getReferenceById(1)).thenReturn(orderDetail);
+        when(orderUserRepository.findClosestOrderByUserId(1L)).thenReturn(null); // Provide valid encrypted text
 
-        ObjednavkaPopis dataValue = new ObjednavkaPopis();
-        dataValue.setID(1);
-        dataValue.setDospelych(0);
-        JAXBElement<ObjednavkaPopis> data = new JAXBElement<>(
-                new QName("namespace", "localPart"), // Replace with your namespace and element name
-                ObjednavkaPopis.class,
-                dataValue
-        );
 
-        ObjednavkaDetailResult result= new ObjednavkaDetailResult();
-        result.setData(data);
-        when(objednavkaPort.objednavkaDetail(context)).thenReturn(result);
-        ObjednavkaDetailResult detailResult = objednavkaPort.objednavkaDetail(context);
+        // Act & Assert: Validate behavior and exception
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> orderService.getOrderDetail(1)); // Ensure ProfisOrderService is instantiated correctly
 
-        System.out.println(detailResult.getData().getValue().getID()+" id");
-        System.out.println("test");
-        when(orderService.createOrderDetail(detailResult)).thenReturn("1");
+        // Assert that the exception message matches the expected behavior
+        assertEquals("No order details found for user ID: 1", exception.getMessage());
 
-        String finalResult = orderService.createOrderDetail(detailResult);
-
-        OrderDTO dto = EntityToDTOMapper.mapToOrderDTO(orderDetail);
-        assertEquals(finalResult,dto.getOrderDetail().getId());
-
-        // Verify interactions
-        verify(orderUserRepository).findClosestOrderByUserId(10L);
-        verifyNoMoreInteractions(orderUserRepository);
     }
-     */
+
 
 }

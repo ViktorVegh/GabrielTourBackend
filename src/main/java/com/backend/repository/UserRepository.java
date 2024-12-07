@@ -13,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     String getPasswordById(@Param("id") int id);
 
     @Query("SELECT u.profis_id FROM User u WHERE u.id = :id")
-    int getProfisId(@Param("id") int id);
+    Integer getProfisId(@Param("id") int id);
 }

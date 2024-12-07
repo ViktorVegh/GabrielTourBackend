@@ -47,7 +47,6 @@ public class TeeTimeService implements TeeTimeServiceInterface {
         if (users.isEmpty()) {
             throw new RuntimeException("No valid users found for provided user IDs");
         }
-        System.out.println(teeTimeRequest.getGolfCourseId()+" golf c id");
         // Fetch the golf course
         GolfCourse fetchedGolfCourse = golfCourseRepository.findById(teeTimeRequest.getGolfCourseId())
                 .orElseThrow(() -> new RuntimeException("GolfCourse with ID " + teeTimeRequest.getGolfCourseId() + " not found"));
