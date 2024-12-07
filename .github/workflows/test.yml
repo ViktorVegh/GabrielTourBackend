@@ -23,6 +23,10 @@ jobs:
 
       # Install dependencies and run tests
       - name: Install dependencies and run tests
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://database-1.c3acismuom6n.eu-north-1.rds.amazonaws.com:5432/postgres
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: IG16072002
         run: |
           mvn clean install
           mvn test
