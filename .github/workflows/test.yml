@@ -19,15 +19,8 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      # Debug Maven
-      - name: Debug Maven
-        run: |
-          mvn --version
-          mvn help:effective-pom
-          mvn test -Dtest=!OrderIntegrationTest -X
-
       # Install dependencies and run tests
       - name: Install dependencies and run tests
         run: |
           mvn clean install
-          mvn test -DexcludedTests=com.backend.integration.OrderIntegrationTest
+          mvn test 
