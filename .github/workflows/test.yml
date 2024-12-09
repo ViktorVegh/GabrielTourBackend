@@ -1,9 +1,7 @@
 name: test
 
 on:
-  push:
-    branches:
-      - dev  # Trigger the workflow on push to the branch
+  workflow_call:
 
 jobs:
   build-and-push:
