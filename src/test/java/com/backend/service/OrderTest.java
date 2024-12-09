@@ -38,9 +38,6 @@ import static org.mockito.Mockito.*;
 public class OrderTest {
     @Mock
     private OrderUserRepository orderUserRepository;
-
-    @Mock
-    private OrderDetailRepository orderDetailRepository;
     @Mock
     private UserRepository userRepository;
 
@@ -99,22 +96,23 @@ public class OrderTest {
     }
 
     @Test
-    void createOrderDetailException1(){
+    void createOrderDetail_noOrderFoundForId(){
+        // Arrange
         OrderUser orderUser = new OrderUser();
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setId(1); // Example ID;
         orderUser.setOrderDetail(orderDetail);
-        //String result = ProfisOrderService.CreateOrderDetailRequest(1);
 
         when(orderUserRepository.findClosestOrderByUserId(1L)).thenReturn(null);
-
+        // Act
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> ProfisOrderService.CreateOrderDetailRequest(1));
-
+        // Assert
         assertEquals("No Order found for the given user ID: 1 in database", exception.getMessage());
     }
     @Test
-    void createOrderDetailException2(){
+    void createOrderDetail_OrderUserDoesNotExist(){
+        // Arrange
         OrderUser orderUser = new OrderUser();
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setId(1); // Example ID;
@@ -124,9 +122,10 @@ public class OrderTest {
 
         when(objednavkaPort.objednavkaDetail(context)).thenReturn(null);
         when(orderUserRepository.findClosestOrderByUserId(1L)).thenReturn(orderUser);
+        // Act
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> ProfisOrderService.CreateOrderDetailRequest(1));
-
+        // Assert
         assertEquals("OrderUser does not exist in Profis system", exception.getMessage());
     }
     @Test
