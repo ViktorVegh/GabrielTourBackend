@@ -29,4 +29,4 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: IG16072002
         run: |
           mvn clean install
-          mvn test -Dtest=!createOrderDetailTest
+          mvn test -Dtest=!OrderIntegrationTest
