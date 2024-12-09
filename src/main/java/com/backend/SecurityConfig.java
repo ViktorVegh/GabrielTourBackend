@@ -61,7 +61,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // Allow credentials
-        config.addAllowedOrigin("https://jakubbabica.github.io"); // Add your frontend origin
+        config.addAllowedOriginPattern("*"); // Allow all origins for development
         config.addAllowedHeader("*"); // Allow all headers
         config.addAllowedMethod("*"); // Allow all HTTP methods
         source.registerCorsConfiguration("/**", config);
