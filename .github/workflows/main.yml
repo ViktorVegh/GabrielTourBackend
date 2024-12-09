@@ -7,9 +7,9 @@ on:
 jobs:
   unit_test:
     name: Unit Test
-    uses: ./.github/workflows/test.yaml
+    uses: ./.github/workflows/test.yml
     secrets: inherit
   publish:
     name: Publish
-    uses: ./.github/workflows/aws-ecr-docker-push.yaml
+    uses: ./.github/workflows/aws-ecr-docker-push.yml
     secrets: inherit
