@@ -5,10 +5,7 @@ on:
     branches:
       - main
 jobs:
-  unit_test:
-    name: Unit Test
-    uses: ./.github/workflows/test.yml
-
   publish:
     name: Publish
     uses: ./.github/workflows/aws-ecr-docker-push.yml
+    secrets: inherit
