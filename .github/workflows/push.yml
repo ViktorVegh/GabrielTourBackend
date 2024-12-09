@@ -1,4 +1,4 @@
-name: Test pushed commits
+name: Push
 on:
   push:
     branches:
