@@ -1,0 +1,11 @@
+name: Test pushed commits
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
+jobs:
+    test:
+    name: Unit Test
+    uses: ./.github/workflows/test.yaml
+    secrets: inherit

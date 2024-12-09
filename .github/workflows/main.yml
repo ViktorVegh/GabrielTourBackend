@@ -1,0 +1,15 @@
+name: main
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  unit_test:
+    name: Unit Test
+    uses: ./.github/workflows/test.yaml
+    secrets: inherit
+  publish:
+    name: Publish
+    uses: ./.github/workflows/aws-ecr-docker-push.yaml
+    secrets: inherit
