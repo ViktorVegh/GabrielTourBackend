@@ -32,4 +32,4 @@ jobs:
       - name: Install dependencies and run tests
         run: |
           mvn clean install
-          mvn test -Dtest=!OrderIntegrationTest
+          mvn test -DexcludedTests=com.backend.integration.OrderIntegrationTest
