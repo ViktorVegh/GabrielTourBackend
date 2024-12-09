@@ -5,6 +5,10 @@ on:
     branches:
       - main
 jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
   publish:
     name: Publish
     uses: ./.github/workflows/aws-ecr-docker-push.yml
