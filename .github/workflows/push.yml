@@ -6,6 +6,6 @@ on:
       - "!main"
 jobs:
     test:
-    name: Unit Test
+    name: Test
     uses: ./.github/workflows/test.yml
     secrets: inherit
