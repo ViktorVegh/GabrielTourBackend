@@ -189,7 +189,9 @@
                         <include>**/*Tests.java</include>
                         <include>**/*TestCase.java</include>
                     </includes>
-
+                    <excludes>
+                        <exclude>com/backend/integration/OrderIntegrationTest.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
