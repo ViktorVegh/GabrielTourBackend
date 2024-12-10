@@ -73,6 +73,16 @@ public class EntityToDTOMapper {
                 person.getProfilePicture().orElse(null)
         );
     }
+    public static GolfCourseDTO mapToGolfCourseDTO(GolfCourse golfCourse) {
+        if (golfCourse == null) {
+            return null;
+        }
+
+        return new GolfCourseDTO(
+                golfCourse.getId(),
+                golfCourse.getName()
+        );
+    }
 
     public static DriveDTO mapToDriveDTO(Drive drive) {
         if (drive == null) {
