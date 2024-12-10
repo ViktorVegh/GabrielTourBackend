@@ -34,8 +34,6 @@ public class GolfCourseService implements GolfCourseServiceInterface {
         }
         else {
             GolfCourse golfCourse = new GolfCourse();
-            System.out.println(golfCourseDTO.getId()+" golf course id from dto");
-            golfCourse.setId(golfCourseDTO.getId());
             golfCourse.setName(golfCourseDTO.getName());
             GolfCourse savedGolfCourse =golfCourseRepository.save(golfCourse);
             return EntityToDTOMapper.toGolfCourseDTO(savedGolfCourse);
