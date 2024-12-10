@@ -16,8 +16,4 @@ public class OrderDTO {
         return orderDetail;
     }
 
-    public void setOrderDetail(OrderDetail orderDetail) {
-        this.orderDetail = orderDetail;
-    }
-
 }
