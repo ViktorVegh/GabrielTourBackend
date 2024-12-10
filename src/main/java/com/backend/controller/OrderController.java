@@ -58,7 +58,7 @@ public class OrderController {
         }
     }
     @PostMapping("/create-orderDetails")
-    public ResponseEntity<Integer> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<Integer> CreateOrderDetail(@RequestBody Map<String, Object> body) {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
             // Fetch order data using the service
