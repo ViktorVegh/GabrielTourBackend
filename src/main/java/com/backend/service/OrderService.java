@@ -323,10 +323,6 @@ public class OrderService implements OrderServiceInterface {
             }
             // Save OrderDetail
             orderDetailRepository.save(orderDetail);
-
-            //xml.append("<Data>");
-            //xml.append(data.getID());
-            //xml.append("</Data>");
             resultid = data.getID();
         }
 
