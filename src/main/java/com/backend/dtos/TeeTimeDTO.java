@@ -14,6 +14,7 @@ public class TeeTimeDTO {
     private int adults;
     private int juniors;
     private String note;
+    private boolean needTransport;
 
     // Default constructor
     public TeeTimeDTO() {
@@ -21,17 +22,18 @@ public class TeeTimeDTO {
 
     // Full constructor
     public TeeTimeDTO(Long id, LocalDateTime teeTime, int groupSize, List<Long> userIds, Long golfCourseId,
-                      boolean green, int holes, int adults, int juniors, String note) {
+                      boolean green, int holes, int adults, int juniors, String note, boolean needTransport) {
         this.id = id;
         this.teeTime = teeTime;
         this.groupSize = groupSize;
         this.userIds = userIds;
-        this.golfCourseId = golfCourseId; // Updated field to golfCourseId
+        this.golfCourseId = golfCourseId;
         this.green = green;
         this.holes = holes;
         this.adults = adults;
         this.juniors = juniors;
         this.note = note;
+        this.needTransport = needTransport;
     }
 
     // Getters and setters for all fields
@@ -113,5 +115,13 @@ public class TeeTimeDTO {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public boolean isNeedTransport() {
+        return needTransport;
+    }
+
+    public void setNeedTransport(boolean needTransport) {
+        this.needTransport = needTransport;
     }
 }

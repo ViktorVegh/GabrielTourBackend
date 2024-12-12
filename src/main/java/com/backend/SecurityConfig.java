@@ -41,16 +41,16 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtHelper);
 
         http
-                .csrf().disable() // Disable CSRF since we are using JWT
-                .cors().and() // Enable CORS
+                .csrf().disable()
+                .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/register", "/auth/login","/auth/verify-key","/auth/reset-password","/auth/login-klient","/auth/change-password","order/get-order","order/create-orderDetails","order/get-orderDetails","/api/teetimes/get_golf_course","/api/teetimes/create_golf_course").permitAll() // Allow public access to register and login endpoints
-                .anyRequest().authenticated() // All other requests require authentication
+                .requestMatchers("/auth/register", "/auth/login","/auth/verify-key","/auth/reset-password","/auth/login-klient","/auth/change-password","order/get-order","order/create-orderDetails","order/get-orderDetails").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Set session policy to stateless for JWT
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

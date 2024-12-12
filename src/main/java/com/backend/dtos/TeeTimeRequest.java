@@ -13,6 +13,7 @@ public class TeeTimeRequest {
     private int adults;
     private int juniors;
     private String note;
+    private boolean needTransport;
 
         // Driver ID
 
@@ -88,6 +89,14 @@ public class TeeTimeRequest {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public boolean isNeedTransport() {
+        return needTransport;
+    }
+
+    public void setNeedTransport(boolean needTransport) {
+        this.needTransport = needTransport;
     }
 
 }

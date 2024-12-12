@@ -11,4 +11,6 @@ public interface PersonServiceInterface {
     Optional<PersonDTO> findPersonByEmail(String email);
 
     Optional<PersonDTO> findPersonById(Long id, String role);
+
+    List<PersonDTO> getAllDrivers();
 }

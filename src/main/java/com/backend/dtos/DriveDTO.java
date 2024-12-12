@@ -29,6 +29,8 @@ public class DriveDTO {
         this.userIds = userIds;
     }
 
+    public DriveDTO(){}
+
     public Long getId() {
         return id;
     }

@@ -1,26 +1,33 @@
 package com.backend.service;
-import com.backend.entity.Driver;
 
-import com.backend.entity.Drive;
-import com.backend.entity.TeeTime;
-import com.backend.entity.TransportationReservation;
-import com.backend.entity.User;
+import com.backend.dtos.DriveDTO;
+import com.backend.entity.*;
 import com.backend.repository.*;
 import com.backend.service_interface.DriveServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.backend.dtos.EntityToDTOMapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.backend.entity.Hotel;
+import static com.backend.dtos.EntityToDTOMapper.mapToDrive;
 
 @Service
 public class DriveService implements DriveServiceInterface {
+
+    @Autowired
+    private DriveRepository driveRepository;
+
+    @Autowired
+    private DriverRepository driverRepository;
+
+    @Autowired
+    private DrivesCalendarRepository drivesCalendarRepository;
 
     @Autowired
     private TeeTimeRepository teeTimeRepository;
@@ -28,240 +35,195 @@ public class DriveService implements DriveServiceInterface {
     @Autowired
     private TransportationReservationRepository transportationReservationRepository;
 
-    @Autowired
-    private DriveRepository driveRepository;
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private DriverRepository driverRepository;
 
-    @Autowired
-    private TourGuideRepository tourGuideRepository;
+    public Drive createDrive(DriveDTO driveDTO) {
+        Driver driver = null;
 
-    /**
-     * Fetch drives for the given date range.
-     */
-    @Override
-    public List<Drive> getDrivesForDateRange(LocalDate startDate, LocalDate endDate) {
-        List<Drive> drives = new ArrayList<>();
-
-        // Fetch existing drives
-        List<Drive> existingDrives = driveRepository.findAllByDateBetween(startDate, endDate);
-        drives.addAll(existingDrives);
-
-        // Create drives for TeeTimes
-        List<TeeTime> teeTimes = teeTimeRepository.findAllByTeeTimeBetween(
-                startDate.atStartOfDay(),
-                endDate.atTime(23, 59, 59)
-        );
-
-        for (TeeTime teeTime : teeTimes) {
-            if (existingDrives.stream().noneMatch(d -> d.getTeeTime() != null && d.getTeeTime().equals(teeTime))) {
-                drives.addAll(createDrivesForTeeTime(teeTime));
-            }
+        // Check if driverId is provided and fetch the Driver entity
+        if (driveDTO.getDriverId() != null) {
+            driver = driverRepository.findById(driveDTO.getDriverId())
+                    .orElseThrow(() -> new IllegalArgumentException("Driver not found with id: " + driveDTO.getDriverId()));
         }
 
-        // Create drives for TransportationReservations
-        List<TransportationReservation> reservations = transportationReservationRepository
-                .findAllByPickupTimeBetweenOrDropoffTimeBetween(
-                        startDate.atStartOfDay(),
-                        endDate.atTime(23, 59, 59),
-                        startDate.atStartOfDay(),
-                        endDate.atTime(23, 59, 59)
-                );
+        // Map the DTO to the Drive entity, passing the driver (null if not provided)
+        Drive drive = EntityToDTOMapper.mapToDrive(driveDTO, driver);
 
-        for (TransportationReservation reservation : reservations) {
-            if (existingDrives.stream().noneMatch(d -> d.getTransportationReservation() != null &&
-                    d.getTransportationReservation().equals(reservation))) {
-                drives.addAll(createDrivesForTransportation(reservation));
-            }
-        }
-
-        driveRepository.saveAll(drives);
-        return drives;
-    }
-
-    @Override
-    public List<Drive> createDrivesForTeeTime(TeeTime teeTime) {
-        List<Drive> drives = new ArrayList<>();
-
-        // Fetch hotel name from accommodation reservation
-        String hotelName = teeTime.getUsers().stream()
-                .flatMap(user -> user.getOrderUsers().stream())
-                .map(orderUser -> orderUser.getOrderDetail())
-                .filter(orderDetail -> orderDetail != null && orderDetail.getAccommodationReservations() != null)
-                .flatMap(orderDetail -> orderDetail.getAccommodationReservations().stream())
-                .map(reservation -> reservation.getObjednavkaHotel())
-                .filter(hotel -> hotel != null)
-                .map(Hotel::getName)
-                .findFirst()
-                .orElse("Unknown Hotel");
-
-        // Fetch golf course name
-        String golfCourseName = teeTime.getGolfCourse() != null ? teeTime.getGolfCourse().getName() : "Unknown Golf Course";
-
-        // Extract user IDs from TeeTime
-        List<Long> userIds = teeTime.getUsers().stream()
-                .map(User::getId)
-                .collect(Collectors.toList());
-
-        // Drive to Tee Time
-        Drive toTeeTime = new Drive();
-        toTeeTime.setTeeTime(teeTime);
-        toTeeTime.setDate(teeTime.getTeeTime().toLocalDate());
-        toTeeTime.setCustomReason("Drive to Tee Time");
-        toTeeTime.setDeparturePlace(hotelName);
-        toTeeTime.setArrivalPlace(golfCourseName);
-        toTeeTime.setUserIds(userIds); // Set user IDs
-        drives.add(toTeeTime);
-
-        // Drive from Tee Time
-        Drive fromTeeTime = new Drive();
-        fromTeeTime.setTeeTime(teeTime);
-        fromTeeTime.setDate(teeTime.getTeeTime().toLocalDate());
-        fromTeeTime.setCustomReason("Drive from Tee Time");
-        fromTeeTime.setDeparturePlace(golfCourseName);
-        fromTeeTime.setArrivalPlace(hotelName);
-        fromTeeTime.setUserIds(userIds); // Set user IDs
-        drives.add(fromTeeTime);
-
-        return drives;
-    }
-
-
-
-    @Override
-    public List<Drive> createDrivesForTransportation(TransportationReservation reservation) {
-        List<Drive> drives = new ArrayList<>();
-
-        // Extract user IDs from TransportationReservation
-        List<Long> userIds = reservation.getPassengers().stream()
-                .map(User::getId)
-                .collect(Collectors.toList());
-
-        // Drive to Destination
-        if ("tam".equalsIgnoreCase(reservation.getRouteName())) {
-            String departureAirportName = reservation.getDepartureAirportName() != null ? reservation.getDepartureAirportName() : "Unknown Departure";
-            String arrivalAirportName = reservation.getArrivalAirportName() != null ? reservation.getArrivalAirportName() : "Unknown Arrival";
-
-            Drive toDestination = new Drive();
-            toDestination.setTransportationReservation(reservation);
-            toDestination.setDate(reservation.getDropoffTime().toLocalDate());
-            toDestination.setCustomReason("Drive to Destination");
-            toDestination.setDeparturePlace(departureAirportName);
-            toDestination.setArrivalPlace(arrivalAirportName);
-            toDestination.setUserIds(userIds); // Set user IDs
-            drives.add(toDestination);
-        }
-
-        // Drive from Destination
-        if ("zpet".equalsIgnoreCase(reservation.getRouteName())) {
-            String departureAirportName = reservation.getArrivalAirportName() != null ? reservation.getArrivalAirportName() : "Unknown Departure";
-            String arrivalAirportName = reservation.getDepartureAirportName() != null ? reservation.getDepartureAirportName() : "Unknown Arrival";
-
-            Drive fromDestination = new Drive();
-            fromDestination.setTransportationReservation(reservation);
-            fromDestination.setDate(reservation.getPickupTime().toLocalDate());
-            fromDestination.setCustomReason("Drive from Destination");
-            fromDestination.setDeparturePlace(departureAirportName);
-            fromDestination.setArrivalPlace(arrivalAirportName);
-            fromDestination.setUserIds(userIds); // Set user IDs
-            drives.add(fromDestination);
-        }
-
-        return drives;
-    }
-
-
-
-
-
-    /**
-     * Edit an existing drive.
-     */
-    @Override
-    public Drive editDrive(Long driveId, LocalDateTime pickupTime, LocalDateTime dropoffTime, Driver driver) {
-        Drive drive = driveRepository.findById(driveId)
-                .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
-
-        if (driver != null) {
-
-            if (!driverRepository.existsById(driver.getId())) {
-                throw new IllegalArgumentException("Invalid Driver ID: " + driver.getId());
-            }
-            drive.setDriver(driver);
-        }
-
-        drive.setPickupTime(pickupTime);
-        drive.setDropoffTime(dropoffTime);
-
+        // Save and return the Drive entity
         return driveRepository.save(drive);
     }
 
 
     @Override
-    public void populateMissingPlacesForDrives() {
+    public Drive updateDrive(Long driveId, DriveDTO driveDTO) {
+        // Fetch the existing Drive entity
+        Drive existingDrive = driveRepository.findById(driveId)
+                .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
+
+        // Map the DTO to a new Drive entity for comparison
+        Driver driver = null;
+        if (driveDTO.getDriverId() != null) {
+            driver = driverRepository.findById(driveDTO.getDriverId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Driver ID: " + driveDTO.getDriverId()));
+        }
+
+        Drive newDrive = EntityToDTOMapper.mapToDrive(driveDTO, driver);
+
+        // Check if the existing Drive needs to be updated
+        if (updateDriveIfNecessary(existingDrive, newDrive)) {
+            return driveRepository.save(existingDrive); // Save only if updated
+        }
+
+        // If no updates were necessary, return the existing drive
+        return existingDrive;
+    }
+
+
+
+    @Override
+    public void deleteDrive(Long driveId) {
+        if (!driveRepository.existsById(driveId)) {
+            throw new NoSuchElementException("Drive not found for ID: " + driveId);
+        }
+        driveRepository.deleteById(driveId);
+    }
+
+    @Override
+    public List<Drive> getUntrackedDrives() {
+        LocalDate currentDate = LocalDate.now();
+
+        // Get all drives from the repository
         List<Drive> allDrives = driveRepository.findAll();
 
-        for (Drive drive : allDrives) {
-            // Populate missing places
-            if (drive.getDeparturePlace() == null || drive.getArrivalPlace() == null) {
-                if (drive.getTeeTime() != null) {
-                    TeeTime teeTime = drive.getTeeTime();
+        // Fetch all TeeTimes and TransportationReservations
+        List<TeeTime> teeTimes = teeTimeRepository.findAll();
+        List<TransportationReservation> reservations = transportationReservationRepository.findAll();
 
-                    // Fetch hotel name
-                    String hotelName = teeTime.getUsers().stream()
-                            .flatMap(user -> user.getOrderUsers().stream())
-                            .filter(orderUser -> orderUser.getOrderDetail().getAccommodationReservations() != null)
-                            .flatMap(orderUser -> orderUser.getOrderDetail().getAccommodationReservations().stream())
-                            .map(reservation -> reservation.getObjednavkaHotel().getName())
-                            .findFirst()
-                            .orElse("Unknown Hotel");
+        List<Drive> untrackedDrives = new ArrayList<>();
 
-                    // Fetch golf course name
-                    String golfCourseName = teeTime.getGolfCourse() != null ? teeTime.getGolfCourse().getName() : "Unknown Golf Course";
+        // Process TeeTimes and create/update drives
+        for (TeeTime teeTime : teeTimes) {
+            if (!teeTime.isNeedTransport()) {
+                continue; // Skip tee times that do not require transportation
+            }
 
-                    if ("Drive to Tee Time".equals(drive.getCustomReason())) {
-                        drive.setDeparturePlace(hotelName);
-                        drive.setArrivalPlace(golfCourseName);
-                    } else if ("Drive from Tee Time".equals(drive.getCustomReason())) {
-                        drive.setDeparturePlace(golfCourseName);
-                        drive.setArrivalPlace(hotelName);
+            List<Drive> newDrives = TeeTimeDriveFactory.createDrivesForTeeTime(teeTime);
+
+            for (Drive newDrive : newDrives) {
+                Optional<Drive> existingDriveOpt = driveRepository.findByDateAndCustomReasonAndTeeTime(
+                        newDrive.getDate(),
+                        newDrive.getCustomReason(),
+                        teeTime
+                );
+
+                if (existingDriveOpt.isPresent()) {
+                    Drive existingDrive = existingDriveOpt.get();
+
+                    // Use the reusable method to update the drive if necessary
+                    if (updateDriveIfNecessary(existingDrive, newDrive)) {
+                        Drive updatedDrive = driveRepository.save(existingDrive); // Save changes
+                        untrackedDrives.add(updatedDrive); // Add to the result list
                     }
-
-                    // Populate user IDs from TeeTime
-                    List<Long> userIds = teeTime.getUsers().stream()
-                            .map(User::getId)
-                            .collect(Collectors.toList());
-                    drive.setUserIds(userIds);
-
-                } else if (drive.getTransportationReservation() != null) {
-                    TransportationReservation reservation = drive.getTransportationReservation();
-
-                    if ("Drive to Destination".equals(drive.getCustomReason())) {
-                        drive.setDeparturePlace(reservation.getDepartureAirportName());
-                        drive.setArrivalPlace(reservation.getArrivalAirportName());
-                    } else if ("Drive from Destination".equals(drive.getCustomReason())) {
-                        drive.setDeparturePlace(reservation.getArrivalAirportName());
-                        drive.setArrivalPlace(reservation.getDepartureAirportName());
-                    }
-
-                    // Populate user IDs from TransportationReservation
-                    List<Long> userIds = reservation.getPassengers().stream()
-                            .map(User::getId)
-                            .collect(Collectors.toList());
-                    drive.setUserIds(userIds);
+                } else if (newDrive.getDate().isAfter(currentDate)) {
+                    // If drive doesn't exist, save it
+                    Drive savedDrive = driveRepository.save(newDrive);
+                    untrackedDrives.add(savedDrive);
                 }
             }
         }
 
-        // Save updated drives
-        driveRepository.saveAll(allDrives);
+        // Process TransportationReservations and create/update drives
+        for (TransportationReservation reservation : reservations) {
+            List<Drive> newDrives = TransportationDriveFactory.createDrivesForTransportation(reservation);
+
+            for (Drive newDrive : newDrives) {
+                Optional<Drive> existingDriveOpt = driveRepository.findByDateAndCustomReasonAndTransportationReservation(
+                        newDrive.getDate(),
+                        newDrive.getCustomReason(),
+                        reservation
+                );
+
+                if (existingDriveOpt.isPresent()) {
+                    Drive existingDrive = existingDriveOpt.get();
+
+                    // Use the reusable method to update the drive if necessary
+                    if (updateDriveIfNecessary(existingDrive, newDrive)) {
+                        Drive updatedDrive = driveRepository.save(existingDrive); // Save changes
+                        untrackedDrives.add(updatedDrive); // Add to the result list
+                    }
+                } else if (newDrive.getDate().isAfter(currentDate)) {
+                    // If drive doesn't exist, save it
+                    Drive savedDrive = driveRepository.save(newDrive);
+                    untrackedDrives.add(savedDrive);
+                }
+            }
+        }
+
+        return untrackedDrives;
+    }
+
+
+
+
+    @Override
+    public List<Drive> getAllDrives() {
+        return driveRepository.findAll();
+    }
+
+
+    private boolean updateDriveIfNecessary(Drive existingDrive, Drive newDrive) {
+        boolean isUpdated = false;
+
+        if (!areEqual(existingDrive.getUserIds(), newDrive.getUserIds())) {
+            existingDrive.setUserIds(newDrive.getUserIds());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getDeparturePlace(), newDrive.getDeparturePlace())) {
+            existingDrive.setDeparturePlace(newDrive.getDeparturePlace());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getArrivalPlace(), newDrive.getArrivalPlace())) {
+            existingDrive.setArrivalPlace(newDrive.getArrivalPlace());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getCustomReason(), newDrive.getCustomReason())) {
+            existingDrive.setCustomReason(newDrive.getCustomReason());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getPickupTime(), newDrive.getPickupTime())) {
+            existingDrive.setPickupTime(newDrive.getPickupTime());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getDropoffTime(), newDrive.getDropoffTime())) {
+            existingDrive.setDropoffTime(newDrive.getDropoffTime());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getDate(), newDrive.getDate())) {
+            existingDrive.setDate(newDrive.getDate());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getDriver(), newDrive.getDriver())) {
+            existingDrive.setDriver(newDrive.getDriver());
+            isUpdated = true;
+        }
+        if (!areEqual(existingDrive.getTransportationReservation(), newDrive.getTransportationReservation())) {
+            existingDrive.setTransportationReservation(newDrive.getTransportationReservation());
+            isUpdated = true;
+        }
+
+        return isUpdated;
+    }
+
+    private boolean areEqual(Object obj1, Object obj2) {
+        if (obj1 == null) {
+            return obj2 == null;
+        }
+        return obj1.equals(obj2);
     }
 
 
 
 
 }
+

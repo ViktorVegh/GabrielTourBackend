@@ -2,61 +2,59 @@ package com.backend.controller;
 
 import com.backend.dtos.DriveDTO;
 import com.backend.dtos.EditDriveRequest;
+import com.backend.dtos.EntityToDTOMapper;
 import com.backend.entity.Drive;
-import com.backend.service.DriveScheduleService;
-import com.backend.service.DriveService;
-import com.backend.service_interface.DriveScheduleServiceInterface;
 import com.backend.service_interface.DriveServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.backend.dtos.EntityToDTOMapper;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/drives")
 public class DriveController {
 
     @Autowired
-    private DriveScheduleServiceInterface driveScheduleService;
-
-    @Autowired
     private DriveServiceInterface driveService;
 
-    /**
-     * Updates the calendar for the current week and returns all drives.
-     */
-    @PreAuthorize("hasAnyAuthority('driver', 'office', 'operationmanager')")
-    @GetMapping("/current-week")
-    public List<DriveDTO> getAndUpdateCurrentWeekDrives() {
-        driveScheduleService.updateWeeklyCalendar();
-        List<Drive> drives = driveScheduleService.getWeeklyCalendar();
+    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @GetMapping("/upcoming")
+    public List<DriveDTO> getAllUntrackedDrives() {
+        List<Drive> drives = driveService.getUntrackedDrives();
         return drives.stream()
                 .map(EntityToDTOMapper::mapToDriveDTO)
                 .toList();
     }
 
+    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @PostMapping
+    public DriveDTO createDrive(@RequestBody DriveDTO driveDTO) {
+        Drive createdDrive = driveService.createDrive(driveDTO);
+        return EntityToDTOMapper.mapToDriveDTO(createdDrive);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
-    @PutMapping("/{driveId}/edit")
-    public DriveDTO editDrive(
-            @PathVariable Long driveId,
-            @RequestBody EditDriveRequest request
-    ) {
-        Drive updatedDrive = driveService.editDrive(
-                driveId,
-                request.getPickupTime(),
-                request.getDropoffTime(),
-                request.getDriver()
-        );
-
+    @PutMapping("/{driveId}")
+    public DriveDTO updateDrive(@PathVariable Long driveId, @RequestBody DriveDTO driveDTO) {
+        Drive updatedDrive = driveService.updateDrive(driveId, driveDTO);
         return EntityToDTOMapper.mapToDriveDTO(updatedDrive);
     }
 
+
     @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
-    @PostMapping("/update-missing-places")
-    public void updateMissingPlacesForDrives() {
-        driveService.populateMissingPlacesForDrives();
+    @DeleteMapping("/{driveId}")
+    public void deleteDrive(@PathVariable Long driveId) {
+        driveService.deleteDrive(driveId);
     }
 
+    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @GetMapping("/all")
+    public List<DriveDTO> getAllDrives() {
+        List<Drive> drives = driveService.getAllDrives(); // New service method
+        return drives.stream()
+                .map(EntityToDTOMapper::mapToDriveDTO)
+                .toList();
+    }
 }

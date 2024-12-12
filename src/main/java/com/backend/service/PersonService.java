@@ -90,4 +90,10 @@ public class PersonService implements PersonServiceInterface {
         }
     }
 
+    public List<PersonDTO> getAllDrivers() {
+        return driverRepository.findAll().stream()
+                .map(EntityToDTOMapper::mapToPersonDTO)
+                .toList();
+    }
+
 }

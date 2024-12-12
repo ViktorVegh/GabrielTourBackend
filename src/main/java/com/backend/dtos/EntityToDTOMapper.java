@@ -25,7 +25,8 @@ public class EntityToDTOMapper {
                 teeTime.getHoles(),
                 teeTime.getAdults(),
                 teeTime.getJuniors(),
-                teeTime.getNote()
+                teeTime.getNote(),
+                teeTime.isNeedTransport()
         );
     }
 
@@ -101,6 +102,22 @@ public class EntityToDTOMapper {
                 drive.getUserIds()
         );
     }
+
+
+    public static Drive mapToDrive(DriveDTO driveDTO, Driver driver) {
+        Drive drive = new Drive();
+        drive.setId(driveDTO.getId());
+        drive.setDate(driveDTO.getDate());
+        drive.setPickupTime(driveDTO.getPickupTime());
+        drive.setDropoffTime(driveDTO.getDropoffTime());
+        drive.setCustomReason(driveDTO.getCustomReason());
+        drive.setDeparturePlace(driveDTO.getDeparturePlace());
+        drive.setArrivalPlace(driveDTO.getArrivalPlace());
+        drive.setUserIds(driveDTO.getUserIds());
+        drive.setDriver(driver);
+        return drive;
+    }
+
 
     public static OrderDTO mapToOrderDTO(OrderDetail detail) {
         if (detail == null) {

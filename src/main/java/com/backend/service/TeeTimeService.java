@@ -62,6 +62,7 @@ public class TeeTimeService implements TeeTimeServiceInterface {
         newTeeTime.setAdults(teeTimeRequest.getAdults());
         newTeeTime.setJuniors(teeTimeRequest.getJuniors());
         newTeeTime.setNote(teeTimeRequest.getNote());
+        newTeeTime.setNeedTransport(teeTimeRequest.isNeedTransport());
 
         // Save and map to DTO
         TeeTime savedTeeTime = teeTimeRepository.save(newTeeTime);

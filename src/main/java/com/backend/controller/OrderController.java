@@ -35,7 +35,7 @@ public class OrderController {
     @PostMapping("/get-order")
     public ResponseEntity<String> CreateOrderList(@RequestBody Map<String, Object> body) {
         try {
-            long id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
+            long id = Integer.parseInt(body.get("id").toString());
 
             // Fetch order data using the service
             String result = profisOrderService.CreateOrderListRequest(id);

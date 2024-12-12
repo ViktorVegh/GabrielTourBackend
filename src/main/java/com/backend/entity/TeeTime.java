@@ -58,6 +58,9 @@ public class TeeTime {
     @JoinColumn(name = "drive_id", referencedColumnName = "id")
     private Drive drive;
 
+    @Column(nullable = false)
+    private boolean needTransport;
+
     // Getters and Setters
 
     public Long getId() {
@@ -146,5 +149,13 @@ public class TeeTime {
 
     public void setDrive(Drive drive) {
         this.drive = drive;
+    }
+
+    public boolean isNeedTransport() {
+        return needTransport;
+    }
+
+    public void setNeedTransport(boolean needTransport) {
+        this.needTransport = needTransport;
     }
 }

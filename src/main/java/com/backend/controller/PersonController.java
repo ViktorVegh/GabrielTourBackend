@@ -24,6 +24,13 @@ public class PersonController {
         return ResponseEntity.ok(persons);
     }
 
+    @PreAuthorize("hasAuthority('drivermanager')")
+    @GetMapping("/all/drivers")
+    public ResponseEntity<List<PersonDTO>> getAllDrivers() {
+        List<PersonDTO> persons = personService.getAllDrivers();
+        return ResponseEntity.ok(persons);
+    }
+
     @PreAuthorize("hasAuthority('office')")
     @GetMapping("/search_by_email")
     public ResponseEntity<PersonDTO> searchPersonByEmail(@RequestParam String email) {

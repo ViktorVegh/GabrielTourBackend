@@ -30,7 +30,7 @@ public class Drive {
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "tee_time_id")
     private TeeTime teeTime;
 
