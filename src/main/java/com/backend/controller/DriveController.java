@@ -18,7 +18,7 @@ public class DriveController {
     @Autowired
     private DriveServiceInterface driveService;
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager')")
     @GetMapping("/upcoming")
     public List<DriveDTO> getAllUntrackedDrives() {
         List<Drive> drives = driveService.getUntrackedDrives();
@@ -27,7 +27,7 @@ public class DriveController {
                 .toList();
     }
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager')")
     @PostMapping
     public DriveDTO createDrive(@RequestBody DriveDTO driveDTO) {
         Drive createdDrive = driveService.createDrive(driveDTO);
@@ -35,7 +35,7 @@ public class DriveController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager')")
     @PutMapping("/{driveId}")
     public DriveDTO updateDrive(@PathVariable Long driveId, @RequestBody DriveDTO driveDTO) {
         Drive updatedDrive = driveService.updateDrive(driveId, driveDTO);
@@ -43,13 +43,13 @@ public class DriveController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager')")
     @DeleteMapping("/{driveId}")
     public void deleteDrive(@PathVariable Long driveId) {
         driveService.deleteDrive(driveId);
     }
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager')")
     @GetMapping("/all")
     public List<DriveDTO> getAllDrives() {
         List<Drive> drives = driveService.getAllDrives(); // New service method

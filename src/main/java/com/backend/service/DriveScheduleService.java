@@ -29,15 +29,15 @@ public class DriveScheduleService implements DriveScheduleServiceInterface {
     public DrivesCalendar initializeCalendar() {
         DrivesCalendar calendar = new DrivesCalendar();
         calendar.setId(CALENDAR_ID); // Set the fixed ID for the single calendar
-        calendar.setWeekStartDate(LocalDate.now().withDayOfMonth(1)); // Start of the current month
-        calendar.setWeekEndDate(YearMonth.now().atEndOfMonth()); // End of the current month
+        calendar.setMonthStartDate(LocalDate.now().withDayOfMonth(1)); // Start of the current month
+        calendar.setMonthEndDate(YearMonth.now().atEndOfMonth()); // End of the current month
         return drivesCalendarRepository.save(calendar);
     }
 
 
 
     @Override
-    public List<Drive> getMonthlyCalendar() {
+    public DrivesCalendar getDrivesCalendar() {
         DrivesCalendar calendar = drivesCalendarRepository.findById(CALENDAR_ID)
                 .orElseGet(this::initializeCalendar);
 
@@ -47,8 +47,9 @@ public class DriveScheduleService implements DriveScheduleServiceInterface {
         // Remove expired drives before returning the calendar
         removeExpiredDrivesFromCalendar(calendar);
 
-        return calendar.getDrives();
+        return calendar;
     }
+
 
     @Override
     public void removeDrivesFromCalendar(List<Long> driveIds) {
@@ -78,10 +79,10 @@ public class DriveScheduleService implements DriveScheduleServiceInterface {
         LocalDate expectedStartDate = today;
         LocalDate expectedEndDate = today.plusMonths(1).withDayOfMonth(1).minusDays(1); // Next month
 
-        if (!calendar.getWeekStartDate().equals(expectedStartDate) || !calendar.getWeekEndDate().equals(expectedEndDate)) {
+        if (!calendar.getMonthStartDate().equals(expectedStartDate) || !calendar.getMonthEndDate().equals(expectedEndDate)) {
             // Update calendar dates
-            calendar.setWeekStartDate(expectedStartDate);
-            calendar.setWeekEndDate(expectedEndDate);
+            calendar.setMonthStartDate(expectedStartDate);
+            calendar.setMonthEndDate(expectedEndDate);
 
             // Remove drives outside the new range (but keep expired ones intact)
             calendar.getDrives().removeIf(drive ->

@@ -35,6 +35,9 @@ public class DriveService implements DriveServiceInterface {
     @Autowired
     private TransportationReservationRepository transportationReservationRepository;
 
+    @Autowired
+    private TeeTimeDriveFactory teeTimeDriveFactory;
+
 
 
 
@@ -93,9 +96,6 @@ public class DriveService implements DriveServiceInterface {
     public List<Drive> getUntrackedDrives() {
         LocalDate currentDate = LocalDate.now();
 
-        // Get all drives from the repository
-        List<Drive> allDrives = driveRepository.findAll();
-
         // Fetch all TeeTimes and TransportationReservations
         List<TeeTime> teeTimes = teeTimeRepository.findAll();
         List<TransportationReservation> reservations = transportationReservationRepository.findAll();
@@ -108,7 +108,7 @@ public class DriveService implements DriveServiceInterface {
                 continue; // Skip tee times that do not require transportation
             }
 
-            List<Drive> newDrives = TeeTimeDriveFactory.createDrivesForTeeTime(teeTime);
+            List<Drive> newDrives = teeTimeDriveFactory.createDrivesForTeeTime(teeTime);
 
             for (Drive newDrive : newDrives) {
                 Optional<Drive> existingDriveOpt = driveRepository.findByDateAndCustomReasonAndTeeTime(

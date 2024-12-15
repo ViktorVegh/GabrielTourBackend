@@ -96,4 +96,9 @@ public class PersonService implements PersonServiceInterface {
                 .toList();
     }
 
+
+    public Optional<PersonDTO> findPersonByProfisId(Integer profisId) {
+        Optional<User> user = userRepository.findByProfisId(profisId);
+        return user.map(EntityToDTOMapper::mapToPersonDTO);
+    }
 }

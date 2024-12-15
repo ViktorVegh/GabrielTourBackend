@@ -1,8 +1,10 @@
 package com.backend.controller;
 
 import com.backend.dtos.DriveDTO;
+import com.backend.dtos.DrivesCalendarDTO;
 import com.backend.dtos.EntityToDTOMapper;
 import com.backend.entity.Drive;
+import com.backend.entity.DrivesCalendar;
 import com.backend.service_interface.DriveScheduleServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,22 +19,21 @@ public class DrivesCalendarController {
     @Autowired
     private DriveScheduleServiceInterface driveScheduleService;
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager','driver')")
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager','driver','user')")
     @GetMapping("/monthly")
-    public List<DriveDTO> getMonthlyCalendar() {
-        List<Drive> drives = driveScheduleService.getMonthlyCalendar();
-        return drives.stream()
-                .map(EntityToDTOMapper::mapToDriveDTO)
-                .toList();
+    public DrivesCalendarDTO getMonthlyCalendar() {
+        DrivesCalendar calendar = driveScheduleService.getDrivesCalendar();
+        return EntityToDTOMapper.mapToDrivesCalendarDTO(calendar);
     }
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager')")
     @DeleteMapping("/remove")
     public void removeDrivesFromCalendar(@RequestBody List<Long> driveIds) {
         driveScheduleService.removeDrivesFromCalendar(driveIds);
     }
 
-    @PreAuthorize("hasAnyAuthority('office', 'operationmanager')")
+    @PreAuthorize("hasAnyAuthority('office', 'drivermanager')")
     @PostMapping("/add")
     public void addDriveToCalendar(@RequestParam Long driveId) {
         driveScheduleService.addDriveToCalendar(driveId);

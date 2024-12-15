@@ -20,7 +20,7 @@ public class TeeTime {
     @JoinTable(
             name = "tee_time_users",
             joinColumns = @JoinColumn(name = "tee_time_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            inverseJoinColumns = @JoinColumn(name = "profis_id", referencedColumnName = "profis_id")
     )
     private List<User> users;
 

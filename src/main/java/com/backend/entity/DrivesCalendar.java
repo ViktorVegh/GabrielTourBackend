@@ -13,11 +13,11 @@ public class DrivesCalendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "week_start_date", nullable = false)
-    private LocalDate weekStartDate;
+    @Column(name = "month_start_date", nullable = false)
+    private LocalDate monthStartDate;
 
-    @Column(name = "week_end_date", nullable = false)
-    private LocalDate weekEndDate;
+    @Column(name = "month_end_date", nullable = false)
+    private LocalDate monthEndDate;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "calendar_id") // Creates a foreign key in the "Drive" table
@@ -27,8 +27,8 @@ public class DrivesCalendar {
     }
 
     public DrivesCalendar(LocalDate weekStartDate, LocalDate weekEndDate, List<Drive> drives) {
-        this.weekStartDate = weekStartDate;
-        this.weekEndDate = weekEndDate;
+        this.monthStartDate = weekStartDate;
+        this.monthEndDate = weekEndDate;
         this.drives = drives != null ? new ArrayList<>(drives) : new ArrayList<>();
     }
 
@@ -40,20 +40,20 @@ public class DrivesCalendar {
         this.id = id;
     }
 
-    public LocalDate getWeekStartDate() {
-        return weekStartDate;
+    public LocalDate getMonthStartDate() {
+        return monthStartDate;
     }
 
-    public void setWeekStartDate(LocalDate weekStartDate) {
-        this.weekStartDate = weekStartDate;
+    public void setMonthStartDate(LocalDate weekStartDate) {
+        this.monthStartDate = weekStartDate;
     }
 
-    public LocalDate getWeekEndDate() {
-        return weekEndDate;
+    public LocalDate getMonthEndDate() {
+        return monthEndDate;
     }
 
-    public void setWeekEndDate(LocalDate weekEndDate) {
-        this.weekEndDate = weekEndDate;
+    public void setMonthEndDate(LocalDate weekEndDate) {
+        this.monthEndDate = weekEndDate;
     }
 
 

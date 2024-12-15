@@ -14,7 +14,8 @@ public class EntityToDTOMapper {
 
         // Convert the list of User objects to a list of user IDs
         List<Long> userIds = teeTime.getUsers() != null ?
-                teeTime.getUsers().stream().map(User::getId).collect(Collectors.toList()) : null;
+                teeTime.getUsers().stream().map(User::getProfisId).collect(Collectors.toList()) : null;
+
 
         return new TeeTimeDTO(
                 teeTime.getId(),
@@ -85,10 +86,36 @@ public class EntityToDTOMapper {
         );
     }
 
+    public static Drive mapToDrive(DriveDTO driveDTO, Driver driver) {
+
+        Drive drive = new Drive();
+        drive.setId(driveDTO.getId());
+        drive.setDate(driveDTO.getDate());
+        drive.setPickupTime(driveDTO.getPickupTime());
+        drive.setDropoffTime(driveDTO.getDropoffTime());
+        drive.setCustomReason(driveDTO.getCustomReason());
+        drive.setDeparturePlace(driveDTO.getDeparturePlace());
+        drive.setArrivalPlace(driveDTO.getArrivalPlace());
+
+        // Deduplicate userIds
+        List<Long> uniqueUserIds = driveDTO.getUserIds().stream()
+                .distinct()
+                .collect(Collectors.toList());
+        drive.setUserIds(uniqueUserIds);
+
+        drive.setDriver(driver);
+        return drive;
+    }
+
     public static DriveDTO mapToDriveDTO(Drive drive) {
         if (drive == null) {
             return null;
         }
+
+        // Deduplicate userIds in the DTO mapping
+        List<Long> uniqueUserIds = drive.getUserIds().stream()
+                .distinct()
+                .collect(Collectors.toList());
 
         return new DriveDTO(
                 drive.getId(),
@@ -99,24 +126,11 @@ public class EntityToDTOMapper {
                 drive.getDriver() != null ? drive.getDriver().getId() : null,
                 drive.getDeparturePlace(),
                 drive.getArrivalPlace(),
-                drive.getUserIds()
+                uniqueUserIds
         );
     }
 
 
-    public static Drive mapToDrive(DriveDTO driveDTO, Driver driver) {
-        Drive drive = new Drive();
-        drive.setId(driveDTO.getId());
-        drive.setDate(driveDTO.getDate());
-        drive.setPickupTime(driveDTO.getPickupTime());
-        drive.setDropoffTime(driveDTO.getDropoffTime());
-        drive.setCustomReason(driveDTO.getCustomReason());
-        drive.setDeparturePlace(driveDTO.getDeparturePlace());
-        drive.setArrivalPlace(driveDTO.getArrivalPlace());
-        drive.setUserIds(driveDTO.getUserIds());
-        drive.setDriver(driver);
-        return drive;
-    }
 
 
     public static OrderDTO mapToOrderDTO(OrderDetail detail) {
@@ -148,4 +162,23 @@ public class EntityToDTOMapper {
                 )
         );
     }
+
+    public static DrivesCalendarDTO mapToDrivesCalendarDTO(DrivesCalendar calendar) {
+        if (calendar == null) {
+            return null;
+        }
+
+        // Map the drives in the calendar
+        List<DriveDTO> driveDTOs = calendar.getDrives().stream()
+                .map(EntityToDTOMapper::mapToDriveDTO)
+                .collect(Collectors.toList());
+
+        return new DrivesCalendarDTO(
+                calendar.getId(),
+                calendar.getMonthStartDate(),
+                calendar.getMonthEndDate(),
+                driveDTOs
+        );
+    }
+
 }

@@ -13,4 +13,6 @@ public interface PersonServiceInterface {
     Optional<PersonDTO> findPersonById(Long id, String role);
 
     List<PersonDTO> getAllDrivers();
+
+    Optional<PersonDTO> findPersonByProfisId(Integer profisId);
 }

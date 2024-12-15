@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DriveScheduleServiceInterface {
     DrivesCalendar initializeCalendar();
-    List<Drive> getMonthlyCalendar();
+    DrivesCalendar getDrivesCalendar();
     void removeDrivesFromCalendar(List<Long> driveIds);
     void addDriveToCalendar(Long driveId);
 }
