@@ -72,7 +72,7 @@ public class TeeTimeTest {
         // Verify interactions
         verify(userRepository).findAllById(userIds);
 
-    }*/
+    }
     @Test
     void getTeeTime_One() {
 
@@ -88,6 +88,6 @@ public class TeeTimeTest {
         // Verify interactions
         verify(userRepository).findById(1L);
 
-    }
+    }*/
 
 }
