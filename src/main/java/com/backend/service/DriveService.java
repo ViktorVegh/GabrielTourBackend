@@ -86,10 +86,16 @@ public class DriveService implements DriveServiceInterface {
 
     @Override
     public void deleteDrive(Long driveId) {
-        if (!driveRepository.existsById(driveId)) {
-            throw new NoSuchElementException("Drive not found for ID: " + driveId);
+        Drive drive = driveRepository.findById(driveId)
+                .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
+
+        TeeTime teeTime = drive.getTeeTime();
+        if (teeTime != null) {
+            teeTime.setDrive(null);
+            teeTimeRepository.save(teeTime);
         }
-        driveRepository.deleteById(driveId);
+
+        driveRepository.delete(drive);
     }
 
     @Override

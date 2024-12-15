@@ -53,10 +53,12 @@ public class TeeTime {
     // Additional notes for the tee time reservation
     private String note;
 
-    // Drive details (pickup, drop-off, driver, etc.)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "drive_id", referencedColumnName = "id")
+    @JoinColumn(name = "drive_id", referencedColumnName = "id", nullable = true)
     private Drive drive;
+
+
+
 
     @Column(nullable = false)
     private boolean needTransport;

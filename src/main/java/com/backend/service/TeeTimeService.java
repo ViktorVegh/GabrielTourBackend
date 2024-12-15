@@ -106,16 +106,14 @@ public class TeeTimeService implements TeeTimeServiceInterface {
     }
 
     @Override
-    public void deleteTeeTime(Long id) {
-        TeeTime teeTime = teeTimeRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("TeeTime not found for ID: " + id));
+    public void deleteTeeTime(Long teeTimeId) {
+        TeeTime teeTime = teeTimeRepository.findById(teeTimeId)
+                .orElseThrow(() -> new NoSuchElementException("TeeTime not found for ID: " + teeTimeId));
 
-        if (teeTime.getDrive() != null) {
-            driveRepository.delete(teeTime.getDrive());
-        }
-
-        teeTimeRepository.deleteById(id);
+        teeTimeRepository.delete(teeTime);
     }
+
+
 
     private boolean updateTeeTimeIfNecessary(TeeTime existingTeeTime, TeeTimeDTO newTeeTime) {
         boolean isUpdated = false;
