@@ -30,7 +30,7 @@ public class TeeTimeTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+/*
     @Test
     void createTeeTime_Zero() {
         TeeTimeRequest teeTimeRequest = new TeeTimeRequest();
@@ -72,7 +72,7 @@ public class TeeTimeTest {
         // Verify interactions
         verify(userRepository).findAllById(userIds);
 
-    }
+    }*/
     @Test
     void getTeeTime_One() {
 

@@ -38,10 +38,10 @@ public class TeeTimeService implements TeeTimeServiceInterface {
 
     @Override
     public List<TeeTimeDTO> getTeeTimesByUserId(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByProfisId(userId.intValue())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        return teeTimeRepository.findByUsersContaining(user) // Assuming `findByUsersContaining` is available in `TeeTimeRepository`
+        System.out.println(userId);
+        return teeTimeRepository.findByProfisId(userId) // Assuming `findByUsersContaining` is available in `TeeTimeRepository`
                 .stream()
                 .map(EntityToDTOMapper::toTeeTimeDTO) // Updated method name
                 .collect(Collectors.toList());
