@@ -1,9 +1,8 @@
 package com.backend.controller;
 
-import com.backend.dtos.GolfCourseDTO;
-import com.backend.dtos.PersonDTO;
-import com.backend.dtos.TeeTimeDTO;
-import com.backend.dtos.TeeTimeRequest;
+import com.backend.dtos.*;
+import com.backend.entity.GolfCourse;
+import com.backend.entity.TeeTime;
 import com.backend.service.TeeTimeService;
 import com.backend.service_interface.GolfCourseServiceInterface;
 import com.backend.service_interface.TeeTimeServiceInterface;
@@ -28,6 +27,10 @@ public class TeeTimeController {
     public List<TeeTimeDTO> getTeeTimesByUserId(@PathVariable Long userId) {
         return teeTimeService.getTeeTimesByUserId(userId);
     }
+    @PreAuthorize("hasAnyAuthority('user', 'office')")    @GetMapping("/get_tee_time")
+    public List<TeeTimeDTO> getLatestTeeTimes() {
+        return teeTimeService.getLatestTeeTimes();
+    }
 
     @PreAuthorize("hasAuthority('office')")
     @PostMapping("/create")
@@ -47,5 +50,18 @@ public class TeeTimeController {
     public GolfCourseDTO createGolfCourse(@RequestBody GolfCourseDTO golfCourseDTO) {
         System.out.println("Creating a new TeeTime");
         return golfCourseService.createGolfCourse(golfCourseDTO);
+    }
+    @PreAuthorize("hasAuthority('office')")
+    @DeleteMapping("/delete_tee_time")
+    public void deleteTeeTime(@RequestParam Long id) {
+        System.out.println("Deleting a new TeeTime");
+        teeTimeService.deleteTeeTime(id);
+    }
+    @PreAuthorize("hasAuthority('office')")
+    @PutMapping("/edit_tee_time")
+    public TeeTimeDTO editTeeTime(@RequestBody TeeTimeDTO teeTimeDTO) {
+        System.out.println("Editing a new TeeTime");
+        TeeTime updatedTeeTime = teeTimeService.editTeeTime(teeTimeDTO);
+        return EntityToDTOMapper.toTeeTimeDTO(updatedTeeTime);
     }
 }

@@ -54,7 +54,7 @@ public class TeeTime {
     private String note;
 
     // Drive details (pickup, drop-off, driver, etc.)
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "drive_id", referencedColumnName = "id")
     private Drive drive;
 
