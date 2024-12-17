@@ -102,64 +102,51 @@ public class DriveService implements DriveServiceInterface {
     public List<Drive> getUntrackedDrives() {
         LocalDate currentDate = LocalDate.now();
 
-        // Fetch all TeeTimes and TransportationReservations
-        List<TeeTime> teeTimes = teeTimeRepository.findAll();
-        List<TransportationReservation> reservations = transportationReservationRepository.findAll();
-
         List<Drive> untrackedDrives = new ArrayList<>();
 
-        // Process TeeTimes and create/update drives
-        for (TeeTime teeTime : teeTimes) {
+        // Process TeeTimes
+        for (TeeTime teeTime : teeTimeRepository.findAll()) {
             if (!teeTime.isNeedTransport()) {
-                continue; // Skip tee times that do not require transportation
+                continue;
             }
 
             List<Drive> newDrives = teeTimeDriveFactory.createDrivesForTeeTime(teeTime);
 
             for (Drive newDrive : newDrives) {
-                Optional<Drive> existingDriveOpt = driveRepository.findByDateAndCustomReasonAndTeeTime(
-                        newDrive.getDate(),
-                        newDrive.getCustomReason(),
-                        teeTime
-                );
+                // Refresh drives without calendar each time
+                Optional<Drive> existingDriveOpt = driveRepository
+                        .findDrivesWithoutCalendar()
+                        .stream()
+                        .filter(d -> d.getDate().equals(newDrive.getDate())
+                                && d.getCustomReason().equals(newDrive.getCustomReason())
+                                && d.getTeeTime() == teeTime)
+                        .findFirst();
 
                 if (existingDriveOpt.isPresent()) {
-                    Drive existingDrive = existingDriveOpt.get();
-
-                    // Use the reusable method to update the drive if necessary
-                    if (updateDriveIfNecessary(existingDrive, newDrive)) {
-                        Drive updatedDrive = driveRepository.save(existingDrive); // Save changes
-                        untrackedDrives.add(updatedDrive); // Add to the result list
-                    }
+                    untrackedDrives.add(existingDriveOpt.get());
                 } else if (newDrive.getDate().isAfter(currentDate)) {
-                    // If drive doesn't exist, save it
                     Drive savedDrive = driveRepository.save(newDrive);
                     untrackedDrives.add(savedDrive);
                 }
             }
         }
 
-        // Process TransportationReservations and create/update drives
-        for (TransportationReservation reservation : reservations) {
+        // Process TransportationReservations
+        for (TransportationReservation reservation : transportationReservationRepository.findAll()) {
             List<Drive> newDrives = TransportationDriveFactory.createDrivesForTransportation(reservation);
 
             for (Drive newDrive : newDrives) {
-                Optional<Drive> existingDriveOpt = driveRepository.findByDateAndCustomReasonAndTransportationReservation(
-                        newDrive.getDate(),
-                        newDrive.getCustomReason(),
-                        reservation
-                );
+                Optional<Drive> existingDriveOpt = driveRepository
+                        .findDrivesWithoutCalendar()
+                        .stream()
+                        .filter(d -> d.getDate().equals(newDrive.getDate())
+                                && d.getCustomReason().equals(newDrive.getCustomReason())
+                                && d.getTransportationReservation() == reservation)
+                        .findFirst();
 
                 if (existingDriveOpt.isPresent()) {
-                    Drive existingDrive = existingDriveOpt.get();
-
-                    // Use the reusable method to update the drive if necessary
-                    if (updateDriveIfNecessary(existingDrive, newDrive)) {
-                        Drive updatedDrive = driveRepository.save(existingDrive); // Save changes
-                        untrackedDrives.add(updatedDrive); // Add to the result list
-                    }
+                    untrackedDrives.add(existingDriveOpt.get());
                 } else if (newDrive.getDate().isAfter(currentDate)) {
-                    // If drive doesn't exist, save it
                     Drive savedDrive = driveRepository.save(newDrive);
                     untrackedDrives.add(savedDrive);
                 }
