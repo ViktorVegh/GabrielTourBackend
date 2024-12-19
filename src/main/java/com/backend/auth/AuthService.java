@@ -1,6 +1,6 @@
 package com.backend.auth;
 
-import com.backend.entity.*;
+import com.backend.entity.Person.*;
 import com.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

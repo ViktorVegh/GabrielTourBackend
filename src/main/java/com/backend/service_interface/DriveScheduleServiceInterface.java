@@ -1,7 +1,6 @@
 package com.backend.service_interface;
 
-import com.backend.entity.Drive;
-import com.backend.entity.DrivesCalendar;
+import com.backend.entity.Transportation.DrivesCalendar;
 
 import java.util.List;
 

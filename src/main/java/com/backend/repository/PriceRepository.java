@@ -1,7 +1,6 @@
 package com.backend.repository;
 
-import com.backend.entity.Prices;
-import com.backend.entity.TransportationReservation;
+import com.backend.entity.Services.Prices;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

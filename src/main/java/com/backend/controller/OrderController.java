@@ -1,25 +1,13 @@
 package com.backend.controller;
 
-import com.backend.auth.JwtHelper;
-import com.backend.dtos.OrderDTO;
-import com.backend.dtos.TeeTimeRequest;
-import com.backend.profis_service.ProfisOrderService;
+import com.backend.dtos.Order.OrderDTO;
 import com.backend.profis_service_interface.ProfisOrderServiceInterface;
-import com.backend.service.OrderService;
 import com.backend.service_interface.OrderServiceInterface;
-import com.example.klientsoapclient.*;
-import com.example.klientsoapclient.KlientKontakt;
-import com.example.klientsoapclient.ObjednavkaKlient;
-import com.example.objednavkasoapclient.*;
-import com.example.objednavkasoapclient.IntegerNazev;
-import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController

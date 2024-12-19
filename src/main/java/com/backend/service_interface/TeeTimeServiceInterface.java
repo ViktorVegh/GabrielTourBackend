@@ -1,10 +1,8 @@
 package com.backend.service_interface;
 
-import com.backend.dtos.GolfCourseDTO;
-import com.backend.dtos.TeeTimeDTO;
-import com.backend.dtos.TeeTimeRequest;
-import com.backend.entity.GolfCourse;
-import com.backend.entity.TeeTime;
+import com.backend.dtos.TeeTime.TeeTimeDTO;
+import com.backend.dtos.TeeTime.TeeTimeRequest;
+import com.backend.entity.TeeTime.TeeTime;
 
 import java.util.List;
 

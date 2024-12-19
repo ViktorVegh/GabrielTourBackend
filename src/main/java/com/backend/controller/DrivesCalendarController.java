@@ -1,10 +1,8 @@
 package com.backend.controller;
 
-import com.backend.dtos.DriveDTO;
-import com.backend.dtos.DrivesCalendarDTO;
+import com.backend.dtos.Drive.DrivesCalendarDTO;
 import com.backend.dtos.EntityToDTOMapper;
-import com.backend.entity.Drive;
-import com.backend.entity.DrivesCalendar;
+import com.backend.entity.Transportation.DrivesCalendar;
 import com.backend.service_interface.DriveScheduleServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

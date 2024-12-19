@@ -1,11 +1,8 @@
 package com.backend.service_interface;
 
-import com.backend.dtos.OrderDTO;
+import com.backend.dtos.Order.OrderDTO;
 import com.example.klientsoapclient.KlientObjednavkaListResult;
 import com.example.objednavkasoapclient.ObjednavkaDetailResult;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.time.LocalDateTime;
 
 public interface OrderServiceInterface {
 

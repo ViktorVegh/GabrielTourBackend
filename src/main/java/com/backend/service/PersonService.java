@@ -1,9 +1,9 @@
 package com.backend.service;
 
-import com.backend.dtos.PersonDTO;
-import com.backend.entity.User;
-import com.backend.entity.Driver;
-import com.backend.entity.TourGuide;
+import com.backend.dtos.Person.PersonDTO;
+import com.backend.entity.Person.User;
+import com.backend.entity.Person.Driver;
+import com.backend.entity.Person.TourGuide;
 import com.backend.repository.UserRepository;
 import com.backend.repository.DriverRepository;
 import com.backend.repository.TourGuideRepository;

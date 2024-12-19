@@ -1,7 +1,7 @@
 package com.backend.repository;
 
-import com.backend.entity.TeeTime;
-import com.backend.entity.User;
+import com.backend.entity.TeeTime.TeeTime;
+import com.backend.entity.Person.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

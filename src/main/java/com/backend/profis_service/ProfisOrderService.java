@@ -1,7 +1,7 @@
 package com.backend.profis_service;
 
 import com.backend.auth.EncryptionUtil;
-import com.backend.entity.OrderUser;
+import com.backend.entity.Order.OrderUser;
 import com.backend.profis_service_interface.ProfisOrderServiceInterface;
 import com.backend.repository.OrderUserRepository;
 import com.backend.repository.UserRepository;

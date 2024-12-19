@@ -1,9 +1,10 @@
 package com.backend.controller;
 
 import com.backend.dtos.*;
-import com.backend.entity.GolfCourse;
-import com.backend.entity.TeeTime;
-import com.backend.service.TeeTimeService;
+import com.backend.dtos.TeeTime.GolfCourseDTO;
+import com.backend.dtos.TeeTime.TeeTimeDTO;
+import com.backend.dtos.TeeTime.TeeTimeRequest;
+import com.backend.entity.TeeTime.TeeTime;
 import com.backend.service_interface.GolfCourseServiceInterface;
 import com.backend.service_interface.TeeTimeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
