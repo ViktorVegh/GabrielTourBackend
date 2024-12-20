@@ -3,7 +3,7 @@ package com.backend.service;
 import com.backend.dtos.Person.PersonDTO;
 import com.backend.entity.Person.User;
 import com.backend.entity.Person.Driver;
-import com.backend.entity.Person.TourGuide;
+import com.backend.entity.Person.Delegate;
 import com.backend.repository.UserRepository;
 import com.backend.repository.DriverRepository;
 import com.backend.repository.TourGuideRepository;
@@ -62,7 +62,7 @@ public class PersonService implements PersonServiceInterface {
             return driver.map(EntityToDTOMapper::mapToPersonDTO);
         }
 
-        Optional<TourGuide> tourGuide = Optional.ofNullable(tourGuideRepository.findByEmail(email));
+        Optional<Delegate> tourGuide = Optional.ofNullable(tourGuideRepository.findByEmail(email));
         if (tourGuide.isPresent()) {
             return tourGuide.map(EntityToDTOMapper::mapToPersonDTO);
         }
@@ -82,7 +82,7 @@ public class PersonService implements PersonServiceInterface {
                 return driver.map(EntityToDTOMapper::mapToPersonDTO);
 
             case "TOUR_GUIDE":
-                Optional<TourGuide> tourGuide = tourGuideRepository.findById(id);
+                Optional<Delegate> tourGuide = tourGuideRepository.findById(id);
                 return tourGuide.map(EntityToDTOMapper::mapToPersonDTO);
 
             default:

@@ -4,14 +4,14 @@ package com.backend.entity.Person;
 import jakarta.persistence.Entity;
 
 @Entity
-public class TourGuide extends Person {
+public class Delegate extends Person {
 
     // Constructors
-    public TourGuide() {
+    public Delegate() {
         super();
     }
 
-    public TourGuide(String email, String password, String name, String profilePicture,String role) {
+    public Delegate(String email, String password, String name, String profilePicture, String role) {
         super(email, password, name, profilePicture,role);
     }
 }

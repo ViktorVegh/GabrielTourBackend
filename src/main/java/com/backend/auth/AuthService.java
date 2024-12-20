@@ -50,8 +50,8 @@ public class AuthService implements AuthServiceInterface {
                 driverRepository.save((Driver) newPerson);
                 break;
             case "tourguide":
-                newPerson = new TourGuide(email, encryptedPassword, finalName, finalProfilePicture, role);
-                tourGuideRepository.save((TourGuide) newPerson);
+                newPerson = new Delegate(email, encryptedPassword, finalName, finalProfilePicture, role);
+                tourGuideRepository.save((Delegate) newPerson);
                 break;
             case "office":
                 newPerson = new Office(email, encryptedPassword, role);
@@ -109,7 +109,7 @@ public class AuthService implements AuthServiceInterface {
             // Corrected role assignment with proper braces
             if (person instanceof Driver) {
                 role = "driver";
-            } else if (person instanceof TourGuide) {
+            } else if (person instanceof Delegate) {
                 role = "tourguide";
             } else if (person instanceof Office) {
                 role = "office";
