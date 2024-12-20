@@ -1,5 +1,20 @@
 package com.backend.dtos;
-import com.backend.entity.*;
+import com.backend.dtos.Acommodation.HotelDTO;
+import com.backend.dtos.Drive.DriveDTO;
+import com.backend.dtos.Drive.DrivesCalendarDTO;
+import com.backend.dtos.Order.OrderDTO;
+import com.backend.dtos.Person.PersonDTO;
+import com.backend.dtos.TeeTime.GolfCourseDTO;
+import com.backend.dtos.TeeTime.TeeTimeDTO;
+import com.backend.entity.Acommodation.Hotel;
+import com.backend.entity.Order.OrderDetail;
+import com.backend.entity.Person.Driver;
+import com.backend.entity.Person.Person;
+import com.backend.entity.Person.User;
+import com.backend.entity.TeeTime.GolfCourse;
+import com.backend.entity.TeeTime.TeeTime;
+import com.backend.entity.Transportation.Drive;
+import com.backend.entity.Transportation.DrivesCalendar;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +29,8 @@ public class EntityToDTOMapper {
 
         // Convert the list of User objects to a list of user IDs
         List<Long> userIds = teeTime.getUsers() != null ?
-                teeTime.getUsers().stream().map(User::getId).collect(Collectors.toList()) : null;
+                teeTime.getUsers().stream().map(User::getProfisId).collect(Collectors.toList()) : null;
+
 
         return new TeeTimeDTO(
                 teeTime.getId(),
@@ -25,7 +41,8 @@ public class EntityToDTOMapper {
                 teeTime.getHoles(),
                 teeTime.getAdults(),
                 teeTime.getJuniors(),
-                teeTime.getNote()
+                teeTime.getNote(),
+                teeTime.isNeedTransport()
         );
     }
 
@@ -73,11 +90,47 @@ public class EntityToDTOMapper {
                 person.getProfilePicture().orElse(null)
         );
     }
+    public static GolfCourseDTO mapToGolfCourseDTO(GolfCourse golfCourse) {
+        if (golfCourse == null) {
+            return null;
+        }
+
+        return new GolfCourseDTO(
+                golfCourse.getId(),
+                golfCourse.getName()
+        );
+    }
+
+    public static Drive mapToDrive(DriveDTO driveDTO, Driver driver) {
+
+        Drive drive = new Drive();
+        drive.setId(driveDTO.getId());
+        drive.setDate(driveDTO.getDate());
+        drive.setPickupTime(driveDTO.getPickupTime());
+        drive.setDropoffTime(driveDTO.getDropoffTime());
+        drive.setCustomReason(driveDTO.getCustomReason());
+        drive.setDeparturePlace(driveDTO.getDeparturePlace());
+        drive.setArrivalPlace(driveDTO.getArrivalPlace());
+
+        // Deduplicate userIds
+        List<Long> uniqueUserIds = driveDTO.getUserIds().stream()
+                .distinct()
+                .collect(Collectors.toList());
+        drive.setUserIds(uniqueUserIds);
+
+        drive.setDriver(driver);
+        return drive;
+    }
 
     public static DriveDTO mapToDriveDTO(Drive drive) {
         if (drive == null) {
             return null;
         }
+
+        // Deduplicate userIds in the DTO mapping
+        List<Long> uniqueUserIds = drive.getUserIds().stream()
+                .distinct()
+                .collect(Collectors.toList());
 
         return new DriveDTO(
                 drive.getId(),
@@ -88,9 +141,12 @@ public class EntityToDTOMapper {
                 drive.getDriver() != null ? drive.getDriver().getId() : null,
                 drive.getDeparturePlace(),
                 drive.getArrivalPlace(),
-                drive.getUserIds()
+                uniqueUserIds
         );
     }
+
+
+
 
     public static OrderDTO mapToOrderDTO(OrderDetail detail) {
         if (detail == null) {
@@ -121,4 +177,23 @@ public class EntityToDTOMapper {
                 )
         );
     }
+
+    public static DrivesCalendarDTO mapToDrivesCalendarDTO(DrivesCalendar calendar) {
+        if (calendar == null) {
+            return null;
+        }
+
+        // Map the drives in the calendar
+        List<DriveDTO> driveDTOs = calendar.getDrives().stream()
+                .map(EntityToDTOMapper::mapToDriveDTO)
+                .collect(Collectors.toList());
+
+        return new DrivesCalendarDTO(
+                calendar.getId(),
+                calendar.getMonthStartDate(),
+                calendar.getMonthEndDate(),
+                driveDTOs
+        );
+    }
+
 }

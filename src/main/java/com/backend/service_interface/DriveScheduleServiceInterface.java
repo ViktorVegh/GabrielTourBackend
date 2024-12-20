@@ -1,13 +1,13 @@
 package com.backend.service_interface;
 
-import com.backend.entity.Drive;
+import com.backend.entity.Transportation.DrivesCalendar;
 
 import java.util.List;
 
 public interface DriveScheduleServiceInterface {
-    void updateWeeklyCalendar();
-
-    List<Drive> getWeeklyCalendar();
-
-    boolean isCalendarCurrent();
+    DrivesCalendar initializeCalendar();
+    DrivesCalendar getDrivesCalendar();
+    void removeDrivesFromCalendar(List<Long> driveIds);
+    void addDriveToCalendar(Long driveId);
 }
+

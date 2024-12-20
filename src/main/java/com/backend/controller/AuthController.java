@@ -1,10 +1,8 @@
 package com.backend.controller;
 
-import com.backend.auth.AuthService;
 import com.backend.auth.AuthServiceInterface;
-import com.backend.dtos.LoginRequest;
-import com.backend.dtos.RegisterRequest;
-import com.backend.profis_service.LoginService;
+import com.backend.dtos.Person.LoginRequest;
+import com.backend.dtos.Person.RegisterRequest;
 import com.backend.profis_service_interface.LoginServiceInterface;
 import com.example.klientsoapclient.*;
 import org.springframework.beans.factory.annotation.Autowired;

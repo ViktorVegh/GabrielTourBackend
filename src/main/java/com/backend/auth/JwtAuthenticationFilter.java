@@ -1,6 +1,6 @@
 package com.backend.auth;
 
-import com.backend.entity.Person;
+import com.backend.entity.Person.Person;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         // List of public endpoints to exclude from the filter
-        return path.equals("/auth/verify-key");
+        return path.equals("/auth/verify-key") || path.equals("/auth/reset-password");
     }
+
 }
