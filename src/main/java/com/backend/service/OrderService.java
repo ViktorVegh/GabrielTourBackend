@@ -10,12 +10,15 @@ import com.backend.entity.Order.OrderUserId;
 import com.backend.entity.Person.User;
 import com.backend.entity.Services.Prices;
 import com.backend.entity.Transportation.TransportationReservation;
+import com.backend.profis_service.ExternalService;
+import com.backend.profis_service_interface.ExternalServiceInterface;
 import com.backend.repository.*;
 import com.backend.service_interface.OrderServiceInterface;
 import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.objednavkasoapclient.*;
 import com.example.objednavkasoapclient.IntegerNazev;
+import com.example.ostatnisoapclient.ExterniProceduraResult;
 import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,9 @@ public class OrderService implements OrderServiceInterface {
 
     @Autowired
     private OrderUserRepository orderUserRepository;
+
+    @Autowired
+    private ExternalServiceInterface externalService;
 
     public OrderService() {
     }
@@ -198,7 +204,11 @@ public class OrderService implements OrderServiceInterface {
                                     : null
                     );
                 }
-
+                ArrayList<String> arrivalAirportCode = externalService.getAirportCodes(orderDetail.getId(),"D88A537D");
+                System.out.println(arrivalAirportCode);
+                System.out.println(arrivalAirportCode.get(1));
+                transportEntity.setArrivalAirportCode(arrivalAirportCode.get(0));
+                transportEntity.setDepartureAirportCode(arrivalAirportCode.get(1));
                 // Additional mappings...
                 if (!existingTransportationsMap.containsKey(transportation.getID())) {
                     updatedTransportations.add(transportEntity);
@@ -362,8 +372,10 @@ public class OrderService implements OrderServiceInterface {
         return xmlGregorianCalendar.toGregorianCalendar()
                 .toZonedDateTime()
                 .toLocalDateTime();
-    }
+    }/*
+    private String getArrivalAirportCode(int id){
 
+    }*/
 
 
 
