@@ -204,11 +204,11 @@ public class OrderService implements OrderServiceInterface {
                                     : null
                     );
                 }
-                ArrayList<String> arrivalAirportCode = externalService.getAirportCodes(orderDetail.getId(),"D88A537D");
-                System.out.println(arrivalAirportCode);
-                System.out.println(arrivalAirportCode.get(1));
-                transportEntity.setArrivalAirportCode(arrivalAirportCode.get(0));
-                transportEntity.setDepartureAirportCode(arrivalAirportCode.get(1));
+                //TODO finish flight number
+                ArrayList<String> flightNumber = externalService.getAirportCodes(orderDetail.getId(),"D88A537D");
+
+                System.out.println(flightNumber.get(1));
+                transportEntity.setFlightNumber(flightNumber.get(0));
                 // Additional mappings...
                 if (!existingTransportationsMap.containsKey(transportation.getID())) {
                     updatedTransportations.add(transportEntity);

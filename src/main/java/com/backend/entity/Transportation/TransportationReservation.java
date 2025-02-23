@@ -31,6 +31,8 @@ public class TransportationReservation {
     private String notes; // Poznamka (Poznámka k rezervaci dopravy)
     private String direction; // Smer (Směr rezervace dopravy tam nebo zpět)
     private String pickupLocation; // SvozMisto (Svozové místo)
+
+    private String flightNumber;
     private int transportType; // TypDoprava (20 for bus, 40 for plane)
 
     @ElementCollection
@@ -61,7 +63,7 @@ public class TransportationReservation {
                                      int transportId, int transportCapacityId, int transportRouteId,
                                      int seatingPlanId, String departureAirportCode, String arrivalAirportCode,
                                      String routeName, int reservedSeats, String notes, String direction,
-                                     String pickupLocation, int transportType, Map<String, String> externalValues,
+                                     String pickupLocation, String flightNumber, int transportType, Map<String, String> externalValues,
                                      List<User> passengers, OrderDetail orderDetail) {
         this.pickupTime = pickupTime;
         this.dropoffTime = dropoffTime;
@@ -77,6 +79,7 @@ public class TransportationReservation {
         this.notes = notes;
         this.direction = direction;
         this.pickupLocation = pickupLocation;
+        this.flightNumber = flightNumber;
         this.transportType = transportType;
         this.externalValues = externalValues;
         this.passengers = passengers;
@@ -225,6 +228,14 @@ public class TransportationReservation {
 
     public void setPickupLocation(String pickupLocation) {
         this.pickupLocation = pickupLocation;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
     }
 
     public int getTransportType() {

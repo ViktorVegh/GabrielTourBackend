@@ -9,6 +9,7 @@ public class TeeTimeDTO {
     private int groupSize;
     private List<Long> userIds; // List of user IDs
     private Long golfCourseId; // Changed to Long for golfCourseId
+    private String golfCourseName;
     private boolean green;
     private int holes;
     private int adults;
@@ -21,13 +22,14 @@ public class TeeTimeDTO {
     }
 
     // Full constructor
-    public TeeTimeDTO(Long id, LocalDateTime teeTime, int groupSize, List<Long> userIds, Long golfCourseId,
+    public TeeTimeDTO(Long id, LocalDateTime teeTime, int groupSize, List<Long> userIds, Long golfCourseId,String golfCourseName,
                       boolean green, int holes, int adults, int juniors, String note, boolean needTransport) {
         this.id = id;
         this.teeTime = teeTime;
         this.groupSize = groupSize;
         this.userIds = userIds;
         this.golfCourseId = golfCourseId;
+        this.golfCourseName = golfCourseName;
         this.green = green;
         this.holes = holes;
         this.adults = adults;
@@ -71,6 +73,14 @@ public class TeeTimeDTO {
 
     public Long getGolfCourseId() {
         return golfCourseId; // Getter for golfCourseId
+    }
+
+    public String getGolfCourseName() {
+        return golfCourseName;
+    }
+
+    public void setGolfCourseName(String golfCourseName) {
+        this.golfCourseName = golfCourseName;
     }
 
     public void setGolfCourseId(Long golfCourseId) {

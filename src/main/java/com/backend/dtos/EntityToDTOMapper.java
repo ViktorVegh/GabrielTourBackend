@@ -31,13 +31,18 @@ public class EntityToDTOMapper {
         List<Long> userIds = teeTime.getUsers() != null ?
                 teeTime.getUsers().stream().map(User::getProfisId).collect(Collectors.toList()) : null;
 
+        GolfCourse golfCourse = teeTime.getGolfCourse();
+        Long golfCourseId = (golfCourse != null) ? golfCourse.getId() : null;
+        String golfCourseName = (golfCourse != null) ? golfCourse.getName() : null;
 
         return new TeeTimeDTO(
                 teeTime.getId(),
                 teeTime.getTeeTime(),
                 teeTime.getGroupSize(),
                 userIds, // Updated to pass a list of user IDs
-                teeTime.getGolfCourse().getId(),                teeTime.isGreen(),
+                golfCourseId,
+                golfCourseName,
+                teeTime.isGreen(),
                 teeTime.getHoles(),
                 teeTime.getAdults(),
                 teeTime.getJuniors(),
