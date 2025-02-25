@@ -1,7 +1,7 @@
 package com.backend.controller;
 
 
-import com.backend.entity.Prices;
+import com.backend.entity.Services.Prices;
 import com.backend.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

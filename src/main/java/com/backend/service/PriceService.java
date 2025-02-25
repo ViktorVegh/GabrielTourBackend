@@ -1,7 +1,7 @@
 package com.backend.service;
 
 
-import com.backend.entity.Prices;
+import com.backend.entity.Services.Prices;
 import com.backend.repository.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
