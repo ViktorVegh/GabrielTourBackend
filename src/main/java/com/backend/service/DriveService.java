@@ -27,7 +27,8 @@ public class DriveService implements DriveServiceInterface {
     private DriverRepository driverRepository;
 
     @Autowired
-    private DrivesCalendarRepository drivesCalendarRepository;
+    private DriveScheduleService driveScheduleService;
+
 
     @Autowired
     private TeeTimeRepository teeTimeRepository;
@@ -58,29 +59,81 @@ public class DriveService implements DriveServiceInterface {
     }
 
 
+//    @Override
+//    public Drive updateDrive(Long driveId, DriveDTO driveDTO) {
+//        // Fetch the existing Drive entity
+//        Drive existingDrive = driveRepository.findById(driveId)
+//                .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
+//
+//        // Map the DTO to a new Drive entity for comparison
+//        Driver driver = null;
+//        if (driveDTO.getDriverId() != null) {
+//            driver = driverRepository.findById(driveDTO.getDriverId())
+//                    .orElseThrow(() -> new IllegalArgumentException("Invalid Driver ID: " + driveDTO.getDriverId()));
+//        }
+//
+//        Drive newDrive = EntityToDTOMapper.mapToDrive(driveDTO, driver);
+//
+//        // Check if the existing Drive needs to be updated
+//        if (updateDriveIfNecessary(existingDrive, newDrive)) {
+//            return driveRepository.save(existingDrive); // Save only if updated
+//        }
+//
+//        driveScheduleService.addDriveToCalendar(driveId);
+//        // If no updates were necessary, return the existing drive
+//        return existingDrive;
+//    }
+
     @Override
     public Drive updateDrive(Long driveId, DriveDTO driveDTO) {
+        System.out.println("Updating drive with ID: " + driveId);
+        System.out.println("Received DTO: " + driveDTO);
+
         // Fetch the existing Drive entity
         Drive existingDrive = driveRepository.findById(driveId)
-                .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
+                .orElseThrow(() -> {
+                    System.out.println("Drive not found for ID: " + driveId);
+                    return new NoSuchElementException("Drive not found for ID: " + driveId);
+                });
+        System.out.println("Fetched existing drive: " + existingDrive);
 
         // Map the DTO to a new Drive entity for comparison
         Driver driver = null;
         if (driveDTO.getDriverId() != null) {
+            System.out.println("Fetching driver with ID: " + driveDTO.getDriverId());
             driver = driverRepository.findById(driveDTO.getDriverId())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid Driver ID: " + driveDTO.getDriverId()));
+                    .orElseThrow(() -> {
+                        System.out.println("Invalid Driver ID: " + driveDTO.getDriverId());
+                        return new IllegalArgumentException("Invalid Driver ID: " + driveDTO.getDriverId());
+                    });
+            System.out.println("Fetched driver: " + driver);
         }
 
         Drive newDrive = EntityToDTOMapper.mapToDrive(driveDTO, driver);
+        System.out.println("Mapped new drive: " + newDrive);
 
         // Check if the existing Drive needs to be updated
         if (updateDriveIfNecessary(existingDrive, newDrive)) {
-            return driveRepository.save(existingDrive); // Save only if updated
+            System.out.println("Drive requires update. Saving updated drive.");
+            Drive savedDrive = driveRepository.save(existingDrive);
+            System.out.println("Updated drive saved: " + savedDrive);
+
+            // Check if the drive is now complete and should be added to the calendar
+            if (isDriveComplete(savedDrive)) {
+                System.out.println("Drive is complete. Adding to calendar.");
+                driveScheduleService.addDriveToCalendar(savedDrive.getId());
+            } else {
+                System.out.println("Drive is not complete. Not adding to calendar.");
+            }
+
+            return savedDrive;
+        } else {
+            System.out.println("No updates required for drive with ID: " + driveId);
         }
 
-        // If no updates were necessary, return the existing drive
         return existingDrive;
     }
+
 
 
 
@@ -98,65 +151,123 @@ public class DriveService implements DriveServiceInterface {
         driveRepository.delete(drive);
     }
 
+//    @Override
+//    public List<Drive> getUntrackedDrives() {
+//        LocalDate currentDate = LocalDate.now();
+//
+//        List<Drive> untrackedDrives = new ArrayList<>();
+//
+//        // Process TeeTimes
+//        for (TeeTime teeTime : teeTimeRepository.findAll()) {
+//            if (!teeTime.isNeedTransport()) {
+//                continue;
+//            }
+//
+//            List<Drive> newDrives = teeTimeDriveFactory.createDrivesForTeeTime(teeTime);
+//
+//            for (Drive newDrive : newDrives) {
+//                // Refresh drives without calendar each time
+//                Optional<Drive> existingDriveOpt = driveRepository
+//                        .findDrivesWithoutCalendar()
+//                        .stream()
+//                        .filter(d -> d.getDate().equals(newDrive.getDate())
+//                                && d.getCustomReason().equals(newDrive.getCustomReason())
+//                                && d.getTeeTime() == teeTime)
+//                        .findFirst();
+//
+//                if (existingDriveOpt.isPresent()) {
+//                    untrackedDrives.add(existingDriveOpt.get());
+//                } else if (newDrive.getDate().isAfter(currentDate)) {
+//                    Drive savedDrive = driveRepository.save(newDrive);
+//                    untrackedDrives.add(savedDrive);
+//                }
+//            }
+//        }
+//
+//        // Process TransportationReservations
+//        for (TransportationReservation reservation : transportationReservationRepository.findAll()) {
+//            List<Drive> newDrives = TransportationDriveFactory.createDrivesForTransportation(reservation);
+//
+//            for (Drive newDrive : newDrives) {
+//                Optional<Drive> existingDriveOpt = driveRepository
+//                        .findDrivesWithoutCalendar()
+//                        .stream()
+//                        .filter(d -> d.getDate().equals(newDrive.getDate())
+//                                && d.getCustomReason().equals(newDrive.getCustomReason())
+//                                && d.getTransportationReservation() == reservation)
+//                        .findFirst();
+//
+//                if (existingDriveOpt.isPresent()) {
+//                    untrackedDrives.add(existingDriveOpt.get());
+//                } else if (newDrive.getDate().isAfter(currentDate)) {
+//                    Drive savedDrive = driveRepository.save(newDrive);
+//                    untrackedDrives.add(savedDrive);
+//                }
+//            }
+//        }
+//
+//        return untrackedDrives;
+//    }
+
+
     @Override
     public List<Drive> getUntrackedDrives() {
         LocalDate currentDate = LocalDate.now();
-
         List<Drive> untrackedDrives = new ArrayList<>();
 
-        // Process TeeTimes
+        // Fetch all existing untracked drives from the database
+        List<Drive> existingUntrackedDrives = driveRepository.findDrivesWithoutCalendar();
+
+        System.out.println("DEBUG: Found " + existingUntrackedDrives.size() + " untracked drives in the DB.");
+
+        // ✅ Add all existing untracked drives FIRST
+        untrackedDrives.addAll(existingUntrackedDrives);
+
+        // ✅ Process TeeTime-based drives
         for (TeeTime teeTime : teeTimeRepository.findAll()) {
-            if (!teeTime.isNeedTransport()) {
-                continue;
-            }
+            if (!teeTime.isNeedTransport()) continue;
 
             List<Drive> newDrives = teeTimeDriveFactory.createDrivesForTeeTime(teeTime);
 
             for (Drive newDrive : newDrives) {
-                // Refresh drives without calendar each time
-                Optional<Drive> existingDriveOpt = driveRepository
-                        .findDrivesWithoutCalendar()
-                        .stream()
-                        .filter(d -> d.getDate().equals(newDrive.getDate())
-                                && d.getCustomReason().equals(newDrive.getCustomReason())
-                                && d.getTeeTime() == teeTime)
+                if (newDrive.getDate().isBefore(currentDate)) continue; // Skip past drives
+
+                Optional<Drive> existingDriveOpt = existingUntrackedDrives.stream()
+                        .filter(d -> d.getDate().equals(newDrive.getDate()) &&
+                                d.getCustomReason().equals(newDrive.getCustomReason()) &&
+                                d.getTeeTime() == teeTime)
                         .findFirst();
 
-                if (existingDriveOpt.isPresent()) {
-                    untrackedDrives.add(existingDriveOpt.get());
-                } else if (newDrive.getDate().isAfter(currentDate)) {
+                if (existingDriveOpt.isEmpty()) {
                     Drive savedDrive = driveRepository.save(newDrive);
                     untrackedDrives.add(savedDrive);
                 }
             }
         }
 
-        // Process TransportationReservations
+        // ✅ Process TransportationReservation-based drives
         for (TransportationReservation reservation : transportationReservationRepository.findAll()) {
             List<Drive> newDrives = TransportationDriveFactory.createDrivesForTransportation(reservation);
 
             for (Drive newDrive : newDrives) {
-                Optional<Drive> existingDriveOpt = driveRepository
-                        .findDrivesWithoutCalendar()
-                        .stream()
-                        .filter(d -> d.getDate().equals(newDrive.getDate())
-                                && d.getCustomReason().equals(newDrive.getCustomReason())
-                                && d.getTransportationReservation() == reservation)
+                if (newDrive.getDate().isBefore(currentDate)) continue; // Skip past drives
+
+                Optional<Drive> existingDriveOpt = existingUntrackedDrives.stream()
+                        .filter(d -> d.getDate().equals(newDrive.getDate()) &&
+                                d.getCustomReason().equals(newDrive.getCustomReason()) &&
+                                d.getTransportationReservation() == reservation)
                         .findFirst();
 
-                if (existingDriveOpt.isPresent()) {
-                    untrackedDrives.add(existingDriveOpt.get());
-                } else if (newDrive.getDate().isAfter(currentDate)) {
+                if (existingDriveOpt.isEmpty()) {
                     Drive savedDrive = driveRepository.save(newDrive);
                     untrackedDrives.add(savedDrive);
                 }
             }
         }
 
+        System.out.println("DEBUG: Returning " + untrackedDrives.size() + " total untracked drives.");
         return untrackedDrives;
     }
-
-
 
 
     @Override
@@ -204,6 +315,10 @@ public class DriveService implements DriveServiceInterface {
             existingDrive.setTransportationReservation(newDrive.getTransportationReservation());
             isUpdated = true;
         }
+        if (!areEqual(existingDrive.getPriceIds(), newDrive.getPriceIds())) {
+            existingDrive.setPriceIds(newDrive.getPriceIds());
+            isUpdated = true;
+        }
 
         return isUpdated;
     }
@@ -215,6 +330,15 @@ public class DriveService implements DriveServiceInterface {
         return obj1.equals(obj2);
     }
 
+    private boolean isDriveComplete(Drive drive) {
+        return drive.getUserIds() != null && !drive.getUserIds().isEmpty()
+                && drive.getDeparturePlace() != null && !drive.getDeparturePlace().isBlank()
+                && drive.getArrivalPlace() != null && !drive.getArrivalPlace().isBlank()
+                && drive.getPickupTime() != null
+                && drive.getDropoffTime() != null
+                && drive.getDate() != null
+                && drive.getDriver() != null;
+    }
 
 
 

@@ -30,6 +30,12 @@ public class Drive {
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
+    @ElementCollection
+    @CollectionTable(name = "drive_prices", joinColumns = @JoinColumn(name = "drive_id"))
+    @Column(name = "price_id")
+    private List<Integer> priceIds;
+
+
     @OneToOne(fetch = FetchType.LAZY, cascade = {}, orphanRemoval = false)
     @JoinColumn(name = "tee_time_id", nullable = true) // Allow null here
     private TeeTime teeTime;
@@ -134,5 +140,11 @@ public class Drive {
         this.userIds = userIds;
     }
 
+    public List<Integer> getPriceIds() {
+        return priceIds;
+    }
 
+    public void setPriceIds(List<Integer> priceIds) {
+        this.priceIds = priceIds;
+    }
 }

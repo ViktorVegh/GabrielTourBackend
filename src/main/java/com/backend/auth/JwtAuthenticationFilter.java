@@ -57,7 +57,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         // List of public endpoints to exclude from the filter
-        return path.equals("/auth/verify-key") || path.equals("/auth/reset-password");
+        return path.equals("/auth/login") ||
+                path.equals("/auth/register") ||
+                path.equals("/auth/verify-key") ||
+                path.equals("/auth/reset-password");
     }
+
 
 }

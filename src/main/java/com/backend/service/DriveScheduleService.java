@@ -23,7 +23,7 @@ public class DriveScheduleService implements DriveScheduleServiceInterface {
     @Autowired
     private DriveRepository driveRepository;
 
-    private static final Long CALENDAR_ID = 1L; // Fixed ID for the single calendar
+    private static final Long CALENDAR_ID = 1L;
 
     @Override
     public DrivesCalendar initializeCalendar() {
@@ -98,29 +98,69 @@ public class DriveScheduleService implements DriveScheduleServiceInterface {
     }
 
 
+//    @Override
+//    public void addDriveToCalendar(Long driveId) {
+//        Drive drive = driveRepository.findById(driveId)
+//                .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
+//
+//        if (!isDriveComplete(drive)) {
+//            throw new IllegalArgumentException("Drive is not complete and cannot be added to the calendar.");
+//        }
+//
+//        LocalDate currentDate = LocalDate.now();
+//        if (!drive.getDate().isAfter(currentDate)) { // Check if drive date is after current date
+//            throw new IllegalArgumentException("Cannot add a past or today's drive to the calendar.");
+//        }
+//
+//        DrivesCalendar calendar = drivesCalendarRepository.findById(CALENDAR_ID)
+//                .orElseThrow(() -> new IllegalStateException("DrivesCalendar not found. Please initialize it."));
+//
+//        if (!calendar.getDrives().contains(drive)) {
+//            calendar.getDrives().add(drive);
+//            drivesCalendarRepository.save(calendar);
+//        }
+//    }
+
     @Override
     public void addDriveToCalendar(Long driveId) {
+        System.out.println("Adding drive to calendar with ID: " + driveId);
+
         Drive drive = driveRepository.findById(driveId)
-                .orElseThrow(() -> new NoSuchElementException("Drive not found for ID: " + driveId));
+                .orElseThrow(() -> {
+                    System.out.println("Drive not found for ID: " + driveId);
+                    return new NoSuchElementException("Drive not found for ID: " + driveId);
+                });
+        System.out.println("Fetched drive: " + drive);
 
         if (!isDriveComplete(drive)) {
+            System.out.println("Drive is incomplete: " + drive);
             throw new IllegalArgumentException("Drive is not complete and cannot be added to the calendar.");
         }
+        System.out.println("Drive is complete.");
 
         LocalDate currentDate = LocalDate.now();
-        if (!drive.getDate().isAfter(currentDate)) { // Check if drive date is after current date
+        System.out.println("Current date: " + currentDate + ", Drive date: " + drive.getDate());
+        if (!drive.getDate().isAfter(currentDate)) {
+            System.out.println("Drive date is not valid for the calendar.");
             throw new IllegalArgumentException("Cannot add a past or today's drive to the calendar.");
         }
 
         DrivesCalendar calendar = drivesCalendarRepository.findById(CALENDAR_ID)
-                .orElseThrow(() -> new IllegalStateException("DrivesCalendar not found. Please initialize it."));
+                .orElseThrow(() -> {
+                    System.out.println("Calendar not found for ID: " + CALENDAR_ID);
+                    return new IllegalStateException("DrivesCalendar not found. Please initialize it.");
+                });
+        System.out.println("Fetched calendar: " + calendar);
 
         if (!calendar.getDrives().contains(drive)) {
+            System.out.println("Drive not already in calendar. Adding drive to calendar.");
             calendar.getDrives().add(drive);
             drivesCalendarRepository.save(calendar);
+            System.out.println("Drive added to calendar successfully.");
+        } else {
+            System.out.println("Drive already exists in the calendar. Skipping addition.");
         }
     }
-
 
 
 
