@@ -1,14 +1,24 @@
 package com.backend.service;
 
 import com.backend.dtos.EntityToDTOMapper;
-import com.backend.dtos.OrderDTO;
-import com.backend.entity.*;
+import com.backend.dtos.Order.OrderDTO;
+import com.backend.entity.Acommodation.AccommodationReservation;
+import com.backend.entity.Acommodation.Hotel;
+import com.backend.entity.Order.OrderDetail;
+import com.backend.entity.Order.OrderUser;
+import com.backend.entity.Order.OrderUserId;
+import com.backend.entity.Person.User;
+import com.backend.entity.Services.Prices;
+import com.backend.entity.Transportation.TransportationReservation;
+import com.backend.profis_service.ExternalService;
+import com.backend.profis_service_interface.ExternalServiceInterface;
 import com.backend.repository.*;
 import com.backend.service_interface.OrderServiceInterface;
 import com.example.klientsoapclient.*;
 import com.example.klientsoapclient.ObjednavkaKlient;
 import com.example.objednavkasoapclient.*;
 import com.example.objednavkasoapclient.IntegerNazev;
+import com.example.ostatnisoapclient.ExterniProceduraResult;
 import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +46,9 @@ public class OrderService implements OrderServiceInterface {
 
     @Autowired
     private OrderUserRepository orderUserRepository;
+
+    @Autowired
+    private ExternalServiceInterface externalService;
 
     public OrderService() {
     }
@@ -191,7 +204,11 @@ public class OrderService implements OrderServiceInterface {
                                     : null
                     );
                 }
+                //TODO finish flight number
+                ArrayList<String> flightNumber = externalService.getAirportCodes(orderDetail.getId(),"D88A537D");
 
+                System.out.println(flightNumber.get(1));
+                transportEntity.setFlightNumber(flightNumber.get(0));
                 // Additional mappings...
                 if (!existingTransportationsMap.containsKey(transportation.getID())) {
                     updatedTransportations.add(transportEntity);
@@ -355,7 +372,13 @@ public class OrderService implements OrderServiceInterface {
         return xmlGregorianCalendar.toGregorianCalendar()
                 .toZonedDateTime()
                 .toLocalDateTime();
-    }
+    }/*
+    private String getArrivalAirportCode(int id){
+
+    }*/
+
+
+
 }
 
 

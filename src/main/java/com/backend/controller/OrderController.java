@@ -1,25 +1,13 @@
 package com.backend.controller;
 
-import com.backend.auth.JwtHelper;
-import com.backend.dtos.OrderDTO;
-import com.backend.dtos.TeeTimeRequest;
-import com.backend.profis_service.ProfisOrderService;
+import com.backend.dtos.Order.OrderDTO;
 import com.backend.profis_service_interface.ProfisOrderServiceInterface;
-import com.backend.service.OrderService;
 import com.backend.service_interface.OrderServiceInterface;
-import com.example.klientsoapclient.*;
-import com.example.klientsoapclient.KlientKontakt;
-import com.example.klientsoapclient.ObjednavkaKlient;
-import com.example.objednavkasoapclient.*;
-import com.example.objednavkasoapclient.IntegerNazev;
-import jakarta.xml.bind.JAXBElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -35,7 +23,7 @@ public class OrderController {
     @PostMapping("/get-order")
     public ResponseEntity<String> CreateOrderList(@RequestBody Map<String, Object> body) {
         try {
-            long id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
+            long id = Integer.parseInt(body.get("id").toString());
 
             // Fetch order data using the service
             String result = profisOrderService.CreateOrderListRequest(id);
@@ -58,7 +46,7 @@ public class OrderController {
         }
     }
     @PostMapping("/create-orderDetails")
-    public ResponseEntity<Integer> objednavkaDetailResult(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<Integer> CreateOrderDetail(@RequestBody Map<String, Object> body) {
         try {
             int id = Integer.parseInt(body.get("id").toString()); // Extract ID from the Map
             // Fetch order data using the service

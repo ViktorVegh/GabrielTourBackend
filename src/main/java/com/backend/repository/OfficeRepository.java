@@ -1,8 +1,7 @@
 package com.backend.repository;
 
 
-import com.backend.entity.Driver;
-import com.backend.entity.Office;
+import com.backend.entity.Person.Office;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OfficeRepository extends JpaRepository<Office, Long> {
