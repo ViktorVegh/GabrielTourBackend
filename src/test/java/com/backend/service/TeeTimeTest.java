@@ -1,23 +1,14 @@
 package com.backend.service;
 
-import com.backend.dtos.TeeTimeRequest;
-import com.backend.entity.User;
 import com.backend.repository.GolfCourseRepository;
 import com.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 public class TeeTimeTest {
     @Mock

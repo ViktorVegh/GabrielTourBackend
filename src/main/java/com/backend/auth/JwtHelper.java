@@ -1,6 +1,6 @@
 package com.backend.auth;
 
-import com.backend.entity.Person;
+import com.backend.entity.Person.Person;
 import com.backend.repository.OfficeRepository;
 import com.backend.repository.UserRepository;
 import com.backend.repository.DriverRepository;

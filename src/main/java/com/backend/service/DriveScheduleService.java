@@ -1,7 +1,7 @@
 package com.backend.service;
 
-import com.backend.entity.Drive;
-import com.backend.entity.DrivesCalendar;
+import com.backend.entity.Transportation.Drive;
+import com.backend.entity.Transportation.DrivesCalendar;
 import com.backend.repository.DriveRepository;
 import com.backend.repository.DrivesCalendarRepository;
 import com.backend.service_interface.DriveScheduleServiceInterface;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.NoSuchElementException;

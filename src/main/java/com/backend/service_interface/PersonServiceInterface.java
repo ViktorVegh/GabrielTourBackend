@@ -1,6 +1,6 @@
 package com.backend.service_interface;
 
-import com.backend.dtos.PersonDTO;
+import com.backend.dtos.Person.PersonDTO;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,21 +1,20 @@
 package com.backend.service;
 
-import com.backend.dtos.DriveDTO;
-import com.backend.entity.*;
+import com.backend.dtos.Drive.DriveDTO;
+import com.backend.entity.Person.Driver;
+import com.backend.entity.TeeTime.TeeTime;
+import com.backend.entity.Transportation.Drive;
+import com.backend.entity.Transportation.TransportationReservation;
 import com.backend.repository.*;
 import com.backend.service_interface.DriveServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.backend.dtos.EntityToDTOMapper;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.backend.dtos.EntityToDTOMapper.mapToDrive;
 
 @Service
 public class DriveService implements DriveServiceInterface {

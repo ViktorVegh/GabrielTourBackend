@@ -1,33 +1,22 @@
 package com.backend.service;
 
-import com.backend.auth.AuthService;
 import com.backend.auth.EncryptionUtil;
 import com.backend.dtos.EntityToDTOMapper;
-import com.backend.dtos.OrderDTO;
-import com.backend.entity.OrderDetail;
-import com.backend.entity.OrderUser;
-import com.backend.entity.User;
+import com.backend.dtos.Order.OrderDTO;
+import com.backend.entity.Order.OrderDetail;
+import com.backend.entity.Order.OrderUser;
 import com.backend.profis_service.ProfisOrderService;
-import com.backend.repository.OrderDetailRepository;
 import com.backend.repository.OrderUserRepository;
 import com.backend.repository.UserRepository;
-import com.backend.service.OrderService;
 import com.example.klientsoapclient.KlientHesloContext;
-import com.example.klientsoapclient.KlientObjednavkaListResult;
 import com.example.objednavkasoapclient.*;
-import jakarta.xml.bind.JAXBElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import com.example.klientsoapclient.Klient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.xml.namespace.QName;
-
-import java.lang.reflect.Array;
 import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

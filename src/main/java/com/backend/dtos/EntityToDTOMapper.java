@@ -1,5 +1,20 @@
 package com.backend.dtos;
-import com.backend.entity.*;
+import com.backend.dtos.Acommodation.HotelDTO;
+import com.backend.dtos.Drive.DriveDTO;
+import com.backend.dtos.Drive.DrivesCalendarDTO;
+import com.backend.dtos.Order.OrderDTO;
+import com.backend.dtos.Person.PersonDTO;
+import com.backend.dtos.TeeTime.GolfCourseDTO;
+import com.backend.dtos.TeeTime.TeeTimeDTO;
+import com.backend.entity.Acommodation.Hotel;
+import com.backend.entity.Order.OrderDetail;
+import com.backend.entity.Person.Driver;
+import com.backend.entity.Person.Person;
+import com.backend.entity.Person.User;
+import com.backend.entity.TeeTime.GolfCourse;
+import com.backend.entity.TeeTime.TeeTime;
+import com.backend.entity.Transportation.Drive;
+import com.backend.entity.Transportation.DrivesCalendar;
 
 import java.util.List;
 import java.util.stream.Collectors;

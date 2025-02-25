@@ -1,10 +1,8 @@
 package com.backend.service_interface;
 
-import com.backend.dtos.DriveDTO;
-import com.backend.entity.Driver;
-import com.backend.entity.Drive;
+import com.backend.dtos.Drive.DriveDTO;
+import com.backend.entity.Transportation.Drive;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface DriveServiceInterface {

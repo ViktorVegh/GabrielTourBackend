@@ -3,7 +3,7 @@ package com.backend.service;
 import com.backend.auth.AuthService;
 import com.backend.auth.EncryptionUtil;
 import com.backend.auth.JwtUtil;
-import com.backend.entity.*;
+import com.backend.entity.Person.User;
 import com.backend.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

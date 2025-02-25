@@ -1,9 +1,8 @@
 package com.backend.service;
 
-import com.backend.entity.Drive;
-import com.backend.entity.TeeTime;
-import com.backend.entity.TransportationReservation;
-import com.backend.entity.User;
+import com.backend.entity.Transportation.Drive;
+import com.backend.entity.TeeTime.TeeTime;
+import com.backend.entity.Person.User;
 import com.backend.repository.HotelRepository;
 import com.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class TeeTimeDriveFactory {

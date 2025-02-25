@@ -1,33 +1,17 @@
 package com.backend.integration;
 
-import com.backend.controller.OrderController;
 import com.backend.dtos.EntityToDTOMapper;
-import com.backend.dtos.OrderDTO;
-import com.backend.entity.OrderDetail;
-import com.backend.entity.OrderUser;
+import com.backend.dtos.Order.OrderDTO;
+import com.backend.entity.Order.OrderDetail;
+import com.backend.entity.Order.OrderUser;
 import com.backend.profis_service.ProfisOrderService;
-import com.backend.repository.OrderUserRepository;
 import com.backend.service.OrderService;
-import com.example.klientsoapclient.Klient;
-import com.example.objednavkasoapclient.Objednavka;
-import com.example.objednavkasoapclient.ObjednavkaContext;
-import com.example.objednavkasoapclient.ObjednavkaDetailResult;
-import com.example.objednavkasoapclient.ObjednavkaPopis;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.ws.Service;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.xml.namespace.QName;
-
-import java.net.URL;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @SpringBootTest
 public class OrderIntegrationTest {

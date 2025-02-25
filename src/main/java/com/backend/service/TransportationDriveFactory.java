@@ -1,7 +1,7 @@
 package com.backend.service;
 
-import com.backend.entity.Drive;
-import com.backend.entity.TransportationReservation;
+import com.backend.entity.Transportation.Drive;
+import com.backend.entity.Transportation.TransportationReservation;
 
 import java.util.ArrayList;
 import java.util.List;

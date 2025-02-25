@@ -1,7 +1,7 @@
 package com.backend.repository;
 
-import com.backend.entity.OrderUser;
-import com.backend.entity.OrderUserId;
+import com.backend.entity.Order.OrderUser;
+import com.backend.entity.Order.OrderUserId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface OrderUserRepository extends JpaRepository<OrderUser, OrderUserId> {

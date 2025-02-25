@@ -1,6 +1,8 @@
 package com.backend.repository;
 
-import com.backend.entity.*;
+import com.backend.entity.TeeTime.TeeTime;
+import com.backend.entity.Transportation.Drive;
+import com.backend.entity.Transportation.TransportationReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

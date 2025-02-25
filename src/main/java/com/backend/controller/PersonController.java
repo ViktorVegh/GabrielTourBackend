@@ -1,7 +1,6 @@
 package com.backend.controller;
 
-import com.backend.dtos.PersonDTO;
-import com.backend.service.PersonService;
+import com.backend.dtos.Person.PersonDTO;
 import com.backend.service_interface.PersonServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

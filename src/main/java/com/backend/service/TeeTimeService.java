@@ -1,12 +1,11 @@
 package com.backend.service;
 
-import com.backend.dtos.TeeTimeDTO;
-import com.backend.dtos.TeeTimeRequest;
+import com.backend.dtos.TeeTime.TeeTimeDTO;
+import com.backend.dtos.TeeTime.TeeTimeRequest;
 import com.backend.dtos.EntityToDTOMapper;
-import com.backend.entity.Drive;
-import com.backend.entity.GolfCourse;
-import com.backend.entity.TeeTime;
-import com.backend.entity.User;
+import com.backend.entity.TeeTime.GolfCourse;
+import com.backend.entity.TeeTime.TeeTime;
+import com.backend.entity.Person.User;
 import com.backend.repository.DriveRepository;
 import com.backend.repository.GolfCourseRepository;
 import com.backend.repository.TeeTimeRepository;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

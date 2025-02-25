@@ -1,7 +1,6 @@
 package com.backend.repository;
 
-import com.backend.entity.GolfCourse;
-import com.backend.entity.User;
+import com.backend.entity.TeeTime.GolfCourse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

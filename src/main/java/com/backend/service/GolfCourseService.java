@@ -2,9 +2,8 @@ package com.backend.service;
 
 
 import com.backend.dtos.EntityToDTOMapper;
-import com.backend.dtos.GolfCourseDTO;
-import com.backend.entity.GolfCourse;
-import com.backend.entity.User;
+import com.backend.dtos.TeeTime.GolfCourseDTO;
+import com.backend.entity.TeeTime.GolfCourse;
 import com.backend.repository.GolfCourseRepository;
 import com.backend.service_interface.GolfCourseServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;

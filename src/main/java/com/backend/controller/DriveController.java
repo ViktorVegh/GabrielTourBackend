@@ -1,9 +1,8 @@
 package com.backend.controller;
 
-import com.backend.dtos.DriveDTO;
-import com.backend.dtos.EditDriveRequest;
+import com.backend.dtos.Drive.DriveDTO;
 import com.backend.dtos.EntityToDTOMapper;
-import com.backend.entity.Drive;
+import com.backend.entity.Transportation.Drive;
 import com.backend.service_interface.DriveServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
