@@ -13,8 +13,9 @@ import java.util.Optional;
 public interface DriveRepository extends JpaRepository<Drive, Long> {
     Optional<Drive> findByDateAndCustomReasonAndTeeTime(LocalDate date, String customReason, TeeTime teeTime);
     Optional<Drive> findByDateAndCustomReasonAndTransportationReservation(LocalDate date, String customReason, TransportationReservation reservation);
-    @Query(value = "SELECT * FROM drive d WHERE d.calendar_id IS NULL", nativeQuery = true)
+    @Query(value = "SELECT * FROM drive d WHERE d.calendar_id IS NULL AND d.date >= CURRENT_DATE", nativeQuery = true)
     List<Drive> findDrivesWithoutCalendar();
+
 
 
 }

@@ -17,6 +17,7 @@ public class Prices {
     private String name;
     private BigDecimal price;
     private int quantity;
+    private String status;
 
     private String currency; // Mena
 
@@ -28,6 +29,14 @@ public class Prices {
         this.name = name;
         this.price = price;
         this.orderDetail = orderDetail;
+    }
+
+    public Prices(int id, String name, BigDecimal price, int quantity, String status){
+        this.id=id;
+        this.name= name;
+        this.price = price;
+        this.quantity= quantity;
+        this.status = status;
     }
 
 
@@ -81,5 +90,13 @@ public class Prices {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

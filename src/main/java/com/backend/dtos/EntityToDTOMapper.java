@@ -123,6 +123,12 @@ public class EntityToDTOMapper {
                 .collect(Collectors.toList());
         drive.setUserIds(uniqueUserIds);
 
+        // Deduplicate priceIds
+        List<Integer> uniquePriceIds = driveDTO.getPriceIds().stream()
+                .distinct()
+                .collect(Collectors.toList());
+        drive.setPriceIds(uniquePriceIds);
+
         drive.setDriver(driver);
         return drive;
     }
@@ -137,6 +143,11 @@ public class EntityToDTOMapper {
                 .distinct()
                 .collect(Collectors.toList());
 
+        // Deduplicate priceIds in the DTO mapping
+        List<Integer> uniquePriceIds = drive.getPriceIds().stream()
+                .distinct()
+                .collect(Collectors.toList());
+
         return new DriveDTO(
                 drive.getId(),
                 drive.getDate(),
@@ -146,9 +157,11 @@ public class EntityToDTOMapper {
                 drive.getDriver() != null ? drive.getDriver().getId() : null,
                 drive.getDeparturePlace(),
                 drive.getArrivalPlace(),
-                uniqueUserIds
+                uniqueUserIds,
+                uniquePriceIds
         );
     }
+
 
 
 

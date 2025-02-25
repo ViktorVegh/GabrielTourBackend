@@ -15,9 +15,10 @@ public class DriveDTO {
     private String departurePlace;
     private String arrivalPlace;
     private List<Long> userIds;
+    private List<Integer> priceIds;
 
     // Constructor, Getters, and Setters
-    public DriveDTO(Long id, LocalDate date, LocalDateTime pickupTime, LocalDateTime dropoffTime, String customReason, Long driverId, String departurePlace, String arrivalPlace, List<Long> userIds) {
+    public DriveDTO(Long id, LocalDate date, LocalDateTime pickupTime, LocalDateTime dropoffTime, String customReason, Long driverId, String departurePlace, String arrivalPlace, List<Long> userIds, List<Integer> priceIds) {
         this.id = id;
         this.date = date;
         this.pickupTime = pickupTime;
@@ -27,6 +28,7 @@ public class DriveDTO {
         this.departurePlace = departurePlace;
         this.arrivalPlace = arrivalPlace;
         this.userIds = userIds;
+        this.priceIds = priceIds;
     }
 
     public DriveDTO(){}
@@ -102,4 +104,8 @@ public class DriveDTO {
     public void setUserIds(List<Long> userIds) {
         this.userIds = userIds;
     }
+
+    public List<Integer> getPriceIds(){return priceIds;}
+
+    public void setPriceIds(List<Integer> priceIds){this.priceIds = priceIds;}
 }
